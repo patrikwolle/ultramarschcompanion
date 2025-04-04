@@ -1,0 +1,44 @@
+
+
+
+  <div class="col-12">
+    <p-card>
+      <div class="grid">
+        <div class="col-12">
+          <p-selectbutton [options]="groupOptions" [(ngModel)]="selectedGroup" (onChange)="groupSelect(selectedGroup)" [multiple]="false" optionLabel="name" optionValue="value" />
+        </div>
+        <div *ngIf="isLoading">Loading...</div>
+        <div *ngIf="!isLoading" class="grid">
+          <div class="col-12 sm:col-12 lg:col-6">
+            <input type="text" pInputText [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)"/>
+            <p-button label="Suchen" (click)="selectUser(selectUserId)"></p-button>
+          </div>
+          <div *ngIf="selectedUser" class="col-12 sm:col-12 lg:col-6">
+            Angemeldet für {{selectedUser?.gemeldet}} km.
+          </div>
+
+        <p-progressbar *ngIf="selectedUser" [value]="progress" />
+        <div class="grid" style="width: 100%; margin-top: 15px">
+          <div class="col-6 sm:col-6 lg:col-6">
+            Bisher geschafft
+          </div>
+          <div class="col-6 sm:col-6 lg:col-6">
+            {{selectedUser?.bereitsZurueckgelegt}} km
+          </div>
+          <div class="col-6 sm:col-6 lg:col-6">
+            Tagesdurchschnitt
+          </div>
+          <div class="col-6 sm:col-6 lg:col-6">
+            {{selectedUser?.tagesdurchschnitt}} km
+          </div>
+          <div class="col-6 sm:col-6 lg:col-6">
+            In diesem Jahr zurückgelegt
+          </div>
+          <div class="col-6 sm:col-6 lg:col-6">
+            {{selectedUser?.jahr}} km
+          </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
