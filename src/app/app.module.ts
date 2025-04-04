@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -7,18 +7,21 @@ import { MainComponent } from './components/main/main.component';
 import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {providePrimeNG} from 'primeng/config';
-import Aura from '@primeng/themes/aura';
+import Lara from '@primeng/themes/aura';
 import {CardModule} from 'primeng/card';
 import {InputText} from 'primeng/inputtext';
 import {FormsModule} from '@angular/forms';
-import {ProgressBar} from 'primeng/progressbar';
-import {Button} from 'primeng/button';
-import {SelectButton} from 'primeng/selectbutton';
+import {ButtonModule} from 'primeng/button';
+import {SelectButtonModule} from 'primeng/selectbutton';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import {ProgressBar, ProgressBarModule} from 'primeng/progressbar';
+import { FriendComponent } from './components/friend/friend.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent
+    MainComponent,
+    FriendComponent
   ],
   imports: [
     CardModule,
@@ -28,15 +31,21 @@ import {SelectButton} from 'primeng/selectbutton';
     HttpClientJsonpModule,
     InputText,
     FormsModule,
-    ProgressBar,
-    Button,
-    SelectButton
+    ButtonModule,
+    SelectButtonModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    ProgressBarModule
   ],
   providers: [
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura
+        preset: Lara
       }
     })
   ],

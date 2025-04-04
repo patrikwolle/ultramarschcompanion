@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UmServiceService} from '../../services/um-service.service';
 import {DomParserService} from '../../services/dom-parser.service';
 import {AllParticipant, Participant} from '../../interfaces/participant';
+import {LocalStorageService} from '../../services/local-storage.service';
 
 @Component({
   selector: 'um-main',
@@ -12,10 +13,13 @@ import {AllParticipant, Participant} from '../../interfaces/participant';
 export class MainComponent implements OnInit {
 
   isLoading = true;
+  isLoadingAll = true;
 
   selectUserId: string | undefined;
   selectedUser: Participant | undefined;
   selectedUserGroup: string = '';
+  friendId: string = '';
+  friends: Participant[] = []
 
   allUsers: AllParticipant = {
     hike: [],
@@ -34,21 +38,44 @@ export class MainComponent implements OnInit {
 
   constructor(
     private umService: UmServiceService,
-    private dP: DomParserService
+    private dP: DomParserService,
+    private lS: LocalStorageService
   ) {
   }
 
   ngOnInit() {
-
+    this.selectedUserGroup = typeof this.lS.getCategory() === 'string' &&  this.lS.getCategory() !== null ?  this.lS.getCategory()!  : '';
+    this.selectedGroup = this.groupOptions.find(group => group.name === this.selectedUserGroup)?.value || 0;
+    this.selectUserId = this.lS.getUser() !== null ? this.lS.getUser()! : undefined;
+    if(this.selectedGroup !== 0) {
+      this.groupSelect(this.selectedGroup)
+    }
   }
 
   groupSelect(id: number) {
     this.getDataForGroup(id)
+    this.lS.addCatergory(this.groupOptions.find(group => group.value === id)?.name)
+  }
+
+  addFriend(friendId: string) {
+    const friend = this.findUser(friendId);
+    if(friend) {
+      this.friends.push(friend)
+      this.lS.addFriend(friendId)
+    }
+    this.friendId = '';
+  }
+
+  removeFriend(friendId: string) {
+    this.friends = this.friends.filter(f => f.name !== friendId);
+    this.lS.removeFriend(friendId)
   }
 
   selectUser(userId: string | undefined): void {
     if(userId !== undefined){
-      this.findUser(userId);
+      console.log(userId)
+      this.lS.addUser(userId)
+      this.selectedUser = this.findUser(userId);
       this.progress = Math.round((100 / this.selectedUser?.gemeldet! * this.selectedUser?.bereitsZurueckgelegt!) * 100 ) / 100
       console.log(this.progress)
       this.getData()
@@ -56,37 +83,64 @@ export class MainComponent implements OnInit {
 
   }
 
-  findUser(userId: string) {
+  findUser(userId: string): Participant | undefined {
+    console.log(userId)
     const HikeUser = this.allUsers.hike.find(user => user.name === userId)
     const HikeRunUser = this.allUsers.hikeRun.find(user => user.name === userId)
     const HikeRunBikeUser = this.allUsers.hikeRunBike.find(user => user.name === userId)
     if(HikeUser) {
-      this.selectedUser = HikeUser;
       this.selectedUserGroup = 'Wandern';
+      return HikeUser;
     } else if(HikeRunUser) {
-      this.selectedUser = HikeRunUser;
       this.selectedUserGroup = 'Wandern und Laufen';
+      return HikeRunUser;
+
     } else if(HikeRunBikeUser) {
-      this.selectedUser = HikeRunBikeUser;
       this.selectedUserGroup = 'Wandern, Laufen und Radfahren';
+      return HikeRunBikeUser;
+    } else {
+      return undefined;
     }
   }
 
   getData() {
-    this.umService.getQuartalDataHike().subscribe(response => {
-      this.allUsers.hike = this.dP.convertHtmlToObject(response);
-      this.umService.getQuartalDataHikeRun().subscribe(response => {
-        this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
-        this.umService.getQuartalDataHikeRunBike().subscribe(response => {
-          this.allUsers.hikeRunBike = this.dP.convertHtmlToObject(response);
-          this.isLoading = false;
+    switch (this.selectedUserGroup) {
+      case 'Wandern':
+        this.umService.getQuartalDataHikeRun().subscribe(response => {
+          this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
+          this.umService.getQuartalDataHikeRunBike().subscribe(response => {
+            this.allUsers.hikeRunBike = this.dP.convertHtmlToObject(response);
+            this.isLoadingAll = false;
+            this.lS.getFriends().forEach(friendId => {
+              this.addFriend(friendId)
+            })
+          })
         })
-      })
-    })
-
-
-
-
+        break;
+      case 'Wandern und Laufen':
+        this.umService.getQuartalDataHike().subscribe(response => {
+          this.allUsers.hike = this.dP.convertHtmlToObject(response);
+          this.umService.getQuartalDataHikeRunBike().subscribe(response => {
+            this.allUsers.hikeRunBike = this.dP.convertHtmlToObject(response);
+            this.isLoadingAll = false;
+            this.lS.getFriends().forEach(friendId => {
+              this.addFriend(friendId)
+            })
+          })
+        })
+        break;
+      case 'Wandern, Laufen und Radfahren':
+        this.umService.getQuartalDataHike().subscribe(response => {
+          this.allUsers.hike = this.dP.convertHtmlToObject(response);
+          this.umService.getQuartalDataHikeRun().subscribe(response => {
+            this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
+            this.isLoadingAll = false;
+            this.lS.getFriends().forEach(friendId => {
+              this.addFriend(friendId)
+            })
+          })
+        })
+    }
   }
   getDataForGroup(id: number) {
     switch (id) {
@@ -94,20 +148,30 @@ export class MainComponent implements OnInit {
         this.umService.getQuartalDataHike().subscribe(response => {
           this.allUsers.hike = this.dP.convertHtmlToObject(response);
           this.isLoading = false;
+          if(this.selectUserId) {
+            this.selectUser(this.selectUserId)
+          }
         })
         break;
         case 2:
           this.umService.getQuartalDataHikeRun().subscribe(response => {
             this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
             this.isLoading = false;
+            if(this.selectUserId) {
+              this.selectUser(this.selectUserId)
+            }
           })
         break;
           case 3:
             this.umService.getQuartalDataHikeRunBike().subscribe(response => {
               this.allUsers.hikeRunBike = this.dP.convertHtmlToObject(response);
               this.isLoading = false;
+              if(this.selectUserId) {
+                this.selectUser(this.selectUserId)
+              }
             })
     }
+
   }
 
 
