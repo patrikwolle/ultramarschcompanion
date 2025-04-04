@@ -3,12 +3,15 @@ import {UmServiceService} from '../../services/um-service.service';
 import {DomParserService} from '../../services/dom-parser.service';
 import {AllParticipant, Participant} from '../../interfaces/participant';
 import {LocalStorageService} from '../../services/local-storage.service';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {GroupSelectDialogComponent} from '../../dialogs/group-select-dialog/group-select-dialog.component';
 
 @Component({
   selector: 'um-main',
   standalone: false,
   templateUrl: './main.component.html',
-  styleUrl: './main.component.scss'
+  styleUrl: './main.component.scss',
+  providers: [DialogService]
 })
 export class MainComponent implements OnInit {
 
@@ -20,6 +23,8 @@ export class MainComponent implements OnInit {
   selectedUserGroup: string = '';
   friendId: string = '';
   friends: Participant[] = []
+
+  ref: DynamicDialogRef | undefined;
 
   allUsers: AllParticipant = {
     hike: [],
@@ -39,7 +44,8 @@ export class MainComponent implements OnInit {
   constructor(
     private umService: UmServiceService,
     private dP: DomParserService,
-    private lS: LocalStorageService
+    private lS: LocalStorageService,
+    public dialogService: DialogService,
   ) {
   }
 
@@ -49,6 +55,24 @@ export class MainComponent implements OnInit {
     this.selectUserId = this.lS.getUser() !== null ? this.lS.getUser()! : undefined;
     if(this.selectedGroup !== 0) {
       this.groupSelect(this.selectedGroup)
+    } else {
+      this.ref = this.dialogService.open(GroupSelectDialogComponent,
+        {
+          header: 'Gruppe auswählen',
+          width: '50vw',
+          modal: true,
+          breakpoints: {
+            '960px': '75vw',
+            '640px': '100vw'
+          }
+        }
+      )
+      this.ref.onClose.subscribe(result => {
+        if(result !== undefined) {
+          this.groupSelect(result)
+        }
+      })
+
     }
   }
 

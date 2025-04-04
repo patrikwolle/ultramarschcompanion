@@ -1,17 +1,14 @@
 <div class="col-12">
   <p-card>
     <div class="grid">
-      <div class="col-12">
-        <p-selectbutton [options]="groupOptions" [(ngModel)]="selectedGroup" (onChange)="groupSelect(selectedGroup)" [multiple]="false" optionLabel="name" optionValue="value" />
-      </div>
       <div *ngIf="isLoading">Loading...</div>
       <div *ngIf="!isLoading" class="grid">
         <div class="col-12 sm:col-12 lg:col-6">
-          <input type="text" pInputText [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)"/>
+          <input type="text" pInputText style="margin-right: 10px" [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)"/>
           <p-button label="Suchen" (click)="selectUser(selectUserId)"></p-button>
         </div>
         <div *ngIf="selectedUser" class="col-12 sm:col-12 lg:col-6">
-          Angemeldet für {{selectedUser.gemeldet}} km.
+          {{selectedUser.name}} is angemeldet für {{selectedUser.gemeldet}} km.
         </div>
         <div style="position: relative; width: 100%;">
           <p-progressbar
@@ -51,13 +48,22 @@
     <p-progressbar mode="indeterminate" class="progressBarStyle" [style]="{ height: '6px' }" />
   </div>
   <div *ngIf="!isLoadingAll" class="grid">
-    <p-card *ngFor="let friend of friends">
-      <p-button label="Remove" (click)="removeFriend(friend.name!)"></p-button>
-      <um-friend [friend]="friend"></um-friend>
+    <p-card *ngFor="let friend of friends" class="friendCard">
+      <div class="grid" style="width: 100%; float: right">
+        <div class="col-10"></div>
+        <div class="col-2">
+          <p-button icon="pi pi-times" severity="danger" [rounded]="true" size="small" (click)="removeFriend(friend.name!)"></p-button>
+        </div>
+        <div class="col-12">
+          <um-friend [friend]="friend"></um-friend>
+        </div>
+      </div>
+
+
     </p-card>
-    <div class="col-12 sm:col-12 lg:col-6">
-      <input type="text" pInputText [(ngModel)]="friendId" (keyup.enter)="addFriend(friendId)"/>
-      <p-button label="Suchen" (click)="addFriend(friendId)"></p-button>
+    <div class="col-12 sm:col-12 lg:col-6" style="margin-top: 15px">
+      <input type="text" style="margin-right: 10px" pInputText [(ngModel)]="friendId" (keyup.enter)="addFriend(friendId)"/>
+      <p-button label="Add" (click)="addFriend(friendId)"></p-button>
     </div>
   </div>
 

@@ -7,7 +7,7 @@ import { MainComponent } from './components/main/main.component';
 import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {providePrimeNG} from 'primeng/config';
-import Lara from '@primeng/themes/aura';
+import Aura from '@primeng/themes/aura';
 import {CardModule} from 'primeng/card';
 import {InputText} from 'primeng/inputtext';
 import {FormsModule} from '@angular/forms';
@@ -16,12 +16,16 @@ import {SelectButtonModule} from 'primeng/selectbutton';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {ProgressBar, ProgressBarModule} from 'primeng/progressbar';
 import { FriendComponent } from './components/friend/friend.component';
+import {DialogModule} from 'primeng/dialog';
+import {DynamicDialogModule} from 'primeng/dynamicdialog';
+import { GroupSelectDialogComponent } from './dialogs/group-select-dialog/group-select-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    FriendComponent
+    FriendComponent,
+    GroupSelectDialogComponent
   ],
   imports: [
     CardModule,
@@ -32,6 +36,8 @@ import { FriendComponent } from './components/friend/friend.component';
     InputText,
     FormsModule,
     ButtonModule,
+    DialogModule,
+    DynamicDialogModule,
     SelectButtonModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
@@ -45,7 +51,7 @@ import { FriendComponent } from './components/friend/friend.component';
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Lara
+        preset: Aura
       }
     })
   ],
