@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1743781289961,
+  "timestamp": 1743810342645,
   "index": "/ultramarschcompanion/index.html",
   "assetGroups": [
     {
@@ -11,14 +11,14 @@
         "ignoreVary": true
       },
       "urls": [
-        "/ultramarschcompanion/chunk-ALKIXKJU.js",
-        "/ultramarschcompanion/chunk-ZSJBG64N.js",
+        "/ultramarschcompanion/chunk-D2JBC2QG.js",
+        "/ultramarschcompanion/chunk-FQZJKJ6W.js",
         "/ultramarschcompanion/favicon.ico",
         "/ultramarschcompanion/index.html",
-        "/ultramarschcompanion/main-BUXAZA4A.js",
+        "/ultramarschcompanion/main-CTBC5WUB.js",
         "/ultramarschcompanion/manifest.webmanifest",
         "/ultramarschcompanion/polyfills-FFHMD2TL.js",
-        "/ultramarschcompanion/styles-GDBM4OGQ.css"
+        "/ultramarschcompanion/styles-UGVYITW5.css"
       ],
       "patterns": []
     },
@@ -38,15 +38,19 @@
         "/ultramarschcompanion/icons/icon-48x48.png",
         "/ultramarschcompanion/icons/icon-512x512.png",
         "/ultramarschcompanion/icons/icon-72x72.png",
-        "/ultramarschcompanion/icons/icon-96x96.png"
+        "/ultramarschcompanion/icons/icon-96x96.png",
+        "/ultramarschcompanion/media/primeicons-4GST5W3O.woff2",
+        "/ultramarschcompanion/media/primeicons-DHQU4SEP.svg",
+        "/ultramarschcompanion/media/primeicons-GEFHGEHP.ttf",
+        "/ultramarschcompanion/media/primeicons-P53SE5CV.woff"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [],
   "hashTable": {
-    "/ultramarschcompanion/chunk-ALKIXKJU.js": "0fce7484c290c5ae2a3070528f39937b74045977",
-    "/ultramarschcompanion/chunk-ZSJBG64N.js": "93e1939ddcdad4d35e2c1d0b308eb15b21214c42",
+    "/ultramarschcompanion/chunk-D2JBC2QG.js": "ea9ed2dc6e5892d02f53e3e3032b8d738075d3fd",
+    "/ultramarschcompanion/chunk-FQZJKJ6W.js": "6b005ca73e3636b046a292e85dbb7cbf6ce3de0c",
     "/ultramarschcompanion/favicon.ico": "e6e1859c8dd7045468fa671ec46ca2b1a7b22846",
     "/ultramarschcompanion/icons/icon-128x128.png": "715bf0cb399a53a88b912b40fe3a7021ce79ea91",
     "/ultramarschcompanion/icons/icon-144x144.png": "20b40618935bb7b776a2e27585eb9308ca1dde2d",
@@ -57,11 +61,15 @@
     "/ultramarschcompanion/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
     "/ultramarschcompanion/icons/icon-72x72.png": "fed143160e9eba51b0bd4d27e6971047856218dc",
     "/ultramarschcompanion/icons/icon-96x96.png": "85645b694b21b2f7ab78b7f59016c3b13d1c49c5",
-    "/ultramarschcompanion/index.html": "61429842fc0c1cfbc98168484bd1a54e3b928053",
-    "/ultramarschcompanion/main-BUXAZA4A.js": "678a8107de45d16537999b67f3bc2f09a0b4edc3",
+    "/ultramarschcompanion/index.html": "22d6333a31e22b036f01cefd58e30790a2a1a495",
+    "/ultramarschcompanion/main-CTBC5WUB.js": "13a6dfd6bb31d9a27d5cc656d2beee4e29b88721",
     "/ultramarschcompanion/manifest.webmanifest": "0a139564a81af1c55e3da7ae405b828aee1fb7dd",
+    "/ultramarschcompanion/media/primeicons-4GST5W3O.woff2": "837c1279b6af9d297f34fdb43e6fcc9206a79f32",
+    "/ultramarschcompanion/media/primeicons-DHQU4SEP.svg": "a07ae39027c1a780b42fd82fad7575c2924d9d28",
+    "/ultramarschcompanion/media/primeicons-GEFHGEHP.ttf": "3b878ca7e88945a8ec25814810b95367d8977ae6",
+    "/ultramarschcompanion/media/primeicons-P53SE5CV.woff": "361e3af71bb4e515feead2f787348a92a5527158",
     "/ultramarschcompanion/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
-    "/ultramarschcompanion/styles-GDBM4OGQ.css": "3825f53874e1898091f4835086f01b8cd0ac5773"
+    "/ultramarschcompanion/styles-UGVYITW5.css": "acd87987f99f66caa8c471f4324c404afc095ad1"
   },
   "navigationUrls": [
     {
