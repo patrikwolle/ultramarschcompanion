@@ -1,0 +1,85 @@
+{
+  "configVersion": 1,
+  "timestamp": 1743773591896,
+  "index": "/ultramarschcompanion/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/ultramarschcompanion/chunk-S5QCFNZU.js",
+        "/ultramarschcompanion/chunk-VO4BEMII.js",
+        "/ultramarschcompanion/favicon.ico",
+        "/ultramarschcompanion/index.html",
+        "/ultramarschcompanion/main-HRFA2ZTF.js",
+        "/ultramarschcompanion/manifest.webmanifest",
+        "/ultramarschcompanion/polyfills-FFHMD2TL.js",
+        "/ultramarschcompanion/styles-GDBM4OGQ.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/ultramarschcompanion/icons/icon-128x128.png",
+        "/ultramarschcompanion/icons/icon-144x144.png",
+        "/ultramarschcompanion/icons/icon-152x152.png",
+        "/ultramarschcompanion/icons/icon-192x192.png",
+        "/ultramarschcompanion/icons/icon-384x384.png",
+        "/ultramarschcompanion/icons/icon-48x48.png",
+        "/ultramarschcompanion/icons/icon-512x512.png",
+        "/ultramarschcompanion/icons/icon-72x72.png",
+        "/ultramarschcompanion/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/ultramarschcompanion/chunk-S5QCFNZU.js": "efd52fc7ae0a3eb80dcdced006d2438158d063c9",
+    "/ultramarschcompanion/chunk-VO4BEMII.js": "cc9ba384ef21ffe4e9b37ae5c305ab8688f23d33",
+    "/ultramarschcompanion/favicon.ico": "e6e1859c8dd7045468fa671ec46ca2b1a7b22846",
+    "/ultramarschcompanion/icons/icon-128x128.png": "715bf0cb399a53a88b912b40fe3a7021ce79ea91",
+    "/ultramarschcompanion/icons/icon-144x144.png": "20b40618935bb7b776a2e27585eb9308ca1dde2d",
+    "/ultramarschcompanion/icons/icon-152x152.png": "f37c5f8eb1a6f0cb5a42db13101abca466cbcc30",
+    "/ultramarschcompanion/icons/icon-192x192.png": "cda699288902ab9bf101e1bf4877eafe2a24f904",
+    "/ultramarschcompanion/icons/icon-384x384.png": "16c5842510f4a26bd07fe5a459dbb1b745b12cd0",
+    "/ultramarschcompanion/icons/icon-48x48.png": "faa73a68592e85ff9353af4c84dc2165bb880aa9",
+    "/ultramarschcompanion/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
+    "/ultramarschcompanion/icons/icon-72x72.png": "fed143160e9eba51b0bd4d27e6971047856218dc",
+    "/ultramarschcompanion/icons/icon-96x96.png": "85645b694b21b2f7ab78b7f59016c3b13d1c49c5",
+    "/ultramarschcompanion/index.html": "dc95094c0bdb5c43fb9972fed725c79774e627ed",
+    "/ultramarschcompanion/main-HRFA2ZTF.js": "a2ae26bcffcda084fe12116087b49db5a645bab0",
+    "/ultramarschcompanion/manifest.webmanifest": "0a139564a81af1c55e3da7ae405b828aee1fb7dd",
+    "/ultramarschcompanion/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
+    "/ultramarschcompanion/styles-GDBM4OGQ.css": "3825f53874e1898091f4835086f01b8cd0ac5773"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
