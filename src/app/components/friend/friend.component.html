@@ -1,5 +1,18 @@
 <div class="grid">
+  <div class="col-12">
+    <img src="{{friend?.image}}" alt="user" style="width: 75px; height: 75px; border-radius: 10%">
+  </div>
   <div class="col-12">Name: {{friend?.name}}</div>
   <div class="col-12">Fortschritt: {{friend?.bereitsZurueckgelegt}} km/{{friend?.gemeldet}} km</div>
+  <div style="position: relative; width: 100%;">
+    <p-progressbar
+      [value]="progress"
+      [showValue]="false"
+      class="progressBarStyle"></p-progressbar>
+    <div
+      style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); line-height: 20px;">
+      {{ progress }}%
+    </div>
+  </div>
   <div class="col-12">Dieses Jahr zurückgelegt: {{friend?.jahr}} km</div>
 </div>

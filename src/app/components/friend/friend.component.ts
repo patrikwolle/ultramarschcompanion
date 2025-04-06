@@ -9,4 +9,9 @@ import {Participant} from '../../interfaces/participant';
 })
 export class FriendComponent {
     @Input('friend') friend: Participant | undefined;
+    progress: number = 0;
+
+    ngOnInit() {
+      this.progress = Math.round((100 / this.friend?.gemeldet! * this.friend?.bereitsZurueckgelegt!) * 100 ) / 100
+    }
 }

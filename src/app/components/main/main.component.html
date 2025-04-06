@@ -2,7 +2,7 @@
   <p-card>
     <div class="grid">
       <div *ngIf="isLoading">Loading...</div>
-      <div *ngIf="!isLoading" class="grid">
+      <div *ngIf="!isLoading" class="grid" style="width: 100%">
         <div class="col-12 sm:col-12 lg:col-6">
           <input type="text" pInputText style="margin-right: 10px" [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)"/>
           <p-button label="Suchen" (click)="selectUser(selectUserId)"></p-button>
@@ -47,8 +47,8 @@
   <div *ngIf="isLoadingAll">
     <p-progressbar mode="indeterminate" class="progressBarStyle" [style]="{ height: '6px' }" />
   </div>
-  <div *ngIf="!isLoadingAll" class="grid">
-    <p-card *ngFor="let friend of friends" class="friendCard">
+  <div *ngIf="!isLoadingAll" class="grid" style="width: 100%">
+    <p-card *ngFor="let friend of friends" class="col-12 sm:col-12 lg:col-6 friendCard">
       <div class="grid" style="width: 100%; float: right">
         <div class="col-10"></div>
         <div class="col-2">

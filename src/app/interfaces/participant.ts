@@ -1,5 +1,6 @@
 export interface Participant {
   name: string | undefined;
+  image: string | undefined;
   gemeldet: number | undefined; // z. B. "1000 Kilometer"
   bereitsZurueckgelegt: number | undefined; // z. B. "50,50 Kilometer"
   jahr: number | undefined; // z. B. "556,44 Kilometer"

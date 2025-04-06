@@ -133,7 +133,7 @@ export class MainComponent implements OnInit {
         this.umService.getQuartalDataHikeRun().subscribe(response => {
           this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
           this.umService.getQuartalDataHikeRunBike().subscribe(response => {
-            this.allUsers.hikeRunBike = this.dP.convertHtmlToObject(response);
+            this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response);
             this.isLoadingAll = false;
             this.lS.getFriends().forEach(friendId => {
               this.addFriend(friendId)
@@ -145,7 +145,7 @@ export class MainComponent implements OnInit {
         this.umService.getQuartalDataHike().subscribe(response => {
           this.allUsers.hike = this.dP.convertHtmlToObject(response);
           this.umService.getQuartalDataHikeRunBike().subscribe(response => {
-            this.allUsers.hikeRunBike = this.dP.convertHtmlToObject(response);
+            this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response);
             this.isLoadingAll = false;
             this.lS.getFriends().forEach(friendId => {
               this.addFriend(friendId)
@@ -188,7 +188,7 @@ export class MainComponent implements OnInit {
         break;
           case 3:
             this.umService.getQuartalDataHikeRunBike().subscribe(response => {
-              this.allUsers.hikeRunBike = this.dP.convertHtmlToObject(response);
+              this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response);
               this.isLoading = false;
               if(this.selectUserId) {
                 this.selectUser(this.selectUserId)
