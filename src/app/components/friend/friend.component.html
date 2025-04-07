@@ -1,9 +1,5 @@
-<div class="grid">
-  <div class="col-12">
-    <img src="{{friend?.image}}" alt="user" style="width: 75px; height: 75px; border-radius: 10%">
-  </div>
-  <div class="col-12">Name: {{friend?.name}}</div>
-  <div class="col-12">Fortschritt: {{friend?.bereitsZurueckgelegt}} km/{{friend?.gemeldet}} km</div>
+<div class="grid" style="width: 100%">
+  <div class="col-12">{{friend?.name}}: {{friend?.bereitsZurueckgelegt}} km / {{friend?.gemeldet}} km (Ø: {{friend?.tagesdurchschnitt}} km)</div>
   <div style="position: relative; width: 100%;">
     <p-progressbar
       [value]="progress"
@@ -14,5 +10,5 @@
       {{ progress }}%
     </div>
   </div>
-  <div class="col-12">Dieses Jahr zurückgelegt: {{friend?.jahr}} km</div>
+
 </div>

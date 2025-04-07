@@ -19,6 +19,8 @@ import { FriendComponent } from './components/friend/friend.component';
 import {DialogModule} from 'primeng/dialog';
 import {DynamicDialogModule} from 'primeng/dynamicdialog';
 import { GroupSelectDialogComponent } from './dialogs/group-select-dialog/group-select-dialog.component';
+import {NgOptimizedImage} from '@angular/common';
+import {FloatLabel} from 'primeng/floatlabel';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { GroupSelectDialogComponent } from './dialogs/group-select-dialog/group-
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    ProgressBarModule
+    ProgressBarModule,
+    NgOptimizedImage,
+    FloatLabel
   ],
   providers: [
     provideAnimationsAsync(),

@@ -8,7 +8,7 @@
           <p-button label="Suchen" (click)="selectUser(selectUserId)"></p-button>
         </div>
         <div *ngIf="selectedUser" class="col-12 sm:col-12 lg:col-6">
-          {{selectedUser.name}} is angemeldet für {{selectedUser.gemeldet}} km.
+          {{selectedUser.name}} hat {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km geschafft.
         </div>
         <div style="position: relative; width: 100%;">
           <p-progressbar
@@ -22,23 +22,14 @@
         </div>
 
       <div class="grid" style="width: 100%; margin-top: 15px">
-        <div class="col-6 sm:col-6 lg:col-6">
-          Bisher geschafft
+        <div class="col-12 sm:col-6 lg:col-3">
+          Ø: {{selectedUser?.tagesdurchschnitt}} km
         </div>
-        <div class="col-6 sm:col-6 lg:col-6">
-          {{selectedUser?.bereitsZurueckgelegt}} km
+        <div class="col-12 sm:col-6 lg:col-3">
+          Letze Meldung: {{selectedUser?.letzteMeldung?.datum | date: 'dd.MM.yyyy'}} : {{selectedUser?.letzteMeldung?.distanz}} km
         </div>
-        <div class="col-6 sm:col-6 lg:col-6">
-          Tagesdurchschnitt
-        </div>
-        <div class="col-6 sm:col-6 lg:col-6">
-          {{selectedUser?.tagesdurchschnitt}} km
-        </div>
-        <div class="col-6 sm:col-6 lg:col-6">
-          In diesem Jahr zurückgelegt
-        </div>
-        <div class="col-6 sm:col-6 lg:col-6">
-          {{selectedUser?.jahr}} km
+        <div class="col-12 sm:col-6 lg:col-3">
+          In diesem Jahr zurückgelegt: {{selectedUser?.jahr}} km
         </div>
         </div>
       </div>
@@ -50,7 +41,9 @@
   <div *ngIf="!isLoadingAll" class="grid" style="width: 100%">
     <p-card *ngFor="let friend of friends" class="col-12 sm:col-12 lg:col-6 friendCard">
       <div class="grid" style="width: 100%; float: right">
-        <div class="col-10"></div>
+        <div class="col-10">
+            <img ngSrc="{{friend?.image}}" width="50" height="50" alt="user" style="width: 50px; height: 50px; border-radius: 50%">
+        </div>
         <div class="col-2">
           <p-button icon="pi pi-times" severity="danger" [rounded]="true" size="small" (click)="removeFriend(friend.name!)"></p-button>
         </div>
@@ -62,8 +55,18 @@
 
     </p-card>
     <div class="col-12 sm:col-12 lg:col-6" style="margin-top: 15px">
-      <input type="text" style="margin-right: 10px" pInputText [(ngModel)]="friendId" (keyup.enter)="addFriend(friendId)"/>
-      <p-button label="Add" (click)="addFriend(friendId)"></p-button>
+      <div class="grid">
+        Füge einen Freund hinzu
+        <div class="col-10">
+          <input type="text" style="margin-right: 10px" id="firendInput" placeholder="Vorname N." pInputText [(ngModel)]="friendId" (keyup.enter)="addFriend(friendId)"/>
+        </div>
+        <div class="col-2">
+          <p-button [style]="{width: '100%'}" icon="pi pi-user-plus" (click)="addFriend(friendId)"></p-button>
+        </div>
+      </div>
+
+
+
     </div>
   </div>
 

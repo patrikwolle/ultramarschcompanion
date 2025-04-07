@@ -5,6 +5,7 @@ import {AllParticipant, Participant} from '../../interfaces/participant';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {GroupSelectDialogComponent} from '../../dialogs/group-select-dialog/group-select-dialog.component';
+import {DbService} from '../../services/db.service';
 
 @Component({
   selector: 'um-main',
@@ -44,6 +45,7 @@ export class MainComponent implements OnInit {
   constructor(
     private umService: UmServiceService,
     private dP: DomParserService,
+    private database: DbService,
     private lS: LocalStorageService,
     public dialogService: DialogService,
   ) {
@@ -53,6 +55,20 @@ export class MainComponent implements OnInit {
     this.selectedUserGroup = typeof this.lS.getCategory() === 'string' &&  this.lS.getCategory() !== null ?  this.lS.getCategory()!  : '';
     this.selectedGroup = this.groupOptions.find(group => group.name === this.selectedUserGroup)?.value || 0;
     this.selectUserId = this.lS.getUser() !== null ? this.lS.getUser()! : undefined;
+    this.database.getParticipantsHike().then((participants) => {
+      this.allUsers.hike = participants
+      this.database.getParticipantsHikeRun().then((participants) => {
+        this.allUsers.hikeRun = participants
+        this.database.getParticipantsHikeRunBike().then((participants) => {
+          this.allUsers.hikeRunBike = participants
+          this.selectedUser = this.findUser(this.selectUserId!);
+          this.isLoadingAll = false;
+          this.lS.getFriends().forEach(friendId => {
+            this.addFriend(friendId)
+          })
+        })
+      })
+    })
     if(this.selectedGroup !== 0) {
       this.groupSelect(this.selectedGroup)
     } else {
@@ -88,6 +104,13 @@ export class MainComponent implements OnInit {
       this.lS.addFriend(friendId)
     }
     this.friendId = '';
+  }
+
+  updateFriend(friendId: string) {
+    const friend = this.findUser(friendId);
+    if(friend) {
+      this.friends = this.friends.map(f => f.name === friendId ? friend : f)
+    }
   }
 
   removeFriend(friendId: string) {
@@ -132,11 +155,13 @@ export class MainComponent implements OnInit {
       case 'Wandern':
         this.umService.getQuartalDataHikeRun().subscribe(response => {
           this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
+          this.database.addParticipantHike(this.allUsers.hike).then(() => {})
           this.umService.getQuartalDataHikeRunBike().subscribe(response => {
             this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response);
-            this.isLoadingAll = false;
-            this.lS.getFriends().forEach(friendId => {
-              this.addFriend(friendId)
+            this.database.addParticipantHikeRunBike(this.allUsers.hikeRunBike).then(() => {
+              this.lS.getFriends().forEach(friendId => {
+                this.updateFriend(friendId)
+              })
             })
           })
         })
@@ -144,11 +169,13 @@ export class MainComponent implements OnInit {
       case 'Wandern und Laufen':
         this.umService.getQuartalDataHike().subscribe(response => {
           this.allUsers.hike = this.dP.convertHtmlToObject(response);
+          this.database.addParticipantHike(this.allUsers.hike).then(() => {})
           this.umService.getQuartalDataHikeRunBike().subscribe(response => {
             this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response);
-            this.isLoadingAll = false;
-            this.lS.getFriends().forEach(friendId => {
-              this.addFriend(friendId)
+            this.database.addParticipantHikeRunBike(this.allUsers.hikeRunBike).then(() => {
+              this.lS.getFriends().forEach(friendId => {
+                this.updateFriend(friendId)
+              })
             })
           })
         })
@@ -156,11 +183,13 @@ export class MainComponent implements OnInit {
       case 'Wandern, Laufen und Radfahren':
         this.umService.getQuartalDataHike().subscribe(response => {
           this.allUsers.hike = this.dP.convertHtmlToObject(response);
+          this.database.addParticipantHike(this.allUsers.hike).then(() => {})
           this.umService.getQuartalDataHikeRun().subscribe(response => {
             this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
-            this.isLoadingAll = false;
-            this.lS.getFriends().forEach(friendId => {
-              this.addFriend(friendId)
+            this.database.addParticipantHikeRun(this.allUsers.hikeRun).then(() => {
+              this.lS.getFriends().forEach(friendId => {
+                this.updateFriend(friendId)
+              })
             })
           })
         })
@@ -171,6 +200,7 @@ export class MainComponent implements OnInit {
       case 1:
         this.umService.getQuartalDataHike().subscribe(response => {
           this.allUsers.hike = this.dP.convertHtmlToObject(response);
+          this.database.addParticipantHike(this.allUsers.hike).then(() => {})
           this.isLoading = false;
           if(this.selectUserId) {
             this.selectUser(this.selectUserId)
@@ -180,6 +210,7 @@ export class MainComponent implements OnInit {
         case 2:
           this.umService.getQuartalDataHikeRun().subscribe(response => {
             this.allUsers.hikeRun = this.dP.convertHtmlToObject(response);
+            this.database.addParticipantHikeRun(this.allUsers.hikeRun).then(() => {})
             this.isLoading = false;
             if(this.selectUserId) {
               this.selectUser(this.selectUserId)
@@ -189,6 +220,7 @@ export class MainComponent implements OnInit {
           case 3:
             this.umService.getQuartalDataHikeRunBike().subscribe(response => {
               this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response);
+              this.database.addParticipantHikeRunBike(this.allUsers.hikeRunBike).then(() => {})
               this.isLoading = false;
               if(this.selectUserId) {
                 this.selectUser(this.selectUserId)

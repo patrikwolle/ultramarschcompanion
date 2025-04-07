@@ -23,7 +23,7 @@ export class LocalStorageService {
     return localStorage.getItem('user');
   }
 
-  addFriend(friend: string) {
+  async addFriend(friend: string) {
     let friends: string[] = localStorage.getItem('friends')?.split(',') || [];
     if(friends.includes(friend)) return;
     friends.push(friend);
