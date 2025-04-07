@@ -21,6 +21,8 @@ import {DynamicDialogModule} from 'primeng/dynamicdialog';
 import { GroupSelectDialogComponent } from './dialogs/group-select-dialog/group-select-dialog.component';
 import {NgOptimizedImage} from '@angular/common';
 import {FloatLabel} from 'primeng/floatlabel';
+import {Menubar} from 'primeng/menubar';
+import {Avatar} from 'primeng/avatar';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import {FloatLabel} from 'primeng/floatlabel';
     }),
     ProgressBarModule,
     NgOptimizedImage,
-    FloatLabel
+    FloatLabel,
+    Menubar,
+    Avatar
   ],
   providers: [
     provideAnimationsAsync(),

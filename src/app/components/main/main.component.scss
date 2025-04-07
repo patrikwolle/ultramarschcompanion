@@ -5,3 +5,9 @@
 .friendCard {
   margin-top: 15px;
 }
+
+:host ::ng-deep .p-menubar {
+  background-color: #363635 !important;
+
+}
+

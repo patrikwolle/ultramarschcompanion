@@ -1,14 +1,26 @@
+<div style="width: 100vw; margin-top: -10px; margin-left: -10px; margin-right: -10px;">
+  <p-menubar class="menubarStyle">
+    <ng-template #start>
+      <input type="text" pInputText style="margin-right: 10px" placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)"/>
+      <p-button icon="pi pi-search" (click)="selectUser(selectUserId)"></p-button>
+    </ng-template>
+    <ng-template #end>
+      <div class="flex items-center gap-2">
+        <p-avatar [image]="selectedUser?.image" size="large" />
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>
 <div class="col-12">
   <p-card>
     <div class="grid">
       <div *ngIf="isLoading">Loading...</div>
       <div *ngIf="!isLoading" class="grid" style="width: 100%">
         <div class="col-12 sm:col-12 lg:col-6">
-          <input type="text" pInputText style="margin-right: 10px" [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)"/>
-          <p-button label="Suchen" (click)="selectUser(selectUserId)"></p-button>
+
         </div>
         <div *ngIf="selectedUser" class="col-12 sm:col-12 lg:col-6">
-          {{selectedUser.name}} hat {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km geschafft.
+          {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km (Ø: {{selectedUser.tagesdurchschnitt}} km).
         </div>
         <div style="position: relative; width: 100%;">
           <p-progressbar
@@ -22,9 +34,6 @@
         </div>
 
       <div class="grid" style="width: 100%; margin-top: 15px">
-        <div class="col-12 sm:col-6 lg:col-3">
-          Ø: {{selectedUser?.tagesdurchschnitt}} km
-        </div>
         <div class="col-12 sm:col-6 lg:col-3">
           Letze Meldung: {{selectedUser?.letzteMeldung?.datum | date: 'dd.MM.yyyy'}} : {{selectedUser?.letzteMeldung?.distanz}} km
         </div>
@@ -42,7 +51,7 @@
     <p-card *ngFor="let friend of friends" class="col-12 sm:col-12 lg:col-6 friendCard">
       <div class="grid" style="width: 100%; float: right">
         <div class="col-10">
-            <img ngSrc="{{friend?.image}}" width="50" height="50" alt="user" style="width: 50px; height: 50px; border-radius: 50%">
+          <p-avatar [image]="friend.image" size="large"></p-avatar>
         </div>
         <div class="col-2">
           <p-button icon="pi pi-times" severity="danger" [rounded]="true" size="small" (click)="removeFriend(friend.name!)"></p-button>
