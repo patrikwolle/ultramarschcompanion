@@ -1,18 +1,18 @@
-<div style="width: 100vw; margin-top: -10px; margin-left: -10px; margin-right: -10px;">
-  <p-menubar class="menubarStyle">
-    <ng-template #start>
-      <input type="text" pInputText style="margin-right: 10px" placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)"/>
-      <p-button icon="pi pi-search" (click)="selectUser(selectUserId)"></p-button>
-    </ng-template>
-    <ng-template #end>
-      <div class="flex items-center gap-2">
-        <p-avatar [image]="selectedUser?.image" size="large" />
-      </div>
-    </ng-template>
-  </p-menubar>
-</div>
 <div class="col-12">
   <p-card>
+    <ng-template pTemplate="header">
+      <div class="menuBarFriend">
+        <div class="menuBarLeft">
+          <input type="text" pInputText placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)" />
+          <p-button icon="pi pi-search" (click)="selectUser(selectUserId)"></p-button>
+        </div>
+
+        <div class="menuBarRight">
+          <p-avatar [image]="selectedUser?.image" size="large" />
+        </div>
+      </div>
+
+    </ng-template>
     <div class="grid">
       <div *ngIf="isLoading">Loading...</div>
       <div *ngIf="!isLoading" class="grid" style="width: 100%">
@@ -20,7 +20,7 @@
 
         </div>
         <div *ngIf="selectedUser" class="col-12 sm:col-12 lg:col-6">
-          {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km (Ø: {{selectedUser.tagesdurchschnitt}} km).
+          {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km (Ø: {{selectedUser.tagesdurchschnitt}} km/d).
         </div>
         <div style="position: relative; width: 100%;">
           <p-progressbar
@@ -40,6 +40,9 @@
         <div class="col-12 sm:col-6 lg:col-3">
           In diesem Jahr zurückgelegt: {{selectedUser?.jahr}} km
         </div>
+        <div class="col-12 sm:col-6 lg:col-3">
+          Übrige Tage: {{calculateToGoPerDay()}} Tage (Ø: {{calculateMeanToGo()}} km/d)
+        </div>
         </div>
       </div>
     </div>
@@ -49,13 +52,20 @@
   </div>
   <div *ngIf="!isLoadingAll" class="grid" style="width: 100%">
     <p-card *ngFor="let friend of friends" class="col-12 sm:col-12 lg:col-6 friendCard">
+      <ng-template pTemplate="header">
+        <div class="menuBarFriend">
+          <div class="menuBarLeft">
+            {{friend.name}}
+          </div>
+
+          <div class="menuBarRight">
+            <p-avatar [image]="friend.image" size="large" />
+            <p-button icon="pi pi-times" severity="danger" [rounded]="true" size="small" (click)="removeFriend(friend.name!)"></p-button>
+          </div>
+        </div>
+
+      </ng-template>
       <div class="grid" style="width: 100%; float: right">
-        <div class="col-10">
-          <p-avatar [image]="friend.image" size="large"></p-avatar>
-        </div>
-        <div class="col-2">
-          <p-button icon="pi pi-times" severity="danger" [rounded]="true" size="small" (click)="removeFriend(friend.name!)"></p-button>
-        </div>
         <div class="col-12">
           <um-friend [friend]="friend"></um-friend>
         </div>

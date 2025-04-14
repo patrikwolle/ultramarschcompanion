@@ -1,5 +1,4 @@
 <div class="grid" style="width: 100%">
-  <div class="col-12">{{friend?.name}}: {{friend?.bereitsZurueckgelegt}} km / {{friend?.gemeldet}} km (Ø: {{friend?.tagesdurchschnitt}} km)</div>
   <div style="position: relative; width: 100%;">
     <p-progressbar
       [value]="progress"
@@ -10,5 +9,6 @@
       {{ progress }}%
     </div>
   </div>
+  <div class="col-12">{{friend?.bereitsZurueckgelegt}} km / {{friend?.gemeldet}} km (Ø: {{friend?.tagesdurchschnitt}} km)</div>
 
 </div>

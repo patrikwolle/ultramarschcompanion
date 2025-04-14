@@ -27,6 +27,13 @@ export class MainComponent implements OnInit {
 
   ref: DynamicDialogRef | undefined;
 
+  quartale = [
+    {
+      name: 'q1',
+      start: new Date(20)
+    }
+  ]
+
   allUsers: AllParticipant = {
     hike: [],
     hikeRun: [],
@@ -228,7 +235,53 @@ export class MainComponent implements OnInit {
             })
     }
 
+
+
   }
+
+  calculateToGoPerDay(): number {
+    const today: Date = new Date();
+    return this.checkDateAndCalculateDays(today)
+
+  }
+
+  checkDateAndCalculateDays(today: Date): number {
+    if (today.getMonth() >= 0 && today.getMonth() <= 2) {
+      return this.getTotalDaysForMonthsInCurrentYear([0, 1, 2]) - today.getDate();
+    } else if (today.getMonth() >= 3 && today.getMonth() <= 5) {
+      return this.getTotalDaysForMonthsInCurrentYear([3, 4, 5]) - today.getDate();
+    } else if (today.getMonth() >= 6 && today.getMonth() <= 8) {
+      return this.getTotalDaysForMonthsInCurrentYear([6, 7, 8]) - today.getDate();
+    } else if (today.getMonth() >= 9 && today.getMonth() <= 11) {
+      return this.getTotalDaysForMonthsInCurrentYear([9, 10, 11]) - today.getDate();
+    } else {
+      return 0;
+    }
+
+  }
+
+  calculateMeanToGo(): string {
+    return ((this.selectedUser?.gemeldet! - this.selectedUser?.bereitsZurueckgelegt!) / this.checkDateAndCalculateDays(new Date())).toFixed(2)
+  }
+
+  getTotalDaysForMonthsInCurrentYear(months: number[]): number {
+    const currentYear = new Date().getFullYear(); // Aktuelles Jahr
+    let totalDays = 0;
+
+    months.forEach((month) => {
+      totalDays += this.getDaysInMonth(currentYear, month);
+    });
+
+    return totalDays;
+  }
+
+  getDaysInMonth(year: number, month: number): number {
+    // Berechnet die Anzahl der Tage im angegebenen Monat
+    return new Date(year, month, 0).getDate();
+  }
+
+
+
 
 
 }

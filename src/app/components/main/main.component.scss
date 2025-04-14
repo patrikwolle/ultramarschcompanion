@@ -6,8 +6,51 @@
   margin-top: 15px;
 }
 
-:host ::ng-deep .p-menubar {
-  background-color: #363635 !important;
 
+.menuBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
+  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
+  background-color: #373735; /* optional: Hintergrundfarbe */
+  padding: 0 20px; /* Innenabstand links und rechts */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: Schatten für Trennung */
 }
 
+.menuBarFriend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
+  color: white;
+  width: 100%; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
+  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
+  background-color: #373735; /* optional: Hintergrundfarbe */
+  padding: 0 20px; /* Innenabstand links und rechts */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: Schatten für Trennung */
+}
+
+.menuBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Abstand zwischen dem Input-Feld und dem Button */
+}
+
+.menuBarRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input[pInputText] {
+  height: 40px; /* sorgt dafür, dass das Input-Feld gleich hoch ist wie die anderen Elemente */
+}
+p-button {
+  height: 40px; /* Gleiche Höhe wie das Input-Feld */
+  display: flex; /* Flexbox verwenden, um Inhalt (Icon/Text) zu zentrieren */
+  align-items: center; /* Vertikale Zentrierung */
+  justify-content: center; /* Horizontale Zentrierung */
+  padding: 0; /* Entfernt zusätzlichen inneren Abstand */
+  box-sizing: border-box; /* Verhindert, dass zusätzliche Padding/Border die Höhe beeinflussen */
+}
