@@ -18,6 +18,14 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: Schatten für Trennung */
 }
 
+.mainBar {
+  display: flex;
+  color: white;
+  width: 100vw; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
+  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
+  background-color: #373735; /* optional: Hintergrundfarbe */
+}
+
 .menuBarFriend {
   display: flex;
   justify-content: space-between;
@@ -40,6 +48,7 @@
 .menuBarRight {
   display: flex;
   align-items: center;
+  margin-left: 10px;
   gap: 10px;
 }
 

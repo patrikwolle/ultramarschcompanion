@@ -9,6 +9,6 @@
       {{ progress }}%
     </div>
   </div>
-  <div class="col-12">{{friend?.bereitsZurueckgelegt}} km / {{friend?.gemeldet}} km (Ø: {{friend?.tagesdurchschnitt}} km)</div>
+  <div class="col-12">{{friend?.bereitsZurueckgelegt?.toFixed(2)}} km / {{friend?.gemeldet}} km (Ø: {{friend?.tagesdurchschnitt}} km)</div>
 
 </div>

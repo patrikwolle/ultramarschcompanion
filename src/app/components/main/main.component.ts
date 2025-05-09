@@ -246,14 +246,17 @@ export class MainComponent implements OnInit {
   }
 
   checkDateAndCalculateDays(today: Date): number {
+    console.log(today.getDate())
+    let days = 0;
+
     if (today.getMonth() >= 0 && today.getMonth() <= 2) {
-      return this.getTotalDaysForMonthsInCurrentYear([0, 1, 2]) - today.getDate();
+      return this.getTotalDaysForMonthsInCurrentYear([0, 1, 2]) - this.getRemainingDays(today);
     } else if (today.getMonth() >= 3 && today.getMonth() <= 5) {
-      return this.getTotalDaysForMonthsInCurrentYear([3, 4, 5]) - today.getDate();
+      return this.getTotalDaysForMonthsInCurrentYear([3, 4, 5]) - this.getRemainingDays(today);
     } else if (today.getMonth() >= 6 && today.getMonth() <= 8) {
-      return this.getTotalDaysForMonthsInCurrentYear([6, 7, 8]) - today.getDate();
+      return this.getTotalDaysForMonthsInCurrentYear([6, 7, 8]) - this.getRemainingDays(today);
     } else if (today.getMonth() >= 9 && today.getMonth() <= 11) {
-      return this.getTotalDaysForMonthsInCurrentYear([9, 10, 11]) - today.getDate();
+      return this.getTotalDaysForMonthsInCurrentYear([9, 10, 11]) - this.getRemainingDays(today);
     } else {
       return 0;
     }
@@ -278,6 +281,37 @@ export class MainComponent implements OnInit {
   getDaysInMonth(year: number, month: number): number {
     // Berechnet die Anzahl der Tage im angegebenen Monat
     return new Date(year, month, 0).getDate();
+  }
+
+  getRemainingDays(d: Date) {
+    switch (d.getMonth()) {
+      case 0:
+        return this.getDaysInMonth(d.getFullYear(), 0) + this.getDaysInMonth(d.getFullYear(), 1) + this.getDaysInMonth(d.getFullYear(), 2)- d.getDate();
+      case 1:
+        return this.getDaysInMonth(d.getFullYear(), 1) + this.getDaysInMonth(d.getFullYear(), 2) - d.getDate();
+      case 2:
+        return this.getDaysInMonth(d.getFullYear(), 2) - d.getDate();
+      case 3:
+        return this.getDaysInMonth(d.getFullYear(), 3) + this.getDaysInMonth(d.getFullYear(), 4) + this.getDaysInMonth(d.getFullYear(), 5)- d.getDate();
+      case 4:
+        return this.getDaysInMonth(d.getFullYear(), 4) + this.getDaysInMonth(d.getFullYear(), 5) - d.getDate();
+      case 5:
+        return this.getDaysInMonth(d.getFullYear(), 5) - d.getDate();
+      case 6:
+        return this.getDaysInMonth(d.getFullYear(), 6) + this.getDaysInMonth(d.getFullYear(), 7) + this.getDaysInMonth(d.getFullYear(), 8)- d.getDate();
+      case 7:
+        return this.getDaysInMonth(d.getFullYear(), 7) + this.getDaysInMonth(d.getFullYear(), 8) - d.getDate();
+      case 8:
+        return this.getDaysInMonth(d.getFullYear(), 8) - d.getDate();
+      case 9:
+        return this.getDaysInMonth(d.getFullYear(), 9) + this.getDaysInMonth(d.getFullYear(), 10) + this.getDaysInMonth(d.getFullYear(), 11)- d.getDate();
+      case 10:
+        return this.getDaysInMonth(d.getFullYear(), 10) + this.getDaysInMonth(d.getFullYear(), 11) - d.getDate();
+      case 11:
+        return this.getDaysInMonth(d.getFullYear(), 11) - d.getDate();
+        default:
+          return 0;
+    }
   }
 
 

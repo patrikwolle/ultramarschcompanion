@@ -1,7 +1,6 @@
-<div class="col-12">
-  <p-card>
-    <ng-template pTemplate="header">
-      <div class="menuBarFriend">
+<div class="col-12" style="width: 100vw;">
+  <div style="width: 100vw">
+      <div class="menuBar">
         <div class="menuBarLeft">
           <input type="text" pInputText placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)" />
           <p-button icon="pi pi-search" (click)="selectUser(selectUserId)"></p-button>
@@ -11,8 +10,6 @@
           <p-avatar [image]="selectedUser?.image" size="large" />
         </div>
       </div>
-
-    </ng-template>
     <div class="grid">
       <div *ngIf="isLoading">Loading...</div>
       <div *ngIf="!isLoading" class="grid" style="width: 100%">
@@ -46,7 +43,7 @@
         </div>
       </div>
     </div>
-  </p-card>
+  </div>
   <div *ngIf="isLoadingAll">
     <p-progressbar mode="indeterminate" class="progressBarStyle" [style]="{ height: '6px' }" />
   </div>
