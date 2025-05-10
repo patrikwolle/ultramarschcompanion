@@ -246,21 +246,7 @@ export class MainComponent implements OnInit {
   }
 
   checkDateAndCalculateDays(today: Date): number {
-    console.log(today.getDate())
-    let days = 0;
-
-    if (today.getMonth() >= 0 && today.getMonth() <= 2) {
-      return this.getTotalDaysForMonthsInCurrentYear([0, 1, 2]) - this.getRemainingDays(today);
-    } else if (today.getMonth() >= 3 && today.getMonth() <= 5) {
-      return this.getTotalDaysForMonthsInCurrentYear([3, 4, 5]) - this.getRemainingDays(today);
-    } else if (today.getMonth() >= 6 && today.getMonth() <= 8) {
-      return this.getTotalDaysForMonthsInCurrentYear([6, 7, 8]) - this.getRemainingDays(today);
-    } else if (today.getMonth() >= 9 && today.getMonth() <= 11) {
-      return this.getTotalDaysForMonthsInCurrentYear([9, 10, 11]) - this.getRemainingDays(today);
-    } else {
-      return 0;
-    }
-
+    return this.getRemainingDays(today);
   }
 
   calculateMeanToGo(): string {
