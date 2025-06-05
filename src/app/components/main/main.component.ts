@@ -6,6 +6,10 @@ import {LocalStorageService} from '../../services/local-storage.service';
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {GroupSelectDialogComponent} from '../../dialogs/group-select-dialog/group-select-dialog.component';
 import {DbService} from '../../services/db.service';
+import {MenuItem, MenuItemCommandEvent} from 'primeng/api';
+import {SettingsComponent} from '../settings/settings.component';
+import {ProcessedMessages} from '../../interfaces/processed-messages';
+import {UtilsService} from '../../services/utils.service';
 
 @Component({
   selector: 'um-main',
@@ -24,8 +28,19 @@ export class MainComponent implements OnInit {
   selectedUserGroup: string = '';
   friendId: string = '';
   friends: Participant[] = []
+  history: ProcessedMessages[] =[];
+  showHistory: boolean = false;
 
   ref: DynamicDialogRef | undefined;
+
+  menuItems: MenuItem[] = [
+    {
+      label: 'Settings',
+    },
+    {
+      label: 'Upload'
+    }
+  ]
 
   quartale = [
     {
@@ -48,6 +63,8 @@ export class MainComponent implements OnInit {
   ];
 
   selectedGroup: number = 0;
+  self = this;
+  token: string = '';
 
   constructor(
     private umService: UmServiceService,
@@ -55,13 +72,44 @@ export class MainComponent implements OnInit {
     private database: DbService,
     private lS: LocalStorageService,
     public dialogService: DialogService,
+    protected utils: UtilsService
   ) {
   }
 
   ngOnInit() {
+    const self = this;
+    this.token = this.lS.getToken();
+    if(this.token !== '') {
+      this.umService.getProcessedMessages(this.token).subscribe(res => {
+          this.history = this.dP.extractProcessedMessages(res);
+        }
+      )
+
+    }
+
     this.selectedUserGroup = typeof this.lS.getCategory() === 'string' &&  this.lS.getCategory() !== null ?  this.lS.getCategory()!  : '';
     this.selectedGroup = this.groupOptions.find(group => group.name === this.selectedUserGroup)?.value || 0;
     this.selectUserId = this.lS.getUser() !== null ? this.lS.getUser()! : undefined;
+    this.menuItems = [
+      {
+        label: 'Settings',
+        command(event: MenuItemCommandEvent) {
+          self.dialogService.open(SettingsComponent,
+            {
+              header: 'Einstellungen',
+              width: '50vw',
+              modal: true,
+              breakpoints: {
+                '960px': '75vw',
+                '640px': '100vw'
+              }
+            })
+        }
+      },
+      {
+        label: 'Upload'
+      }
+    ]
     this.database.getParticipantsHike().then((participants) => {
       this.allUsers.hike = participants
       this.database.getParticipantsHikeRun().then((participants) => {
@@ -239,65 +287,10 @@ export class MainComponent implements OnInit {
 
   }
 
-  calculateToGoPerDay(): number {
-    const today: Date = new Date();
-    return this.checkDateAndCalculateDays(today)
 
-  }
 
-  checkDateAndCalculateDays(today: Date): number {
-    return this.getRemainingDays(today);
-  }
-
-  calculateMeanToGo(): string {
-    return ((this.selectedUser?.gemeldet! - this.selectedUser?.bereitsZurueckgelegt!) / this.checkDateAndCalculateDays(new Date())).toFixed(2)
-  }
-
-  getTotalDaysForMonthsInCurrentYear(months: number[]): number {
-    const currentYear = new Date().getFullYear(); // Aktuelles Jahr
-    let totalDays = 0;
-
-    months.forEach((month) => {
-      totalDays += this.getDaysInMonth(currentYear, month);
-    });
-
-    return totalDays;
-  }
-
-  getDaysInMonth(year: number, month: number): number {
-    // Berechnet die Anzahl der Tage im angegebenen Monat
-    return new Date(year, month, 0).getDate();
-  }
-
-  getRemainingDays(d: Date) {
-    switch (d.getMonth()) {
-      case 0:
-        return this.getDaysInMonth(d.getFullYear(), 0) + this.getDaysInMonth(d.getFullYear(), 1) + this.getDaysInMonth(d.getFullYear(), 2)- d.getDate();
-      case 1:
-        return this.getDaysInMonth(d.getFullYear(), 1) + this.getDaysInMonth(d.getFullYear(), 2) - d.getDate();
-      case 2:
-        return this.getDaysInMonth(d.getFullYear(), 2) - d.getDate();
-      case 3:
-        return this.getDaysInMonth(d.getFullYear(), 3) + this.getDaysInMonth(d.getFullYear(), 4) + this.getDaysInMonth(d.getFullYear(), 5)- d.getDate();
-      case 4:
-        return this.getDaysInMonth(d.getFullYear(), 4) + this.getDaysInMonth(d.getFullYear(), 5) - d.getDate();
-      case 5:
-        return this.getDaysInMonth(d.getFullYear(), 5) - d.getDate();
-      case 6:
-        return this.getDaysInMonth(d.getFullYear(), 6) + this.getDaysInMonth(d.getFullYear(), 7) + this.getDaysInMonth(d.getFullYear(), 8)- d.getDate();
-      case 7:
-        return this.getDaysInMonth(d.getFullYear(), 7) + this.getDaysInMonth(d.getFullYear(), 8) - d.getDate();
-      case 8:
-        return this.getDaysInMonth(d.getFullYear(), 8) - d.getDate();
-      case 9:
-        return this.getDaysInMonth(d.getFullYear(), 9) + this.getDaysInMonth(d.getFullYear(), 10) + this.getDaysInMonth(d.getFullYear(), 11)- d.getDate();
-      case 10:
-        return this.getDaysInMonth(d.getFullYear(), 10) + this.getDaysInMonth(d.getFullYear(), 11) - d.getDate();
-      case 11:
-        return this.getDaysInMonth(d.getFullYear(), 11) - d.getDate();
-        default:
-          return 0;
-    }
+  toogleHistory() {
+    this.showHistory = !this.showHistory;
   }
 
 

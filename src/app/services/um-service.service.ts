@@ -24,4 +24,8 @@ export class UmServiceService {
     return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=365,366,367,368&bike=1', { responseType: 'text' });
     //return this.http.jsonp('https://list.ultramarsch.de/result/table/?event=357,358,359,360&callback=jQuery1810512256588940176_1743666439151&_=1743666439208', 'callback')
   }
+
+  getProcessedMessages(token: string) {
+    return this.http.get(`https://ultramarsch-connector-production.up.railway.app/melden/?token=${token}`, {responseType: 'text'})
+  }
 }

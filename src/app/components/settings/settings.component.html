@@ -1,0 +1,14 @@
+<div class="grid">
+  <div class="md:col-6 col-12">
+    Token
+  </div>
+  <div class="md:col-6 col-12">
+    <input pInputText [(ngModel)]="userToken"/>
+  </div>
+  <div class="col-6">
+      <p-button [style]="{width: '100%'}" label="Abbrechen" (click)="cancel()"></p-button>
+  </div>
+  <div class="col-6">
+    <p-button [style]="{width: '100%'}" label="Speichern" (click)="saveSettings()"></p-button>
+  </div>
+</div>

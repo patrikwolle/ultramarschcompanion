@@ -23,13 +23,15 @@ import {NgOptimizedImage} from '@angular/common';
 import {FloatLabel} from 'primeng/floatlabel';
 import {Menubar} from 'primeng/menubar';
 import {Avatar} from 'primeng/avatar';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     FriendComponent,
-    GroupSelectDialogComponent
+    GroupSelectDialogComponent,
+    SettingsComponent
   ],
   imports: [
     CardModule,
@@ -59,7 +61,10 @@ import {Avatar} from 'primeng/avatar';
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura
+        preset: Aura,
+        options: {
+          darkModeSelector: false || 'none'
+        }
       }
     })
   ],

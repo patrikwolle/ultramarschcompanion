@@ -9,6 +9,8 @@
       {{ progress }}%
     </div>
   </div>
-  <div class="col-12">{{friend?.bereitsZurueckgelegt?.toFixed(2)}} km / {{friend?.gemeldet}} km (Ø: {{friend?.tagesdurchschnitt}} km)</div>
-
+  <div class="col-12">{{friend?.bereitsZurueckgelegt?.toFixed(2)}} km / {{friend?.gemeldet}} km (Ø: {{friend?.tagesdurchschnitt}} km / d)</div>
+  <div class="col-12 sm:col-6 lg:col-3">
+    Übrige Tage: {{utils.calculateToGoPerDay()}} Tage (Ø: {{utils.calculateMeanToGo(friend!)}} km/d)
+  </div>
 </div>

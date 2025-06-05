@@ -1,14 +1,20 @@
+<p-menubar [model]="menuItems" styleClass="custom-menubar">
+    <div class="flex items-center gap-2" style="margin-right: 10px">
+      <input type="text" pInputText placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)" />
+      <p-button icon="pi pi-search" (click)="selectUser(selectUserId)"></p-button>
+    </div>
+</p-menubar>
 <div class="col-12" style="width: 100%;">
+
   <p-card>
     <ng-template pTemplate="header">
       <div class="menuBarFriend">
         <div class="menuBarLeft">
-          <input type="text" pInputText placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)" />
-          <p-button icon="pi pi-search" (click)="selectUser(selectUserId)"></p-button>
+          {{selectedUser?.name}}
         </div>
 
-        <div class="menuBarRight">
-          <p-avatar [image]="selectedUser?.image" size="large" />
+        <div *ngIf="selectedUser" class="menuBarRight">
+          <img [ngSrc]="selectedUser!.image!" width="40" height="40">
         </div>
       </div>
 
@@ -41,11 +47,38 @@
           In diesem Jahr zurückgelegt: {{selectedUser?.jahr}} km
         </div>
         <div class="col-12 sm:col-6 lg:col-3">
-          Übrige Tage: {{calculateToGoPerDay()}} Tage (Ø: {{calculateMeanToGo()}} km/d)
+          Übrige Tage: {{utils.calculateToGoPerDay()}} Tage (Ø: {{utils.calculateMeanToGo(selectedUser!)}} km/d)
         </div>
         </div>
       </div>
     </div>
+    <div *ngIf="showHistory">
+      <div class="grid">
+        <div class="col-2">
+          Typ
+        </div>
+        <div class="col-3">
+          Datum
+        </div>
+        <div class="col-3">Länge / km</div>
+        <div class="col-3">Höhe / m</div>
+      </div>
+      <div *ngFor="let h of history" class="grid">
+        <div class="col-2">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#73735"><path d="m280-40 112-564-72 28v136h-80v-188l202-86q14-6 29.5-7t29.5 4q14 5 26.5 14t20.5 23l40 64q26 42 70.5 69T760-520v80q-70 0-125-29t-94-74l-25 123 84 80v300h-80v-260l-84-64-72 324h-84Zm260-700q-33 0-56.5-23.5T460-820q0-33 23.5-56.5T540-900q33 0 56.5 23.5T620-820q0 33-23.5 56.5T540-740Z"/></svg>
+        </div>
+        <div class="col-3">{{h.date}}</div>
+        <div *ngIf="h.length !== 0" class="col-3">{{h.length}}</div>
+        <div *ngIf="h.bikeLength !== 0" class="col-3">{{h.bikeLength}}</div>
+        <div *ngIf="h.height !== 0" class="col-3">{{h.height}}</div>
+        <div *ngIf="h.bikeHeight !== 0" class="col-3">{{h.bikeHeight}}</div>
+        <div *ngIf="h.bikeHeight === 0 && h.height ===0" class="col-3">0</div>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button *ngIf="!showHistory && token !== ''" icon="pi pi-angle-down" variant="text" class="history-button" (click)="toogleHistory()"></p-button>
+      <p-button *ngIf="showHistory && token !==''" icon="pi pi-angle-up" variant="text" class="history-button" (click)="toogleHistory()"></p-button>
+    </ng-template>
   </p-card>
   <div *ngIf="isLoadingAll">
     <p-progressbar mode="indeterminate" class="progressBarStyle" [style]="{ height: '6px' }" />

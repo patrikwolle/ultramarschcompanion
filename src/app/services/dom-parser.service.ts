@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Participant} from '../interfaces/participant';
+import {ProcessedMessages} from '../interfaces/processed-messages';
 
 @Injectable({
   providedIn: 'root'
@@ -167,6 +168,63 @@ export class DomParserService {
     }
     console.log(participants);
     return participants;
+  }
+
+  extractProcessedMessages(response: string): ProcessedMessages[] {
+
+    console.log(response)
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(response, "text/html");
+
+// 2. Tabelle im neuen DOM suchen
+    const tableElement = doc.querySelector("table.table") as HTMLElement;
+    console.log(tableElement)
+    const processedMessages: ProcessedMessages[] = [];
+
+    let inProcessedSection = false;
+    const rows = Array.from(tableElement.querySelectorAll("tbody tr"));
+    console.log(rows)
+
+    for (const row of rows) {
+      // Prüfen, ob die Überschrift „haben wir verarbeitet“ direkt VOR diesem <tr> steht
+      const prev = row.previousElementSibling;
+
+      // Jetzt sind wir in der verarbeiteten Sektion, also Inhalte auslesen
+      const imgElem = row.querySelector("img") as HTMLImageElement | null;
+      const columns = row.querySelectorAll("td");
+      if (columns.length < 3) continue; // Sicherheit: mindestens 3 Spalten erwarten
+
+      const infoHtml = columns[1].innerHTML;
+      const noteSpan = columns[2].querySelector("span");
+      const noteCount = noteSpan
+        ? parseInt(noteSpan.textContent?.trim() || "0", 10)
+        : 0;
+
+      // Per Regex ID, Datum, Maße aus dem innerHTML extrahieren
+      const idMatch = infoHtml.match(/ID:\s*(\d+)/);
+      const dateMatch = infoHtml.match(/Datum:\s*([\d\-]+)/);
+      const lengthMatch = infoHtml.match(/Länge:\s*([\d.]+)/);
+      const heightMatch = infoHtml.match(/Höhe:\s*([\d.]+)/);
+      const bikeLengthMatch = infoHtml.match(/Länge Bike:\s*([\d.]+)/);
+      const bikeHeightMatch = infoHtml.match(/Höhe Bike:\s*([\d.]+)/);
+
+
+      if (idMatch && dateMatch) {
+        processedMessages.push({
+          id: parseInt(idMatch[1], 10),
+          date: dateMatch[1],
+          length: lengthMatch ? parseFloat(lengthMatch[1]) : 0,
+          height: heightMatch ? parseFloat(heightMatch[1]) : 0,
+          bikeLength: bikeLengthMatch ? parseFloat(bikeLengthMatch[1]) : 0,
+          bikeHeight: bikeHeightMatch ? parseFloat(bikeHeightMatch[1]) : 0,
+          imageUrl: imgElem?.src || "",
+          noteCount: noteCount,
+        });
+      }
+    }
+
+    return processedMessages;
   }
 
 
