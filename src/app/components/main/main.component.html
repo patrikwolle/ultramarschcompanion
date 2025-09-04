@@ -26,7 +26,7 @@
 
         </div>
         <div *ngIf="selectedUser" class="col-12 sm:col-12 lg:col-6">
-          {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km (Ø: {{selectedUser.tagesdurchschnitt}} km/d).
+          {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km (Ø: {{selectedUser.tagesdurchschnitt! + selectedUser.tagesdurchschnittRad!}} km/d).
         </div>
         <div style="position: relative; width: 100%;">
           <p-progressbar

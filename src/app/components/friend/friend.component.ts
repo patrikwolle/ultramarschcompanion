@@ -19,5 +19,6 @@ export class FriendComponent {
 
     ngOnInit() {
       this.progress = Math.round((100 / this.friend?.gemeldet! * this.friend?.bereitsZurueckgelegt!) * 100 ) / 100
+      console.log(this.friend)
     }
 }

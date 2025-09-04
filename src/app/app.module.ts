@@ -23,7 +23,10 @@ import {NgOptimizedImage} from '@angular/common';
 import {FloatLabel} from 'primeng/floatlabel';
 import {Menubar} from 'primeng/menubar';
 import {Avatar} from 'primeng/avatar';
-import { SettingsComponent } from './components/settings/settings.component';
+import { SettingsComponent } from './dialogs/settings/settings.component';
+import { UploadDialogComponent } from './dialogs/upload-dialog/upload-dialog.component';
+import {DatePicker} from 'primeng/datepicker';
+import {FileUpload} from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     MainComponent,
     FriendComponent,
     GroupSelectDialogComponent,
-    SettingsComponent
+    SettingsComponent,
+    UploadDialogComponent
   ],
   imports: [
     CardModule,
@@ -55,7 +59,9 @@ import { SettingsComponent } from './components/settings/settings.component';
     NgOptimizedImage,
     FloatLabel,
     Menubar,
-    Avatar
+    Avatar,
+    DatePicker,
+    FileUpload
   ],
   providers: [
     provideAnimationsAsync(),

@@ -7,9 +7,10 @@ import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {GroupSelectDialogComponent} from '../../dialogs/group-select-dialog/group-select-dialog.component';
 import {DbService} from '../../services/db.service';
 import {MenuItem, MenuItemCommandEvent} from 'primeng/api';
-import {SettingsComponent} from '../settings/settings.component';
+import {SettingsComponent} from '../../dialogs/settings/settings.component';
 import {ProcessedMessages} from '../../interfaces/processed-messages';
 import {UtilsService} from '../../services/utils.service';
+import {UploadDialogComponent} from '../../dialogs/upload-dialog/upload-dialog.component';
 
 @Component({
   selector: 'um-main',
@@ -107,7 +108,19 @@ export class MainComponent implements OnInit {
         }
       },
       {
-        label: 'Upload'
+        label: 'Upload',
+        command(event: MenuItemCommandEvent) {
+          self.dialogService.open(UploadDialogComponent,
+            {
+              header: 'Upload',
+              width: '50vw',
+              modal: true,
+              breakpoints: {
+                '960px': '75vw',
+                '640px': '100vw'
+              }
+            })
+        }
       }
     ]
     this.database.getParticipantsHike().then((participants) => {

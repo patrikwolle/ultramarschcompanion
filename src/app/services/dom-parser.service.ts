@@ -59,6 +59,7 @@ export class DomParserService {
       const jahr = getVal("Bereits zurückgelegte seit Jahresbeginn");
 
       const tagesdurchschnitt = getTagesDurchschnitt("Tagesdurchschnitt zu Fuß");
+      const tagesdurchschnittRad = getTagesDurchschnitt("Tagesdurchschnitt per Rad");
 
       let letzteMeldung: Participant["letzteMeldung"] = undefined;
       const meldungMatch = rowText.match(/letzte Meldung vom\s+(\d{2}\.\d{2}\.\d{4}):?\s*([\d.,]+)?\s*Kilometer/i);
@@ -82,6 +83,7 @@ export class DomParserService {
         bereitsZurueckgelegt,
         jahr,
         tagesdurchschnitt: tagesdurchschnitt ?? undefined,
+        tagesdurchschnittRad: tagesdurchschnittRad ?? undefined,
         letzteMeldung
       });
     }
@@ -139,6 +141,7 @@ export class DomParserService {
       const jahr = getVal("Bereits zurückgelegte seit Jahresbeginn");
 
       const tagesdurchschnitt = getTagesDurchschnitt("Tagesdurchschnitt");
+      const tagesdurchschnittRad = getTagesDurchschnitt("Tagesdurchschnitt per Rad");
 
       let letzteMeldung: Participant["letzteMeldung"] = undefined;
       const meldungMatch = rowText.match(/letzte Meldung vom\s+(\d{2}\.\d{2}\.\d{4}):?\s*([\d.,]+)?\s*Kilometer/i);
@@ -163,6 +166,7 @@ export class DomParserService {
         bereitsZurueckgelegt,
         jahr,
         tagesdurchschnitt: tagesdurchschnitt ?? undefined,
+        tagesdurchschnittRad: tagesdurchschnittRad ?? undefined,
         letzteMeldung
       });
     }
