@@ -1,0 +1,344 @@
+.progressBarStyle {
+  width: 100%;
+}
+
+.friendCard {
+  margin-top: 15px;
+}
+
+.history-button {
+  color: #373735;
+}
+
+::ng-deep .custom-menubar {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  width: 100%;
+  height: 60px;
+  border-radius: 0 !important;
+  background: #373735 !important;
+}
+
+
+.menuBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
+  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
+  background-color: #373735; /* optional: Hintergrundfarbe */
+  padding: 0 20px; /* Innenabstand links und rechts */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: Schatten für Trennung */
+}
+
+.mainBar {
+  display: flex;
+  color: white;
+  width: 100vw; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
+  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
+  background-color: #373735; /* optional: Hintergrundfarbe */
+}
+
+.menuBarFriend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
+  color: white;
+  width: 100%; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
+  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
+  background-color: #373735; /* optional: Hintergrundfarbe */
+  padding: 0 20px; /* Innenabstand links und rechts */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: Schatten für Trennung */
+}
+
+.menuBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Abstand zwischen dem Input-Feld und dem Button */
+}
+
+.menuBarRight {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  gap: 10px;
+}
+
+input[pInputText] {
+  height: 40px; /* sorgt dafür, dass das Input-Feld gleich hoch ist wie die anderen Elemente */
+}
+p-button {
+  height: 40px; /* Gleiche Höhe wie das Input-Feld */
+  display: flex; /* Flexbox verwenden, um Inhalt (Icon/Text) zu zentrieren */
+  align-items: center; /* Vertikale Zentrierung */
+  justify-content: center; /* Horizontale Zentrierung */
+  padding: 0; /* Entfernt zusätzlichen inneren Abstand */
+  box-sizing: border-box; /* Verhindert, dass zusätzliche Padding/Border die Höhe beeinflussen */
+}
+
+
+/* Design Tokens */
+$bg: #f5f5f7;
+$card: #ffffff;
+$border: #e6e6ea;
+$text: #0f172a;
+$muted: #6b7280;
+
+$blue: #3b82f6;
+$green: #10b981;
+$amber: #f59e0b;
+$rose: #ef4444;
+
+.screen {
+  min-height: 100dvh;
+  background: $bg;
+  color: $text;
+}
+
+/* Sticky Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(#fff, .9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e6e6ea;
+  padding: .75rem .75rem;
+
+  .controls {
+    display: flex;
+    gap: .5rem;
+    margin-top: .5rem;
+  }
+}
+
+/* --- Mobile-first: horizontale, scrollbare Segmented Tabs --- */
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  background: #eef0f3;
+  border-radius: 1rem;
+  padding: .25rem;
+}
+
+.tab {
+  flex: 1 1 0;                    /* alle Tabs teilen sich gleichmäßig den Platz */
+  text-align: center;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: .6rem .9rem;
+  border-radius: .75rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab.is-active {
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgba(0,0,0,.07);
+}
+
+/* --- Rest aus deinem Stylesheet (Suche/Chip etc.) --- */
+.search {
+  flex: 1;
+  display: flex; align-items: center; gap: .5rem;
+  background: #fff;
+  border: 1px solid #e6e6ea;
+  border-radius: .75rem;
+  padding: .25rem .5rem;
+
+  &__icon { opacity: .7; }
+  &__input { border: 0; outline: none; width: 100%; padding: .5rem; background: transparent; }
+}
+
+.chip {
+  background: #fff;
+  border: 1px solid #e6e6ea;
+  border-radius: .75rem;
+  padding: .5rem .75rem;
+  font-weight: 700;
+}
+
+/* Mini-Tweak: wenn sehr wenig Platz ist, lasse die Controls umbrechen */
+@media (max-width: 360px) {
+  .controls { flex-wrap: wrap; }
+}
+
+/* Content */
+.content {
+  max-width: 720px;
+  margin: .5rem auto 4.5rem;
+  padding: 0 .75rem;
+}
+
+.list { list-style: none; margin: 0; padding: 0; }
+
+.card {
+  background: $card;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  padding: .75rem;
+  border: 1px solid rgba(0,0,0,.03);
+}
+
+.card + .card { margin-top: .75rem; }
+
+.card__head {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+}
+.card__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+
+  /* schneidet 3px rundum weg */
+  clip-path: inset(0 4px 0 4px round 50%);
+}
+
+.card__foot {
+  margin-top: .5rem;
+  padding-top: .5rem;
+  font-size: .82rem;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;  /* <- horizontale Linie */
+
+  .icon-inline {
+    font-size: 1em;             /* erbt von .card__foot */
+    width: 1em;                 /* passt Breite an die Schriftgröße an */
+    height: 1em;                /* passt Höhe an die Schriftgröße an */
+    line-height: 1;             /* verhindert Extraabstand */
+    vertical-align: -0.125em;   /* baseline-feintuning (≈ -2px); ggf. 0 oder middle testen */
+    margin-right: .4em;         /* Abstand zum Text */
+    display: inline-block;      /* zuverlässig in allen Browsern */
+  }
+
+  .icon-inline.is-blue  { color: #3b82f6; }  /* blau */
+  .icon-inline.is-green { color: #10b981; }  /* grün */
+  .icon-inline.is-amber { color: #f59e0b; }  /* amber */
+  .icon-inline.is-rose  { color: #ef4444; }  /* rot/rose */
+}
+.card__meta { flex: 1; }
+.card__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+}
+.card__name { margin: 0; font-size: 1.05rem; font-weight: 700; }
+.card__pct {
+  font-weight: 700;
+  &.is-blue  { color: $blue; }
+  &.is-green { color: $green; }
+  &.is-amber { color: $amber; }
+  &.is-rose  { color: $rose; }
+}
+
+/* Progress bar */
+.progress {
+  position: relative;
+  margin-top: .5rem;
+  height: .6rem;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+
+  &__bar {
+    height: 100%;
+    border-radius: 999px;
+    transition: width .25s ease;
+    &.is-blue  { background: $blue; }
+    &.is-green { background: $green; }
+    &.is-amber { background: $amber; }
+    &.is-rose  { background: $rose; }
+  }
+}
+
+/* Zahlenraster */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .25rem 1rem;
+  margin-top: .5rem;
+  color: #111827;
+
+  strong { font-weight: 700; }
+}
+
+.card__foot {
+  margin-top: .35rem;
+  font-size: .82rem;
+  color: $muted;
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  color: $muted;
+  padding: 2rem 0;
+}
+
+/* Bottom Sheet */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+
+  &__backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.35);
+    border: 0;
+  }
+
+  &__panel {
+    position: absolute; inset-inline: 0; bottom: 0;
+    background: #fff;
+    border-top-left-radius: 1.25rem;
+    border-top-right-radius: 1.25rem;
+    box-shadow: 0 -6px 20px rgba(0,0,0,.18);
+    padding: 1rem;
+  }
+
+  &__head {
+    display: flex; align-items: center; justify-content: space-between;
+    h2 { margin: 0; font-size: 1rem; font-weight: 700; }
+    .link { background: none; border: 0; color: $blue; font-weight: 700; cursor: pointer; }
+  }
+
+  .options {
+    display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .5rem;
+  }
+  .option {
+    border: 1px solid $border;
+    border-radius: .75rem;
+    padding: .5rem .75rem;
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .95rem;
+    cursor: pointer;
+    input { accent-color: $blue; }
+    &.is-active { border-color: $blue; }
+  }
+
+  .toggles {
+    display: flex; justify-content: space-between; margin-top: .75rem;
+    .toggle { display: flex; align-items: center; gap: .5rem; font-size: .95rem;
+      input { accent-color: $blue; }
+    }
+  }
+}
+
+/* Small screens tweaks */
+@media (max-width: 360px) {
+  .grid { grid-template-columns: 1fr; }
+  .tabs { grid-template-columns: repeat(3, 1fr); }
+}

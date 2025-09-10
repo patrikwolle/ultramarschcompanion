@@ -15,7 +15,6 @@ export class SettingsComponent {
   userToken: string = '';
 
   constructor(
-    private ref: DynamicDialogRef,
     private ls: LocalStorageService
   ) {
     this.userToken = ls.getToken();
@@ -25,11 +24,7 @@ export class SettingsComponent {
 
   saveSettings():void {
     this.ls.addToken(this.userToken);
-    this.ref.close();
   }
 
-  cancel():void {
-    this.ref.close();
-  }
 
 }

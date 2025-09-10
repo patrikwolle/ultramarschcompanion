@@ -18,8 +18,8 @@ export class UtilsService {
     return this.getRemainingDays(today);
   }
 
-  calculateMeanToGo(user: Participant): string {
-    return ((user?.gemeldet! - user?.bereitsZurueckgelegt!) / this.checkDateAndCalculateDays(new Date())).toFixed(2)
+  calculateMeanToGo(user: Participant): number {
+    return Number(((user?.gemeldet! - user?.bereitsZurueckgelegt!) / this.checkDateAndCalculateDays(new Date())).toFixed(2))
   }
 
   getDaysInMonth(year: number, month: number): number {

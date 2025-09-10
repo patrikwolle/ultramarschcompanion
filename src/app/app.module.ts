@@ -27,6 +27,7 @@ import { SettingsComponent } from './dialogs/settings/settings.component';
 import { UploadDialogComponent } from './dialogs/upload-dialog/upload-dialog.component';
 import {DatePicker} from 'primeng/datepicker';
 import {FileUpload} from 'primeng/fileupload';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import {FileUpload} from 'primeng/fileupload';
     Menubar,
     Avatar,
     DatePicker,
-    FileUpload
+    FileUpload,
+    MatIconModule
   ],
   providers: [
     provideAnimationsAsync(),

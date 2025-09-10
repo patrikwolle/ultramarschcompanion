@@ -1,133 +1,83 @@
-<p-menubar [model]="menuItems" styleClass="custom-menubar">
-    <div class="flex items-center gap-2" style="margin-right: 10px">
-      <input type="text" pInputText placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)" />
-      <p-button icon="pi pi-search" (click)="selectUser(selectUserId)"></p-button>
+<div class="screen">
+  <header class="topbar">
+    <nav class="tabs" role="tablist" aria-label="Hauptmenü">
+      <button class="tab" role="tab" [attr.aria-selected]="activeTab==='progress'" (click)="activeTab='progress'" [class.is-active]="activeTab==='progress'">Fortschritt</button>
+      <button class="tab" role="tab" [attr.aria-selected]="activeTab==='input'" (click)="activeTab='input'" [class.is-active]="activeTab==='input'">Meldung</button>
+      <button class="tab" role="tab" [attr.aria-selected]="activeTab==='settings'" (click)="activeTab='settings'" [class.is-active]="activeTab==='settings'">Einstellungen</button>
+    </nav>
+
+    <div class="controls" *ngIf="activeTab==='progress'">
+      <label *ngIf="selectedUser !== undefined" class="search">
+        <span class="search__icon" aria-hidden="true">🔎</span>
+        <input class="search__input" type="text" pInputText placeholder="Freund adden (Vorname N.)" [(ngModel)]="friendId" (keyup.enter)="addFriend(friendId)" />
+      </label>
+      <label *ngIf="selectedUser === undefined" class="search">
+        <span class="search__icon" aria-hidden="true">🔎</span>
+        <input class="search__input" type="text" pInputText placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)" />
+      </label>
+
+      <button class="chip" (click)="toggleSheet()" [attr.aria-expanded]="sheetOpen" aria-haspopup="dialog">
+        Sortieren
+      </button>
     </div>
-</p-menubar>
-<div class="col-12" style="width: 100%;">
+  </header>
 
-  <p-card>
-    <ng-template pTemplate="header">
-      <div class="menuBarFriend">
-        <div class="menuBarLeft">
-          {{selectedUser?.name}}
-        </div>
+  <main class="content" *ngIf="activeTab==='progress'">
+    <ul class="list" *ngIf="renderFriends.length; else emptyState">
+      <li class="card" *ngFor="let r of renderFriends">
+        <um-friend [friend]="r"></um-friend>
+      </li>
+    </ul>
 
-        <div *ngIf="selectedUser" class="menuBarRight">
-          <img [ngSrc]="selectedUser!.image!" width="40" height="40">
-        </div>
-      </div>
-
+    <ng-template #emptyState>
+      <div class="empty">Keine Treffer – Filter anpassen.</div>
     </ng-template>
-    <div class="grid">
-      <div *ngIf="isLoading">Loading...</div>
-      <div *ngIf="!isLoading" class="grid" style="width: 100%">
-        <div class="col-12 sm:col-12 lg:col-6">
+  </main>
 
-        </div>
-        <div *ngIf="selectedUser" class="col-12 sm:col-12 lg:col-6">
-          {{selectedUser.bereitsZurueckgelegt}} km von {{selectedUser.gemeldet}} km (Ø: {{selectedUser.tagesdurchschnitt! + selectedUser.tagesdurchschnittRad!}} km/d).
-        </div>
-        <div style="position: relative; width: 100%;">
-          <p-progressbar
-            [value]="progress"
-            [showValue]="false"
-            class="progressBarStyle"></p-progressbar>
-          <div
-            style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); line-height: 20px;">
-            {{ progress }}%
-          </div>
-        </div>
+  <main class="content" *ngIf="activeTab==='input'">📥 Formular „Meldung erfassen“</main>
+  <main class="content" *ngIf="activeTab==='settings'">
+    <app-settings></app-settings>
+  </main>
 
-      <div class="grid" style="width: 100%; margin-top: 15px">
-        <div class="col-12 sm:col-6 lg:col-3">
-          Letze Meldung: {{selectedUser?.letzteMeldung?.datum | date: 'dd.MM.yyyy'}} : {{selectedUser?.letzteMeldung?.distanz}} km
-        </div>
-        <div class="col-12 sm:col-6 lg:col-3">
-          In diesem Jahr zurückgelegt: {{selectedUser?.jahr}} km
-        </div>
-        <div class="col-12 sm:col-6 lg:col-3">
-          Übrige Tage: {{utils.calculateToGoPerDay()}} Tage (Ø: {{utils.calculateMeanToGo(selectedUser!)}} km/d)
-        </div>
-        </div>
+  <section class="sheet" *ngIf="sheetOpen" role="dialog" aria-modal="true" aria-label="Sortieren">
+    <button class="sheet__backdrop" (click)="toggleSheet()" aria-label="Schließen"></button>
+    <div class="sheet__panel">
+      <header class="sheet__head">
+        <h2>Sortieren</h2>
+        <button class="link" (click)="toggleSheet()">Fertig</button>
+      </header>
+
+      <div class="options">
+        <label class="option" [class.is-active]="sortKey==='name'">
+          <input type="radio" name="sortKey" (change)="setSortKey('name')" [checked]="sortKey==='name'">
+          Name
+        </label>
+        <label class="option" [class.is-active]="sortKey==='progress'">
+          <input type="radio" name="sortKey" (change)="setSortKey('progress')" [checked]="sortKey==='progress'">
+          Fortschritt %
+        </label>
+      </div>
+
+      <div class="toggles">
+        <label class="toggle">
+          <input type="checkbox" (change)="toggleAsc()" [checked]="asc">
+          <span>Aufsteigend</span>
+        </label>
+      </div>
+
+      <div class="sheet__head" style="margin-top:.75rem">
+        <h2>Eigener Nutzer</h2>
+      </div>
+      <div class="options">
+        <label class="option" [class.is-active]="selfMode==='pin'">
+          <input type="radio" name="selfMode" (change)="setSelfMode('pin')" [checked]="selfMode==='pin'">
+          An erster Stelle fixieren
+        </label>
+        <label class="option" [class.is-active]="selfMode==='include'">
+          <input type="radio" name="selfMode" (change)="setSelfMode('include')" [checked]="selfMode==='include'">
+          In Sortierung einbeziehen
+        </label>
       </div>
     </div>
-    <div *ngIf="showHistory">
-      <div class="grid">
-        <div class="col-2">
-          Typ
-        </div>
-        <div class="col-3">
-          Datum
-        </div>
-        <div class="col-3">Länge / km</div>
-        <div class="col-3">Höhe / m</div>
-      </div>
-      <div *ngFor="let h of history" class="grid">
-        <div class="col-2">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#73735"><path d="m280-40 112-564-72 28v136h-80v-188l202-86q14-6 29.5-7t29.5 4q14 5 26.5 14t20.5 23l40 64q26 42 70.5 69T760-520v80q-70 0-125-29t-94-74l-25 123 84 80v300h-80v-260l-84-64-72 324h-84Zm260-700q-33 0-56.5-23.5T460-820q0-33 23.5-56.5T540-900q33 0 56.5 23.5T620-820q0 33-23.5 56.5T540-740Z"/></svg>
-        </div>
-        <div class="col-3">{{h.date}}</div>
-        <div *ngIf="h.length !== 0" class="col-3">{{h.length}}</div>
-        <div *ngIf="h.bikeLength !== 0" class="col-3">{{h.bikeLength}}</div>
-        <div *ngIf="h.height !== 0" class="col-3">{{h.height}}</div>
-        <div *ngIf="h.bikeHeight !== 0" class="col-3">{{h.bikeHeight}}</div>
-        <div *ngIf="h.bikeHeight === 0 && h.height ===0" class="col-3">0</div>
-      </div>
-    </div>
-    <ng-template pTemplate="footer">
-      <p-button *ngIf="!showHistory && token !== ''" icon="pi pi-angle-down" variant="text" class="history-button" (click)="toogleHistory()"></p-button>
-      <p-button *ngIf="showHistory && token !==''" icon="pi pi-angle-up" variant="text" class="history-button" (click)="toogleHistory()"></p-button>
-    </ng-template>
-  </p-card>
-  <div *ngIf="isLoadingAll">
-    <p-progressbar mode="indeterminate" class="progressBarStyle" [style]="{ height: '6px' }" />
-  </div>
-  <div *ngIf="!isLoadingAll" class="grid" style="width: 100%">
-    <p-card *ngFor="let friend of friends" class="col-12 sm:col-12 lg:col-6 friendCard">
-      <ng-template pTemplate="header">
-        <div class="menuBarFriend">
-          <div class="menuBarLeft">
-            {{friend.name}}
-          </div>
-
-          <div class="menuBarRight">
-            <p-avatar [image]="friend.image" size="large" />
-            <p-button icon="pi pi-times" severity="danger" [rounded]="true" size="small" (click)="removeFriend(friend.name!)"></p-button>
-          </div>
-        </div>
-
-      </ng-template>
-      <div class="grid" style="width: 100%; float: right">
-        <div class="col-12">
-          <um-friend [friend]="friend"></um-friend>
-        </div>
-      </div>
-
-
-    </p-card>
-    <p-card class="col-12 sm:col-12 lg:col-6 friendCard">
-      <ng-template pTemplate="header">
-        <div class="menuBarFriend">
-          Füge einen Freund hinzu
-        </div>
-
-      </ng-template>
-        <div class="grid">
-          <div class="col-10">
-            <input type="text" style="margin-right: 10px; width: 100%" id="firendInput" placeholder="Vorname N." pInputText [(ngModel)]="friendId" (keyup.enter)="addFriend(friendId)"/>
-          </div>
-          <div class="col-2">
-            <p-button [style]="{width: '100%'}" icon="pi pi-user-plus" (click)="addFriend(friendId)"></p-button>
-          </div>
-        </div>
-
-    </p-card>
-
-
-
-
-
-  </div>
-
+  </section>
 </div>
