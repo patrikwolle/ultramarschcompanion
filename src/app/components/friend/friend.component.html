@@ -3,54 +3,99 @@
   <div class="card__meta">
     <div class="card__row">
       <h3 class="card__name">{{ friend!.name }}</h3>
-      <span class="card__pct"
-            [class.is-blue]="pct(friend)>=100"
-            [class.is-green]="pct(friend)>=90 && pct(friend)<100"
-            [class.is-amber]="pct(friend)>=50 && pct(friend)<90"
-            [class.is-rose]="pct(friend)<50">
-  {{ pct(friend) | number:'1.2-2' }}%
-</span>
+      <span
+        class="card__pct"
+        [class.is-blue]="pct(friend) >= 100"
+        [class.is-green]="pct(friend) >= 90 && pct(friend) < 100"
+        [class.is-amber]="pct(friend) >= 50 && pct(friend) < 90"
+        [class.is-rose]="pct(friend) < 50"
+      >
+        {{ pct(friend) | number : "1.2-2" }}%
+      </span>
     </div>
 
     <!-- Progressbar -->
-    <div class="progress" role="progressbar"
-         [attr.aria-valuemin]="0" [attr.aria-valuemax]="100"
-         [attr.aria-valuenow]="pct(friend) | number:'1.2-2'">
-      <div class="progress__bar"
-           [style.width.%]="pct(friend) > 100 ? 100 : pct(friend)"
-           [ngClass]="{
-         'is-blue':  pct(friend)>=100,
-         'is-green': pct(friend)>=90 && pct(friend)<100,
-         'is-amber': pct(friend)>=50 && pct(friend)<90,
-         'is-rose':  pct(friend)<50
-       }">
-      </div>
+    <div
+      class="progress"
+      role="progressbar"
+      [attr.aria-valuemin]="0"
+      [attr.aria-valuemax]="100"
+      [attr.aria-valuenow]="pct(friend) | number : '1.2-2'"
+    >
+      <div
+        class="progress__bar"
+        [style.width.%]="pct(friend) > 100 ? 100 : pct(friend)"
+        [ngClass]="{
+          'is-blue': pct(friend) >= 100,
+          'is-green': pct(friend) >= 90 && pct(friend) < 100,
+          'is-amber': pct(friend) >= 50 && pct(friend) < 90,
+          'is-rose': pct(friend) < 50
+        }"
+      ></div>
     </div>
   </div>
 </div>
 
 <!-- Zahlenraster -->
 <div class="grid">
-  <div>Gesamt: <strong>{{ friend!.bereitsZurueckgelegt! | number:'1.2-2' }} km</strong></div>
-  <div>Ziel:   <strong>{{ friend!.gemeldet!            | number:'1.2-2' }} km</strong></div>
-  <div>Ø/Tag:  <strong>{{ (friend!.tagesdurchschnitt! + friend!.tagesdurchschnittRad!)     | number:'1.2-2' }} km/d</strong></div>
-  <div>Update:   <strong>{{ friend!.letzteMeldung?.datum }}</strong></div>
+  <div>
+    Gesamt:
+    <strong>{{ friend!.bereitsZurueckgelegt! | number : "1.2-2" }} km</strong>
+  </div>
+  <div>
+    Ziel: <strong>{{ friend!.gemeldet! | number : "1.2-2" }} km</strong>
+  </div>
+  <div>
+    Ø/Tag:
+    <strong
+      >{{
+        friend!.tagesdurchschnitt! + friend!.tagesdurchschnittRad!
+          | number : "1.2-2"
+      }}
+      km/d</strong
+    >
+  </div>
+  <div>
+    Update: <strong>{{ friend!.letzteMeldung?.datum }}</strong>
+  </div>
 </div>
-
-<div *ngIf="remaining(friend) >= 0" class="card__foot">
-  <mat-icon class="icon-inline"
-            [ngClass]="{
-              'is-blue':  pct(friend) >= 100,
-              'is-green': pct(friend) >= 90 && pct(friend) < 100,
-              'is-amber': pct(friend) >= 50 && pct(friend) < 90,
-              'is-rose':  pct(friend) < 50
-            }">
-    directions_walk
-  </mat-icon>
-  {{ remaining(friend) | number:'1.2-2' }} km
-</div>
-<div *ngIf="remaining(friend) < 0" class="card__foot">
-  <mat-icon class="icon-inline is-blue"
-  >rocket_launch</mat-icon>
-  {{ (remaining(friend)*-1) | number:'1.2-2' }} km
-</div>
+<footer
+  class="card__foot"
+  [ngClass]="dailyAvgClass(friend)"
+  role="contentinfo"
+  [attr.aria-label]="dailyAvgAria(friend)"
+>
+  <div>
+    <div *ngIf="remaining(friend) >= 0">
+      <mat-icon
+        class="icon-inline"
+        [ngClass]="{
+          'is-blue': pct(friend) >= 100,
+          'is-green': pct(friend) >= 90 && pct(friend) < 100,
+          'is-amber': pct(friend) >= 50 && pct(friend) < 90,
+          'is-rose': pct(friend) < 50
+        }"
+      >
+        directions_walk
+      </mat-icon>
+      Noch zum Ziel:
+      <strong>{{ remaining(friend) | number : "1.2-2" }} km</strong>
+      <div class="foot__avg" [ngClass]="dailyAvgClass(friend)">
+        Nötiger Tagesdurchschnitt für das Ziel:
+        <strong
+          >{{
+            utils.calculateMeanToGo(friend!).toFixed(2) | number : "1.2-2"
+          }}
+          km/d</strong
+        >
+      </div>
+    </div>
+    <div *ngIf="remaining(friend) < 0">
+      <mat-icon class="icon-inline is-blue" aria-hidden="true">
+        {{ "rocket_launch" }}
+      </mat-icon>
+      Mehr als das Ziel:
+      <strong>{{ remaining(friend) * -1 | number : "1.2-2" }} km</strong>
+    </div>
+  </div>
+</footer>

@@ -1,20 +1,24 @@
-import { Component } from '@angular/core';
-import {DynamicDialogRef} from 'primeng/dynamicdialog';
+import { Component, ViewEncapsulation } from "@angular/core";
+import { DynamicDialogRef } from "primeng/dynamicdialog";
 
 @Component({
-  selector: 'app-group-select-dialog',
+  selector: "app-group-select-dialog",
   standalone: false,
-  templateUrl: './group-select-dialog.component.html',
-  styleUrl: './group-select-dialog.component.scss'
+  templateUrl: "./group-select-dialog.component.html",
+  styleUrl: "./group-select-dialog.component.scss",
+  encapsulation: ViewEncapsulation.None,
 })
 export class GroupSelectDialogComponent {
+  constructor(private ref: DynamicDialogRef) {}
+  groupOptions = [
+    { id: 1, label: "Hike", emoji: "🥾" },
+    { id: 2, label: "Hike’n’Run", emoji: "🥾 🏃" },
+    { id: 3, label: "Hike’n’Run’n’Bike", emoji: "🥾 🏃 🚴" },
+  ];
 
-  constructor(
-    private ref: DynamicDialogRef
-  ) { }
+  selectedGroup: number | null = null;
 
   chooseGroup(group: number) {
     this.ref.close(group);
   }
-
 }

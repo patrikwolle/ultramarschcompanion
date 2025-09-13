@@ -1,16 +1,58 @@
-<div class="grid">
-  <div style="margin: 10px">
+<fieldset class="group-fieldset" aria-describedby="group-help">
+  <legend id="group-legend">
     In welcher Wertungsgruppe befindest du dich?
+  </legend>
+  <p id="group-help" class="help">
+    Wähle eine Option. Tab zum Button, Enter/Leertaste aktiviert.
+  </p>
+
+  <div class="grid">
+    <div class="col-12">
+      <p-button
+        styleClass="group-btn"
+        (click)="chooseGroup(1)"
+        aria-describedby="group-legend group-help"
+      >
+        <ng-template pTemplate="content">
+          <span class="btn-content">
+            <span class="btn-title">Hike</span>
+            <span class="btn-desc">Wandern ohne Laufen/Rad</span>
+          </span>
+        </ng-template>
+      </p-button>
+    </div>
+
+    <div class="col-12">
+      <p-button
+        styleClass="group-btn"
+        (click)="chooseGroup(2)"
+        aria-describedby="group-legend group-help"
+      >
+        <ng-template pTemplate="content">
+          <span class="btn-content">
+            <span class="btn-title">Hike’n’Run</span>
+            <span class="btn-desc">Wandern kombiniert mit Laufen</span>
+          </span>
+        </ng-template>
+      </p-button>
+    </div>
+
+    <div class="col-12">
+      <p-button
+        styleClass="group-btn"
+        (click)="chooseGroup(3)"
+        aria-describedby="group-legend group-help"
+      >
+        <ng-template pTemplate="content">
+          <span class="btn-content">
+            <span class="btn-title">Hike’n’Run’n’Bike</span>
+            <span class="btn-desc">Wandern, Laufen und Radfahren</span>
+          </span>
+        </ng-template>
+      </p-button>
+    </div>
   </div>
 
-  <div class="col-12">
-    <p-button label="Hike" class="buttonStyle" [style]="{width: '100%', height: '100px'}" (click)="chooseGroup(1)"></p-button>
-  </div>
-  <div class="col-12">
-    <p-button label="Hike'n'Run" [style]="{width: '100%', height: '100px'}" (click)="chooseGroup(2)"></p-button>
-  </div>
-  <div class="col-12">
-    <p-button label="Hike'n'Run'n'Bike" [style]="{width: '100%', height: '100px'}" (click)="chooseGroup(3)"></p-button>
-  </div>
-
-</div>
+  <!-- optional: Live-Status/Fehler dynamisch befüllen -->
+  <p class="sr-only" aria-live="polite" id="group-status"></p>
+</fieldset>

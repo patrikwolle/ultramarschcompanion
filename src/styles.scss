@@ -1,8 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%; /* Wichtig für Vollbildbreite */
-  height: 100%; /* Wichtig für Vollbildhöhe */
-  box-sizing: border-box; /* Sichere Größenberechnung */
+:root {
+  --font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+}
+
+html,
+body {
+  font-family: var(--font-family);
+  text-rendering: optimizeLegibility;
+}
+
+.p-component {
+  font-family: var(--font-family) !important;
+}
+
+.p-inputtext,
+.p-button,
+.p-menubar,
+.p-menuitem,
+.p-selectbutton .p-button,
+.p-card,
+.p-datatable,
+.p-dialog,
+.p-toast {
+  font-family: inherit !important;
+}
+
+.page-title {
+  margin: 0.25rem 0 0.5rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  font-size: clamp(1.4rem, 2vw + 1rem, 2rem);
+}
+.page-subtitle {
+  margin: 0 0 1rem;
+  color: #6b7280;
+  font-size: 0.95rem;
 }
