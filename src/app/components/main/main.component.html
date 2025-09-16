@@ -1,6 +1,6 @@
-<div class="screen">
-  <div class="topbar">
-    <section class="add">
+<div class="screen" role="main" aria-label="Übersicht und Freunde">
+  <div class="topbar" role="region" aria-label="Hinzufügen und Sortierung">
+    <section class="add" role="region" aria-label="Freund hinzufügen">
       <form
         class="add__form"
         aria-label="Freund hinzufügen"
@@ -16,7 +16,8 @@
           (keydown.enter)="addFriend(friendBox.value); friendBox.value = ''"
         />
         <button class="add__btn" type="submit">Hinzufügen</button>
-        <nav class="toolbar" aria-label="Sortierung">
+
+        <nav class="toolbar" aria-label="Sortierung" role="navigation">
           <div class="toolbar__group">
             <div class="toolbar__label">Sortierung:</div>
             <button
@@ -50,12 +51,19 @@
       </form>
     </section>
 
-    <section>
-      <ul class="friends__list" *ngIf="renderFriends?.length; else emptyState">
+    <section role="region" aria-label="Freundesliste">
+      <ul
+        class="friends__list"
+        *ngIf="renderFriends?.length; else emptyState"
+        role="list"
+        aria-live="polite"
+        aria-label="Freunde"
+      >
         <li
           class="friends__item"
           *ngFor="let r of renderFriends; trackBy: trackByName"
           [class.is-pinned]="isPinned(r)"
+          role="listitem"
         >
           <button
             type="button"
@@ -81,7 +89,7 @@
       </ul>
 
       <ng-template #emptyState>
-        <div class="friends__empty">
+        <div class="friends__empty" role="status" aria-live="polite">
           Noch keine Einträge. Füge oben jemanden hinzu.
         </div>
       </ng-template>

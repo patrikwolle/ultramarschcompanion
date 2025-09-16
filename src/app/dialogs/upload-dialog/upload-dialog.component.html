@@ -1,106 +1,159 @@
-<div class="upload-dialog-content grid">
-  <div class="grid">
-    <div class="token-area">
-      <div class="upload-header md:col-6 col-12">Token</div>
-      <div class="token-row">
-        <input
-          pInputText
-          class="upload-input"
-          [(ngModel)]="userToken"
-          [disabled]="tokenLocked"
-          placeholder="Token"
-          aria-label="Token"
-        />
+<form class="grid" role="form" aria-describedby="form-hint">
+  <section class="token-area md:col-12" aria-labelledby="token-label">
+    <h3 id="token-label" class="upload-header">Token</h3>
 
-        <button
-          type="button"
-          class="upload-btn token-toggle"
-          [class.is-edit]="tokenLocked"
-          [class.is-save]="!tokenLocked"
-          (click)="toggleToken()"
-          [attr.aria-pressed]="!tokenLocked"
-          [title]="tokenLocked ? 'Bearbeiten' : 'Speichern'"
-        >
-          <i class="pi" [ngClass]="tokenLocked ? 'pi-pencil' : 'pi-save'"></i>
-        </button>
-      </div>
+    <div class="token-row" role="group" aria-labelledby="token-label">
+      <label class="sr-only" for="token-input">Token</label>
+      <input
+        id="token-input"
+        pInputText
+        class="upload-input"
+        [(ngModel)]="userToken"
+        name="userToken"
+        [disabled]="tokenLocked"
+        placeholder="Token"
+        autocomplete="off"
+        inputmode="text"
+      />
+
+      <button
+        type="button"
+        class="upload-btn token-toggle"
+        [class.is-edit]="tokenLocked"
+        [class.is-save]="!tokenLocked"
+        (click)="toggleToken()"
+        [attr.aria-pressed]="!tokenLocked"
+        [attr.aria-label]="
+          tokenLocked
+            ? 'Token bearbeiten'
+            : 'Token
+          speichern'
+        "
+      >
+        <i class="pi" [ngClass]="tokenLocked ? 'pi-pencil' : 'pi-save'"></i>
+        <span class="sr-only">{{
+          tokenLocked ? "Bearbeiten" : "Speichern"
+        }}</span>
+      </button>
     </div>
-
-    <div class="upload-header md:col-6 col-12">Datum</div>
+  </section>
+  <section
+    class="md:col-12"
+    style="margin-top: 4px"
+    aria-labelledby="date-label"
+  >
+    <h3 id="date-label" class="upload-header">Datum</h3>
     <div class="md:col-6 col-12">
+      <label for="date-input" class="sr-only">Datum wählen</label>
       <p-datePicker
         class="upload-date"
         [(ngModel)]="date"
+        name="date"
         dateFormat="dd.mm.yy"
         appendTo="self"
-      >
-      </p-datePicker>
+        panelStyleClass="upload-datepicker"
+        [showIcon]="true"
+        inputId="date-input"
+      ></p-datePicker>
     </div>
+  </section>
 
-    <div class="upload-header md:col-6 col-12">Länge</div>
+  <section class="md:col-12" aria-labelledby="len-label">
+    <h3 id="len-label" class="upload-header">Streckenlänge</h3>
     <div class="md:col-6 col-12">
+      <label for="len-input" class="sr-only">Streckenlänge</label>
       <input
+        id="len-input"
         pInputText
         type="number"
         [(ngModel)]="length"
+        name="length"
         class="upload-input"
+        inputmode="decimal"
+        aria-describedby="len-hint"
+        placeholder="Strecke in km"
       />
     </div>
+  </section>
 
-    <div class="upload-header upload-header md:col-6 col-12">Höhe</div>
+  <section class="md:col-12" aria-labelledby="height-label">
+    <h3 id="height-label" class="upload-header">Höhe</h3>
     <div class="md:col-6 col-12">
+      <label for="height-input" class="sr-only">Höhe</label>
       <input
+        id="height-input"
         pInputText
         type="number"
         [(ngModel)]="height"
+        name="height"
         class="upload-input"
+        inputmode="decimal"
+        aria-describedby="height-hint"
+        placeholder="Höhe in m"
       />
     </div>
+  </section>
 
-    <div class="upload-header md:col-6 col-12">Fahrrad Länge</div>
+  <section class="md:col-12" aria-labelledby="blen-label">
+    <h3 id="blen-label" class="upload-header">Fahrradlänge</h3>
     <div class="md:col-6 col-12">
+      <label for="blen-input" class="sr-only">Fahrradlänge</label>
       <input
+        id="blen-input"
         pInputText
         type="number"
         [(ngModel)]="bikeLength"
+        name="bikeLength"
         class="upload-input"
+        inputmode="decimal"
+        placeholder="Fahrradlänge in m"
       />
     </div>
+  </section>
 
-    <div class="upload-header md:col-6 col-12">Fahrrad Höhe</div>
+  <section class="md:col-12" aria-labelledby="bh-label">
+    <h3 id="bh-label" class="upload-header">Fahrradhöhe</h3>
     <div class="md:col-6 col-12">
+      <label for="bh-input" class="sr-only">Fahrradhöhe</label>
       <input
+        id="bh-input"
         pInputText
         type="number"
         [(ngModel)]="bikeHeight"
+        name="bikeHeight"
         class="upload-input"
+        inputmode="decimal"
+        placeholder="Fahrradhöhe in m"
       />
     </div>
+  </section>
 
-    <div class="upload-header md:col-6 col-12">Screenshot</div>
-    <div class="upload-header md:col-6 col-12">
+  <section class="md:col-12" aria-labelledby="shot-label">
+    <h3 id="shot-label" class="upload-header">Screenshot</h3>
+    <div class="md:col-6 col-12">
       <p-fileupload
+        class="upload-file"
         mode="basic"
         name="upload"
         chooseIcon="pi pi-upload"
+        chooseLabel="Bild wählen"
         accept="image/*"
+        [auto]="true"
         maxFileSize="1000000"
         (onUpload)="addImage($event)"
-        [auto]="true"
-        chooseLabel="Bild wählen"
-        class="upload-file"
+        [attr.aria-label]="'Screenshot hochladen'"
       ></p-fileupload>
     </div>
+  </section>
 
-    <div class="col-6">
-      <button type="button" class="upload-btn cancel" (click)="cancel()">
-        Abbrechen
-      </button>
-    </div>
-    <div class="col-6">
-      <button type="button" class="upload-btn save" (click)="sendForm()">
-        Speichern
-      </button>
-    </div>
+  <div class="col-6">
+    <button type="button" class="upload-btn cancel" (click)="cancel()">
+      Abbrechen
+    </button>
   </div>
-</div>
+  <div class="col-6">
+    <button type="button" class="upload-btn save" (click)="sendForm()">
+      Speichern
+    </button>
+  </div>
+</form>

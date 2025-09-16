@@ -7,7 +7,6 @@
 .add__form {
   display: grid;
   gap: 8px 10px;
-
   grid-template-columns: 1fr;
   grid-template-areas:
     "input"
@@ -29,7 +28,7 @@
   border-radius: 10px;
   color: $text;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   padding: 10px 14px;
 }
