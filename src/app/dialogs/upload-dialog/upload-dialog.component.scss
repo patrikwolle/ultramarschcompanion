@@ -1,0 +1,104 @@
+@use "./../../../colors.scss" as *;
+
+.token-row {
+  margin: 12px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.token-area {
+  width: 100%;
+  border-bottom: 2px solid $border;
+}
+
+@media (max-width: 420) {
+  .token-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.upload-btn.token-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+
+  .pi {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  &.is-edit {
+    background: $muted;
+    color: $text;
+  }
+  &.is-save {
+    background: $primary;
+    color: $text;
+  }
+
+  &:hover {
+    filter: brightness(0.97);
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.upload-header {
+  color: $text;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-bottom: 0px;
+}
+
+.upload-input {
+  width: 100%;
+  border: 1px solid $border;
+  font-size: 0.95rem;
+
+  &:focus {
+    outline: 2px solid $primary;
+    border-color: $primary;
+  }
+}
+
+.upload-btn {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: var(--font-family) !important;
+
+  &.cancel {
+    background: $muted;
+    font-weight: 400;
+    color: $text;
+  }
+
+  &.save {
+    background: $primary;
+    color: $text;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+}

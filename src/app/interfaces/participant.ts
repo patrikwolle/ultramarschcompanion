@@ -6,7 +6,7 @@ export interface Participant {
   jahr: number | undefined; // z. B. "556,44 Kilometer"
   tagesdurchschnitt: number | undefined; // z. B. "16,83"
   tagesdurchschnittRad: number | undefined;
-  letzteMeldung: { datum: string; distanz: number; } | undefined; // z. B. ["letzte Meldung vom...", "Datum", "Kilometer"]
+  letzteMeldung: { datum: string; distanz: number } | undefined; // z. B. ["letzte Meldung vom...", "Datum", "Kilometer"]
 }
 
 export interface AllParticipant {

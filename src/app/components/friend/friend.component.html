@@ -1,101 +1,126 @@
-<div class="card__head">
-  <img class="card__avatar" [src]="friend!.image" [alt]="friend!.name" />
-  <div class="card__meta">
-    <div class="card__row">
-      <h3 class="card__name">{{ friend!.name }}</h3>
-      <span
-        class="card__pct"
-        [class.is-blue]="pct(friend) >= 100"
-        [class.is-green]="pct(friend) >= 90 && pct(friend) < 100"
-        [class.is-amber]="pct(friend) >= 50 && pct(friend) < 90"
-        [class.is-rose]="pct(friend) < 50"
+<div
+  class="person-card"
+  [class.is-summary]="!(pinned || expanded)"
+  [class.is-collapsed]="!(pinned || expanded)"
+  (click)="!pinned && toggle()"
+>
+  <div class="person-card__head">
+    <img
+      class="person-card__avatar"
+      [ngSrc]="avatarUrl"
+      [alt]="displayName"
+      width="64"
+      height="64"
+      loading="lazy"
+      decoding="async"
+    />
+
+    <div class="person-card__meta">
+      <div class="person-card__row">
+        <h3 class="person-card__name">{{ displayName }}</h3>
+      </div>
+
+      <div
+        class="progress"
+        role="progressbar"
+        aria-label="Progressbar"
+        [attr.aria-valuemin]="0"
+        [attr.aria-valuemax]="100"
+        [attr.aria-valuenow]="percent"
+        [attr.aria-valuetext]="ariaText"
       >
-        {{ pct(friend) | number : "1.2-2" }}%
+        <div
+          class="progress__bar"
+          [style.width.%]="percent"
+          [class]="statusClass"
+        ></div>
+
+        <div class="progress__label">{{ percent | number : "1.2-2" }}%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid--summary" [class.grid--inline]="!(pinned || expanded)">
+    <div class="grid__row" [class.grid__row--inline]="!(pinned || expanded)">
+      <mat-icon class="grid__icon" aria-hidden="true">route</mat-icon>
+      <span class="grid__label">Kilometer</span>
+      <span class="grid__value">
+        <strong>{{ doneKm | number : "1.2-2" }} km</strong> von
+        <strong>{{ goalKm | number : "1.2-2" }} km</strong>
       </span>
     </div>
 
-    <!-- Progressbar -->
-    <div
-      class="progress"
-      role="progressbar"
-      [attr.aria-valuemin]="0"
-      [attr.aria-valuemax]="100"
-      [attr.aria-valuenow]="pct(friend) | number : '1.2-2'"
+    <button
+      type="button"
+      class="person-card__toggle"
+      [attr.aria-expanded]="pinned || expanded"
+      [attr.aria-disabled]="pinned || null"
+      (click)="$event.stopPropagation(); !pinned && toggle()"
     >
-      <div
-        class="progress__bar"
-        [style.width.%]="pct(friend) > 100 ? 100 : pct(friend)"
-        [ngClass]="{
-          'is-blue': pct(friend) >= 100,
-          'is-green': pct(friend) >= 90 && pct(friend) < 100,
-          'is-amber': pct(friend) >= 50 && pct(friend) < 90,
-          'is-rose': pct(friend) < 50
-        }"
-      ></div>
-    </div>
-  </div>
-</div>
-
-<!-- Zahlenraster -->
-<div class="grid">
-  <div>
-    Gesamt:
-    <strong>{{ friend!.bereitsZurueckgelegt! | number : "1.2-2" }} km</strong>
-  </div>
-  <div>
-    Ziel: <strong>{{ friend!.gemeldet! | number : "1.2-2" }} km</strong>
-  </div>
-  <div>
-    Ø/Tag:
-    <strong
-      >{{
-        friend!.tagesdurchschnitt! + friend!.tagesdurchschnittRad!
-          | number : "1.2-2"
-      }}
-      km/d</strong
-    >
-  </div>
-  <div>
-    Update: <strong>{{ friend!.letzteMeldung?.datum }}</strong>
-  </div>
-</div>
-<footer
-  class="card__foot"
-  [ngClass]="dailyAvgClass(friend)"
-  role="contentinfo"
-  [attr.aria-label]="dailyAvgAria(friend)"
->
-  <div>
-    <div *ngIf="remaining(friend) >= 0">
-      <mat-icon
-        class="icon-inline"
-        [ngClass]="{
-          'is-blue': pct(friend) >= 100,
-          'is-green': pct(friend) >= 90 && pct(friend) < 100,
-          'is-amber': pct(friend) >= 50 && pct(friend) < 90,
-          'is-rose': pct(friend) < 50
-        }"
-      >
-        directions_walk
+      <mat-icon aria-hidden="true">
+        {{ pinned || expanded ? "expand_less" : "expand_more" }}
       </mat-icon>
-      Noch zum Ziel:
-      <strong>{{ remaining(friend) | number : "1.2-2" }} km</strong>
-      <div class="foot__avg" [ngClass]="dailyAvgClass(friend)">
-        Nötiger Tagesdurchschnitt für das Ziel:
-        <strong
-          >{{
-            utils.calculateMeanToGo(friend!).toFixed(2) | number : "1.2-2"
-          }}
-          km/d</strong
-        >
+      <span class="sr-only">
+        {{
+          pinned || expanded ? "Details ausgeblendet" : "Details eingeblendet"
+        }}
+      </span>
+    </button>
+  </div>
+
+  <div
+    class="person-card__details"
+    [id]="detailsId"
+    [attr.aria-hidden]="!(pinned || expanded)"
+    [class.is-open]="pinned || expanded"
+  >
+    <div class="grid">
+      <div class="grid__row">
+        <mat-icon class="grid__icon" aria-hidden="true">speed</mat-icon>
+        <span class="grid__label">Mittel</span>
+        <strong class="grid__value">
+          {{ dailyMeanKm | number : "1.2-2" }} km/d
+        </strong>
+      </div>
+
+      <div class="grid__row">
+        <mat-icon class="grid__icon" aria-hidden="true">event</mat-icon>
+        <span class="grid__label">Update</span>
+        <strong class="grid__value">{{ friend?.letzteMeldung?.datum }}</strong>
       </div>
     </div>
-    <div *ngIf="remaining(friend) < 0">
-      <mat-icon class="icon-inline is-blue" aria-hidden="true">
-        {{ "rocket_launch" }}
-      </mat-icon>
-      Mehr als das Ziel:
-      <strong>{{ remaining(friend) * -1 | number : "1.2-2" }} km</strong>
-    </div>
+
+    <footer
+      class="person-card__foot"
+      role="contentinfo"
+      [attr.aria-label]="dailyAvgAria"
+    >
+      <div *ngIf="remainingKm >= 0; else overGoal">
+        <div class="foot__avg">
+          <mat-icon
+            class="icon-inline"
+            [class]="statusClass"
+            aria-hidden="true"
+          >
+            directions_walk
+          </mat-icon>
+          Noch zum Ziel:
+          <strong>{{ remainingKm | number : "1.2-2" }} km</strong>
+        </div>
+
+        <div class="foot__avg-box" [class]="dailyAvgClass">
+          Nötiger Tagesdurchschnitt für das Ziel:
+          <strong>{{ meanToGoKm | number : "1.2-2" }} km/d</strong>
+        </div>
+      </div>
+
+      <ng-template #overGoal>
+        <mat-icon class="icon-inline is-blue" aria-hidden="true">
+          rocket_launch
+        </mat-icon>
+        Mehr als das Ziel:
+        <strong>{{ overByKm | number : "1.2-2" }} km</strong>
+      </ng-template>
+    </footer>
   </div>
-</footer>
+</div>

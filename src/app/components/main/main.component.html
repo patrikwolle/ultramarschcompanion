@@ -1,83 +1,99 @@
 <div class="screen">
-  <header class="topbar">
-    <nav class="tabs" role="tablist" aria-label="Hauptmenü">
-      <button class="tab" role="tab" [attr.aria-selected]="activeTab==='progress'" (click)="activeTab='progress'" [class.is-active]="activeTab==='progress'">Fortschritt</button>
-      <button class="tab" role="tab" [attr.aria-selected]="activeTab==='input'" (click)="activeTab='input'" [class.is-active]="activeTab==='input'">Meldung</button>
-      <button class="tab" role="tab" [attr.aria-selected]="activeTab==='settings'" (click)="activeTab='settings'" [class.is-active]="activeTab==='settings'">Einstellungen</button>
-    </nav>
+  <div class="topbar">
+    <section class="add">
+      <form
+        class="add__form"
+        aria-label="Freund hinzufügen"
+        (submit)="addFriend(friendBox.value); friendBox.value = ''"
+      >
+        <input
+          #friendBox
+          class="add__input"
+          type="text"
+          placeholder="Vorname N."
+          autocomplete="off"
+          aria-label="Freund"
+          (keydown.enter)="addFriend(friendBox.value); friendBox.value = ''"
+        />
+        <button class="add__btn" type="submit">Hinzufügen</button>
+        <nav class="toolbar" aria-label="Sortierung">
+          <div class="toolbar__group">
+            <div class="toolbar__label">Sortierung:</div>
+            <button
+              type="button"
+              class="btn"
+              [class.is-active]="sortKey === 'name'"
+              (click)="setSortKey('name')"
+            >
+              Name {{ sortKey === "name" ? (asc ? "▲" : "▼") : "" }}
+            </button>
 
-    <div class="controls" *ngIf="activeTab==='progress'">
-      <label *ngIf="selectedUser !== undefined" class="search">
-        <span class="search__icon" aria-hidden="true">🔎</span>
-        <input class="search__input" type="text" pInputText placeholder="Freund adden (Vorname N.)" [(ngModel)]="friendId" (keyup.enter)="addFriend(friendId)" />
-      </label>
-      <label *ngIf="selectedUser === undefined" class="search">
-        <span class="search__icon" aria-hidden="true">🔎</span>
-        <input class="search__input" type="text" pInputText placeholder="Vorname N." [(ngModel)]="selectUserId" (keyup.enter)="selectUser(selectUserId)" />
-      </label>
+            <button
+              type="button"
+              class="btn"
+              [class.is-active]="sortKey === 'progress'"
+              (click)="setSortKey('progress')"
+            >
+              Fortschritt {{ sortKey === "progress" ? (asc ? "▲" : "▼") : "" }}
+            </button>
 
-      <button class="chip" (click)="toggleSheet()" [attr.aria-expanded]="sheetOpen" aria-haspopup="dialog">
-        Sortieren
-      </button>
-    </div>
-  </header>
+            <button
+              type="button"
+              class="btn"
+              [class.is-active]="sortKey === 'done'"
+              (click)="setSortKey('done')"
+            >
+              km {{ sortKey === "done" ? (asc ? "▲" : "▼") : "" }}
+            </button>
+          </div>
+        </nav>
+      </form>
+    </section>
 
-  <main class="content" *ngIf="activeTab==='progress'">
-    <ul class="list" *ngIf="renderFriends.length; else emptyState">
-      <li class="card" *ngFor="let r of renderFriends">
-        <um-friend [friend]="r"></um-friend>
-      </li>
-    </ul>
+    <section>
+      <ul class="friends__list" *ngIf="renderFriends?.length; else emptyState">
+        <li
+          class="friends__item"
+          *ngFor="let r of renderFriends; trackBy: trackByName"
+          [class.is-pinned]="isPinned(r)"
+        >
+          <button
+            type="button"
+            class="pin-btn"
+            (click)="togglePin(r)"
+            [attr.aria-pressed]="isPinned(r)"
+            [class.is-active]="isPinned(r)"
+            [title]="isPinned(r) ? 'Anpinnen aufheben' : 'Anpinnen'"
+          >
+            <i [ngClass]="isPinned(r) ? 'pi pi-star-fill' : 'pi pi-star'"></i>
+          </button>
 
-    <ng-template #emptyState>
-      <div class="empty">Keine Treffer – Filter anpassen.</div>
-    </ng-template>
-  </main>
+          <button
+            type="button"
+            class="remove-btn"
+            (click)="confirmRemove(r)"
+            [title]="'Entfernen'"
+          >
+            <i class="pi pi-trash"></i>
+          </button>
+          <um-friend [friend]="r" [pinned]="isPinned(r)"></um-friend>
+        </li>
+      </ul>
 
-  <main class="content" *ngIf="activeTab==='input'">📥 Formular „Meldung erfassen“</main>
-  <main class="content" *ngIf="activeTab==='settings'">
-    <app-settings></app-settings>
-  </main>
-
-  <section class="sheet" *ngIf="sheetOpen" role="dialog" aria-modal="true" aria-label="Sortieren">
-    <button class="sheet__backdrop" (click)="toggleSheet()" aria-label="Schließen"></button>
-    <div class="sheet__panel">
-      <header class="sheet__head">
-        <h2>Sortieren</h2>
-        <button class="link" (click)="toggleSheet()">Fertig</button>
-      </header>
-
-      <div class="options">
-        <label class="option" [class.is-active]="sortKey==='name'">
-          <input type="radio" name="sortKey" (change)="setSortKey('name')" [checked]="sortKey==='name'">
-          Name
-        </label>
-        <label class="option" [class.is-active]="sortKey==='progress'">
-          <input type="radio" name="sortKey" (change)="setSortKey('progress')" [checked]="sortKey==='progress'">
-          Fortschritt %
-        </label>
-      </div>
-
-      <div class="toggles">
-        <label class="toggle">
-          <input type="checkbox" (change)="toggleAsc()" [checked]="asc">
-          <span>Aufsteigend</span>
-        </label>
-      </div>
-
-      <div class="sheet__head" style="margin-top:.75rem">
-        <h2>Eigener Nutzer</h2>
-      </div>
-      <div class="options">
-        <label class="option" [class.is-active]="selfMode==='pin'">
-          <input type="radio" name="selfMode" (change)="setSelfMode('pin')" [checked]="selfMode==='pin'">
-          An erster Stelle fixieren
-        </label>
-        <label class="option" [class.is-active]="selfMode==='include'">
-          <input type="radio" name="selfMode" (change)="setSelfMode('include')" [checked]="selfMode==='include'">
-          In Sortierung einbeziehen
-        </label>
-      </div>
-    </div>
-  </section>
+      <ng-template #emptyState>
+        <div class="friends__empty">
+          Noch keine Einträge. Füge oben jemanden hinzu.
+        </div>
+      </ng-template>
+    </section>
+  </div>
 </div>
+
+<button
+  type="button"
+  class="fab"
+  aria-label="Aktivität hinzufügen"
+  (click)="openUploadDialog()"
+>
+  <i class="pi pi-plus"></i>
+</button>

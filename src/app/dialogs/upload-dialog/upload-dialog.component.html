@@ -1,33 +1,106 @@
-<div class="grid">
-  <div class="md:col-6 col-12">Datum</div>
-  <div class="md:col-6 col-12">
-    <p-datePicker [(ngModel)]="date" dateFormat="yy-mm-dd"></p-datePicker>
-  </div>
-  <div class="md:col-6 col-12">Länge</div>
-  <div class="md:col-6 col-12">
-    <input pInputText [(ngModel)]="length"/>
-  </div>
-  <div class="md:col-6 col-12">Höhe</div>
-  <div class="md:col-6 col-12">
-    <input pInputText [(ngModel)]="height"/>
-  </div>
-  <div class="md:col-6 col-12">Fahrrad Länge</div>
-  <div class="md:col-6 col-12">
-    <input pInputText [(ngModel)]="bikeLength"/>
-  </div>
-  <div class="md:col-6 col-12">Fahrrad Höhe</div>
-  <div class="md:col-6 col-12">
-    <input pInputText [(ngModel)]="bikeHeight"/>
-  </div>
-  <div class="md:col-6 col-12">Screenshot</div>
-  <div class="md:col-6 col-12">
-    <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="addImage($event)" [auto]="true" chooseLabel="Browse" />
-  </div>
-  <div class="col-6">
-    <p-button [style]="{width: '100%'}" label="Abbrechen" (click)="cancel()"></p-button>
-  </div>
-  <div class="col-6">
-    <p-button [style]="{width: '100%'}" label="Speichern" (click)="sendForm()"></p-button>
-  </div>
+<div class="upload-dialog-content grid">
+  <div class="grid">
+    <div class="token-area">
+      <div class="upload-header md:col-6 col-12">Token</div>
+      <div class="token-row">
+        <input
+          pInputText
+          class="upload-input"
+          [(ngModel)]="userToken"
+          [disabled]="tokenLocked"
+          placeholder="Token"
+          aria-label="Token"
+        />
 
+        <button
+          type="button"
+          class="upload-btn token-toggle"
+          [class.is-edit]="tokenLocked"
+          [class.is-save]="!tokenLocked"
+          (click)="toggleToken()"
+          [attr.aria-pressed]="!tokenLocked"
+          [title]="tokenLocked ? 'Bearbeiten' : 'Speichern'"
+        >
+          <i class="pi" [ngClass]="tokenLocked ? 'pi-pencil' : 'pi-save'"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="upload-header md:col-6 col-12">Datum</div>
+    <div class="md:col-6 col-12">
+      <p-datePicker
+        class="upload-date"
+        [(ngModel)]="date"
+        dateFormat="dd.mm.yy"
+        appendTo="self"
+      >
+      </p-datePicker>
+    </div>
+
+    <div class="upload-header md:col-6 col-12">Länge</div>
+    <div class="md:col-6 col-12">
+      <input
+        pInputText
+        type="number"
+        [(ngModel)]="length"
+        class="upload-input"
+      />
+    </div>
+
+    <div class="upload-header upload-header md:col-6 col-12">Höhe</div>
+    <div class="md:col-6 col-12">
+      <input
+        pInputText
+        type="number"
+        [(ngModel)]="height"
+        class="upload-input"
+      />
+    </div>
+
+    <div class="upload-header md:col-6 col-12">Fahrrad Länge</div>
+    <div class="md:col-6 col-12">
+      <input
+        pInputText
+        type="number"
+        [(ngModel)]="bikeLength"
+        class="upload-input"
+      />
+    </div>
+
+    <div class="upload-header md:col-6 col-12">Fahrrad Höhe</div>
+    <div class="md:col-6 col-12">
+      <input
+        pInputText
+        type="number"
+        [(ngModel)]="bikeHeight"
+        class="upload-input"
+      />
+    </div>
+
+    <div class="upload-header md:col-6 col-12">Screenshot</div>
+    <div class="upload-header md:col-6 col-12">
+      <p-fileupload
+        mode="basic"
+        name="upload"
+        chooseIcon="pi pi-upload"
+        accept="image/*"
+        maxFileSize="1000000"
+        (onUpload)="addImage($event)"
+        [auto]="true"
+        chooseLabel="Bild wählen"
+        class="upload-file"
+      ></p-fileupload>
+    </div>
+
+    <div class="col-6">
+      <button type="button" class="upload-btn cancel" (click)="cancel()">
+        Abbrechen
+      </button>
+    </div>
+    <div class="col-6">
+      <button type="button" class="upload-btn save" (click)="sendForm()">
+        Speichern
+      </button>
+    </div>
+  </div>
 </div>

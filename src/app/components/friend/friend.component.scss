@@ -1,283 +1,184 @@
-.progressBarStyle {
-  width: 100%;
+@use "./../../../colors.scss" as *;
+
+.person-card {
+  display: grid;
+  gap: 12px;
+  background: $white;
+  border-radius: 1rem;
+  padding: 0.5rem 16px;
+  position: relative;
+  box-shadow: 4px 4px 4px $shadow;
 }
 
-.friendCard {
-  margin-top: 15px;
-}
-
-.history-button {
-  color: #373735;
-}
-
-::ng-deep .custom-menubar {
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  width: 100%;
-  height: 60px;
-  border-radius: 0 !important;
-  background: #373735 !important;
-}
-
-.menuBar {
-  display: flex;
-  justify-content: space-between;
+.person-card__toggle {
+  position: absolute;
+  bottom: 0px;
+  right: -4px;
+  z-index: 3;
+  display: inline-flex;
   align-items: center;
-  width: 100vw; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
-  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
-  background-color: #373735; /* optional: Hintergrundfarbe */
-  padding: 0 20px; /* Innenabstand links und rechts */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: Schatten für Trennung */
-}
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
 
-.mainBar {
-  display: flex;
-  color: white;
-  width: 100vw; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
-  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
-  background-color: #373735; /* optional: Hintergrundfarbe */
-}
-
-.menuBarFriend {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 10px 10px 0 0;
-  color: white;
-  width: 100%; /* sorgt dafür, dass die Leiste die volle Breite des Bildschirms einnimmt */
-  height: 60px; /* Höhe der Leiste, wird angepasst, um alles gleich hoch zu machen */
-  background-color: #373735; /* optional: Hintergrundfarbe */
-  padding: 0 20px; /* Innenabstand links und rechts */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: Schatten für Trennung */
-}
-
-.menuBarLeft {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Abstand zwischen dem Input-Feld und dem Button */
-}
-
-.menuBarRight {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-  gap: 10px;
-}
-
-input[pInputText] {
-  height: 40px; /* sorgt dafür, dass das Input-Feld gleich hoch ist wie die anderen Elemente */
-}
-p-button {
-  height: 40px; /* Gleiche Höhe wie das Input-Feld */
-  display: flex; /* Flexbox verwenden, um Inhalt (Icon/Text) zu zentrieren */
-  align-items: center; /* Vertikale Zentrierung */
-  justify-content: center; /* Horizontale Zentrierung */
-  padding: 0; /* Entfernt zusätzlichen inneren Abstand */
-  box-sizing: border-box; /* Verhindert, dass zusätzliche Padding/Border die Höhe beeinflussen */
-}
-
-/* Design Tokens */
-$bg: #f5f5f7;
-$card: #ffffff;
-$border: #e6e6ea;
-$text: #0f172a;
-$muted: #6b7280;
-
-$blue: #3b82f6;
-$green: #10b981;
-$amber: #f59e0b;
-$rose: #ef4444;
-
-.screen {
-  min-height: 100dvh;
-  background: $bg;
-  color: $text;
-}
-
-/* Sticky Topbar */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(#fff, 0.9);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #e6e6ea;
-  padding: 0.75rem 0.75rem;
-
-  .controls {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
   }
 }
 
-/* --- Mobile-first: horizontale, scrollbare Segmented Tabs --- */
-.tabs {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  background: #eef0f3;
-  border-radius: 1rem;
-  padding: 0.25rem;
+.person-card__head {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0;
+  align-items: center;
+}
+.person-card__avatar {
+  width: 56px;
+  height: 56px;
+  background: transparent;
+  clip-path: inset(0 4px 0 4px round 50%);
+}
+.person-card__meta {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.person-card__name {
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
 }
 
-.tab {
-  flex: 1 1 0; /* alle Tabs teilen sich gleichmäßig den Platz */
-  text-align: center;
-  appearance: none;
-  border: 0;
-  background: transparent;
-  padding: 0.6rem 0.9rem;
-  border-radius: 0.75rem;
-  font-weight: 600;
-  color: #6b7280;
-  cursor: pointer;
+.progress {
+  position: relative;
+  height: 20px;
+  background: $muted;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px $shadow;
+  overflow: hidden;
+}
+.progress__bar {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.25s ease;
+
+  &.is-blue {
+    background: $blue;
+  }
+  &.is-green {
+    background: $green;
+  }
+  &.is-amber {
+    background: $amber;
+  }
+  &.is-rose {
+    background: $rose;
+  }
+}
+.progress__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-weight: 700;
+}
+
+.grid {
+  display: block;
+  gap: 8px 12px;
+  min-width: 0;
+}
+
+.grid__row {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  grid-template-areas:
+    "icon label"
+    "icon value";
+  align-items: start;
+  column-gap: 8px;
+  row-gap: 4px;
+  min-width: 0;
+  margin-top: 8px;
+}
+.grid__icon {
+  grid-area: icon;
+}
+.grid__label {
+  grid-area: label;
+  min-width: 0;
+}
+.grid__value {
+  grid-area: value;
+  min-width: 0;
+}
+
+.grid__row--inline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0;
+  min-width: 0;
+}
+
+.grid__label {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
   white-space: nowrap;
 }
 
-.tab.is-active {
-  background: #fff;
-  color: #0f172a;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+.grid__value {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  margin-left: 4px;
 }
 
-/* --- Rest aus deinem Stylesheet (Suche/Chip etc.) --- */
-.search {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #fff;
-  border: 1px solid #e6e6ea;
-  border-radius: 0.75rem;
-  padding: 0.25rem 0.5rem;
-
-  &__icon {
-    opacity: 0.7;
-  }
-  &__input {
-    border: 0;
-    outline: none;
-    width: 100%;
-    padding: 0.5rem;
-    background: transparent;
-  }
+.person-card__details {
+  margin-right: 8px;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
 }
 
-.chip {
-  background: #fff;
-  border: 1px solid #e6e6ea;
-  border-radius: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  font-weight: 700;
+.person-card__details.is-open {
+  max-height: 1000px;
+  opacity: 1;
+  pointer-events: auto;
 }
 
-/* Mini-Tweak: wenn sehr wenig Platz ist, lasse die Controls umbrechen */
-@media (max-width: 360px) {
-  .controls {
-    flex-wrap: wrap;
-  }
+.person-card.is-summary .person-card__name {
+  flex: 0 0 auto;
 }
 
-/* Content */
-.content {
-  max-width: 720px;
-  margin: 0.5rem auto 4.5rem;
-  padding: 0 0.75rem;
+.person-card.is-summary .progress {
+  flex: 0 1 clamp(220px, 35vw, 420px);
 }
 
-.list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.person-card.is-collapsed .person-card__details {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.card {
-  background: $card;
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.03);
-}
-
-.card + .card {
-  margin-top: 0.75rem;
-}
-
-.card__head {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-.card__avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-
-  /* schneidet 3px rundum weg */
-  clip-path: inset(0 4px 0 4px round 50%);
-}
-
-.card__foot {
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
+.person-card__foot {
+  margin-top: 12px;
   font-size: 0.82rem;
-  color: #6b7280;
-  border-top: 1px solid #e5e7eb; /* <- horizontale Linie */
+  color: $text;
+  border-top: 2px solid $border;
+}
 
-  .icon-inline {
-    font-size: 1.2em; /* erbt von .card__foot */
-    width: 1em; /* passt Breite an die Schriftgröße an */
-    height: 1em; /* passt Höhe an die Schriftgröße an */
-    line-height: 1; /* verhindert Extraabstand */
-    vertical-align: -0.125em; /* baseline-feintuning (≈ -2px); ggf. 0 oder middle testen */
-    margin-right: 0.4em; /* Abstand zum Text */
-    display: inline-block; /* zuverlässig in allen Browsern */
-  }
-
-  .icon-inline.is-blue {
-    color: #3b82f6;
-  } /* blau */
-  .icon-inline.is-green {
-    color: #10b981;
-  } /* grün */
-  .icon-inline.is-amber {
-    color: #f59e0b;
-  } /* amber */
-  .icon-inline.is-rose {
-    color: #ef4444;
-  } /* rot/rose */
-
-  .foot__avg.is-green {
-    color: #10b981;
-  } /* grün */
-  .foot__avg.is-amber {
-    color: #f59e0b;
-  } /* amber */
-  .foot__avg.is-rose {
-    color: #ef4444;
-  }
-}
-.card__meta {
-  flex: 1;
-}
-.card__row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-.card__name {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-.card__pct {
-  font-weight: 700;
+.icon-inline {
+  transform: translateY(5px);
+  font-size: 22px;
   &.is-blue {
     color: $blue;
   }
@@ -292,138 +193,33 @@ $rose: #ef4444;
   }
 }
 
-/* Progress bar */
-.progress {
-  position: relative;
-  margin-top: 0.5rem;
-  height: 0.6rem;
-  border-radius: 999px;
-  background: #e5e7eb;
-  overflow: hidden;
-
-  &__bar {
-    height: 100%;
-    border-radius: 999px;
-    transition: width 0.25s ease;
-    &.is-blue {
-      background: $blue;
-    }
-    &.is-green {
-      background: $green;
-    }
-    &.is-amber {
-      background: $amber;
-    }
-    &.is-rose {
-      background: $rose;
-    }
-  }
+.foot__avg {
+  margin-top: 4px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  max-width: 100%;
 }
 
-/* Zahlenraster */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.25rem 1rem;
-  margin-top: 0.5rem;
-  color: #111827;
-
-  strong {
-    font-weight: 700;
+.foot__avg-box {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: $muted;
+  box-shadow: 0 1px 3px $shadow;
+  font-size: 0.9rem;
+  max-width: 100%;
+  &.is-blue {
+    border: 3px solid $blue;
   }
-}
-
-.card__foot {
-  margin-top: 0.35rem;
-  font-size: 0.82rem;
-  color: $muted;
-}
-
-/* Empty */
-.empty {
-  text-align: center;
-  color: $muted;
-  padding: 2rem 0;
-}
-
-/* Bottom Sheet */
-.sheet {
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-
-  &__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.35);
-    border: 0;
+  &.is-green {
+    border: 3px solid $green;
   }
-
-  &__panel {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    background: #fff;
-    border-top-left-radius: 1.25rem;
-    border-top-right-radius: 1.25rem;
-    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
-    padding: 1rem;
+  &.is-amber {
+    border: 3px solid $amber;
   }
-
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    h2 {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 700;
-    }
-    .link {
-      background: none;
-      border: 0;
-      color: $blue;
-      font-weight: 700;
-      cursor: pointer;
-    }
-  }
-
-  .options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-  .option {
-    border: 1px solid $border;
-    border-radius: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-    cursor: pointer;
-    input {
-      accent-color: $blue;
-    }
-    &.is-active {
-      border-color: $blue;
-    }
-  }
-
-  .toggles {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.75rem;
-    .toggle {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.95rem;
-      input {
-        accent-color: $blue;
-      }
-    }
+  &.is-rose {
+    border: 3px solid $rose;
   }
 }
 
@@ -434,23 +230,7 @@ $rose: #ef4444;
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip: rect(0, 0, 1px, 1px);
   white-space: nowrap;
   border: 0;
-}
-
-.badge:focus-visible,
-.card__pct:focus-visible,
-.progress:focus-visible {
-  outline: 3px solid currentColor;
-  outline-offset: 2px;
-}
-
-@media (max-width: 360px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  .tabs {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }

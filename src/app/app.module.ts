@@ -1,44 +1,37 @@
-import { NgModule, isDevMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { NgModule, isDevMode } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MainComponent } from './components/main/main.component';
-import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
-import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {providePrimeNG} from 'primeng/config';
-import Aura from '@primeng/themes/aura';
-import {CardModule} from 'primeng/card';
-import {InputText} from 'primeng/inputtext';
-import {FormsModule} from '@angular/forms';
-import {ButtonModule} from 'primeng/button';
-import {SelectButtonModule} from 'primeng/selectbutton';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import {ProgressBar, ProgressBarModule} from 'primeng/progressbar';
-import { FriendComponent } from './components/friend/friend.component';
-import {DialogModule} from 'primeng/dialog';
-import {DynamicDialogModule} from 'primeng/dynamicdialog';
-import { GroupSelectDialogComponent } from './dialogs/group-select-dialog/group-select-dialog.component';
-import {NgOptimizedImage} from '@angular/common';
-import {FloatLabel} from 'primeng/floatlabel';
-import {Menubar} from 'primeng/menubar';
-import {Avatar} from 'primeng/avatar';
-import { SettingsComponent } from './dialogs/settings/settings.component';
-import { UploadDialogComponent } from './dialogs/upload-dialog/upload-dialog.component';
-import {DatePicker} from 'primeng/datepicker';
-import {FileUpload} from 'primeng/fileupload';
-import {MatIconModule} from '@angular/material/icon';
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+
+import { NgOptimizedImage } from "@angular/common";
+import { HttpClientJsonpModule, HttpClientModule } from "@angular/common/http";
+import { FormsModule } from "@angular/forms";
+import { MatIconModule } from "@angular/material/icon";
+import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
+import { ServiceWorkerModule } from "@angular/service-worker";
+import Aura from "@primeng/themes/aura";
+import { Avatar } from "primeng/avatar";
+import { ButtonModule } from "primeng/button";
+import { CardModule } from "primeng/card";
+import { providePrimeNG } from "primeng/config";
+import { DatePicker } from "primeng/datepicker";
+import { DialogModule } from "primeng/dialog";
+import { DynamicDialogModule } from "primeng/dynamicdialog";
+import { FileUpload } from "primeng/fileupload";
+import { FloatLabel } from "primeng/floatlabel";
+import { InputText } from "primeng/inputtext";
+import { Menubar } from "primeng/menubar";
+import { ProgressBarModule } from "primeng/progressbar";
+import { SelectButtonModule } from "primeng/selectbutton";
+import { FriendComponent } from "./components/friend/friend.component";
+import { MainComponent } from "./components/main/main.component";
+import { UploadDialogComponent } from "./dialogs/upload-dialog/upload-dialog.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainComponent,
-    FriendComponent,
-    GroupSelectDialogComponent,
-    SettingsComponent,
-    UploadDialogComponent
-  ],
+  declarations: [MainComponent, AppComponent, UploadDialogComponent],
   imports: [
+    FriendComponent,
     CardModule,
     BrowserModule,
     AppRoutingModule,
@@ -50,11 +43,11 @@ import {MatIconModule} from '@angular/material/icon';
     DialogModule,
     DynamicDialogModule,
     SelectButtonModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
+    ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: "registerWhenStable:30000",
     }),
     ProgressBarModule,
     NgOptimizedImage,
@@ -63,7 +56,7 @@ import {MatIconModule} from '@angular/material/icon';
     Avatar,
     DatePicker,
     FileUpload,
-    MatIconModule
+    MatIconModule,
   ],
   providers: [
     provideAnimationsAsync(),
@@ -71,11 +64,11 @@ import {MatIconModule} from '@angular/material/icon';
       theme: {
         preset: Aura,
         options: {
-          darkModeSelector: false || 'none'
-        }
-      }
-    })
+          darkModeSelector: false || "none",
+        },
+      },
+    }),
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
