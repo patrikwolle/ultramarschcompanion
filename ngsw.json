@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1758045693370,
+  "timestamp": 1758145479479,
   "index": "/ultramarschcompanion/index.html",
   "assetGroups": [
     {
@@ -15,10 +15,10 @@
         "/ultramarschcompanion/chunk-HS5CTAWD.js",
         "/ultramarschcompanion/favicon.ico",
         "/ultramarschcompanion/index.html",
-        "/ultramarschcompanion/main-R4B3FYAY.js",
+        "/ultramarschcompanion/main-VVOYUFFB.js",
         "/ultramarschcompanion/manifest.webmanifest",
         "/ultramarschcompanion/polyfills-FFHMD2TL.js",
-        "/ultramarschcompanion/styles-YX5RC3PU.css"
+        "/ultramarschcompanion/styles-UHSVNCDN.css"
       ],
       "patterns": []
     },
@@ -61,15 +61,15 @@
     "/ultramarschcompanion/icons/icon-512x512.png": "f1e2c7772d510871354a42dbf073ce8c59b0eae2",
     "/ultramarschcompanion/icons/icon-72x72.png": "fed143160e9eba51b0bd4d27e6971047856218dc",
     "/ultramarschcompanion/icons/icon-96x96.png": "85645b694b21b2f7ab78b7f59016c3b13d1c49c5",
-    "/ultramarschcompanion/index.html": "28d952a5ba198d94cf4c341d78f085b7471f1494",
-    "/ultramarschcompanion/main-R4B3FYAY.js": "7be720dda0d9e3c6cc6cbaab0606c76c96c049d3",
+    "/ultramarschcompanion/index.html": "854069beac4ccd701d30bc7ba6e0b097793b5dba",
+    "/ultramarschcompanion/main-VVOYUFFB.js": "fdc965e2a1e0ad82287ff6240236c030a294591e",
     "/ultramarschcompanion/manifest.webmanifest": "0a139564a81af1c55e3da7ae405b828aee1fb7dd",
     "/ultramarschcompanion/media/primeicons-4GST5W3O.woff2": "837c1279b6af9d297f34fdb43e6fcc9206a79f32",
     "/ultramarschcompanion/media/primeicons-DHQU4SEP.svg": "a07ae39027c1a780b42fd82fad7575c2924d9d28",
     "/ultramarschcompanion/media/primeicons-GEFHGEHP.ttf": "3b878ca7e88945a8ec25814810b95367d8977ae6",
     "/ultramarschcompanion/media/primeicons-P53SE5CV.woff": "361e3af71bb4e515feead2f787348a92a5527158",
     "/ultramarschcompanion/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
-    "/ultramarschcompanion/styles-YX5RC3PU.css": "9fe0bde353bde04f5d94b223db5aa47817f78ad4"
+    "/ultramarschcompanion/styles-UHSVNCDN.css": "5b291c21931b3ed827c20441ae1fd3ef2ef38c56"
   },
   "navigationUrls": [
     {
