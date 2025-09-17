@@ -1,159 +1,237 @@
-<form class="grid" role="form" aria-describedby="form-hint">
-  <section class="token-area md:col-12" aria-labelledby="token-label">
-    <h3 id="token-label" class="upload-header">Token</h3>
+<form class="upload-form" #f="ngForm" (ngSubmit)="sendForm()" novalidate>
+  <div class="form-grid">
+    <section class="token-area" aria-labelledby="token-label">
+      <h3 id="token-label" class="upload-header">
+        Token<span class="required-marker" aria-hidden="true">*</span>
+      </h3>
+      <div class="form-row">
+        <label class="sr-only" for="token-input">Token</label>
+        <input
+          id="token-input"
+          pInputText
+          class="upload-input"
+          [(ngModel)]="userToken"
+          name="userToken"
+          [disabled]="tokenLocked"
+          placeholder="Token"
+          autocomplete="off"
+          inputmode="text"
+          required
+        />
+        <button
+          type="button"
+          class="upload-btn token-toggle"
+          [class.is-edit]="tokenLocked"
+          [class.is-save]="!tokenLocked"
+          (click)="toggleToken()"
+          [attr.aria-pressed]="!tokenLocked"
+          [attr.aria-label]="
+            tokenLocked ? 'Token bearbeiten' : 'Token speichern'
+          "
+        >
+          <i class="pi" [ngClass]="tokenLocked ? 'pi-pencil' : 'pi-save'"></i>
+          <span class="sr-only">{{
+            tokenLocked ? "Bearbeiten" : "Speichern"
+          }}</span>
+        </button>
+      </div>
+    </section>
 
-    <div class="token-row" role="group" aria-labelledby="token-label">
-      <label class="sr-only" for="token-input">Token</label>
-      <input
-        id="token-input"
-        pInputText
-        class="upload-input"
-        [(ngModel)]="userToken"
-        name="userToken"
-        [disabled]="tokenLocked"
-        placeholder="Token"
-        autocomplete="off"
-        inputmode="text"
-      />
-
-      <button
-        type="button"
-        class="upload-btn token-toggle"
-        [class.is-edit]="tokenLocked"
-        [class.is-save]="!tokenLocked"
-        (click)="toggleToken()"
-        [attr.aria-pressed]="!tokenLocked"
-        [attr.aria-label]="
-          tokenLocked
-            ? 'Token bearbeiten'
-            : 'Token
-          speichern'
-        "
+    <section aria-labelledby="date-label">
+      <h3 id="date-label" class="upload-header">
+        Datum <span class="required-marker" aria-hidden="true">*</span>
+      </h3>
+      <div class="form-row">
+        <label class="sr-only" for="date-input"
+          >Datum wählen (Pflichtfeld)</label
+        >
+        <p-datePicker
+          class="upload-date"
+          [(ngModel)]="date"
+          name="date"
+          #dateCtrl="ngModel"
+          required
+          dateFormat="dd.mm.yy"
+          panelStyleClass="upload-datepicker"
+          [showIcon]="true"
+          inputId="date-input"
+          [ngClass]="{
+            invalid: dateCtrl.invalid && (dateCtrl.touched || f.submitted)
+          }"
+        ></p-datePicker>
+      </div>
+      <p
+        class="field-error"
+        *ngIf="dateCtrl.invalid && (dateCtrl.touched || f.submitted)"
       >
-        <i class="pi" [ngClass]="tokenLocked ? 'pi-pencil' : 'pi-save'"></i>
-        <span class="sr-only">{{
-          tokenLocked ? "Bearbeiten" : "Speichern"
-        }}</span>
+        Bitte ein Datum wählen.
+      </p>
+    </section>
+    <section aria-labelledby="len-label">
+      <h3 id="len-label" class="upload-header">
+        Streckenlänge <span class="required-marker" aria-hidden="true">*</span>
+      </h3>
+      <div class="form-row">
+        <label for="len-input" class="sr-only"
+          >Streckenlänge (Pflichtfeld)</label
+        >
+        <input
+          id="len-input"
+          pInputText
+          type="number"
+          [(ngModel)]="length"
+          name="length"
+          #lengthCtrl="ngModel"
+          class="upload-input"
+          inputmode="decimal"
+          placeholder="Strecke in km"
+          required
+          min="0"
+          [ngClass]="{
+            invalid: lengthCtrl.invalid && (lengthCtrl.touched || f.submitted)
+          }"
+        />
+      </div>
+      <p
+        class="field-error"
+        *ngIf="lengthCtrl.errors?.['required'] && (lengthCtrl.touched || f.submitted)"
+      >
+        Bitte die Streckenlänge angeben.
+      </p>
+      <p
+        class="field-error"
+        *ngIf="lengthCtrl.errors?.['min'] && (lengthCtrl.touched || f.submitted)"
+      >
+        Der Wert muss ≥ 0 sein.
+      </p>
+    </section>
+
+    <section aria-labelledby="height-label">
+      <h3 id="height-label" class="upload-header">Höhe</h3>
+      <div class="form-row">
+        <label for="height-input" class="sr-only">Höhe</label>
+        <input
+          id="height-input"
+          pInputText
+          type="number"
+          name="height"
+          class="upload-input"
+          inputmode="decimal"
+          placeholder="Höhe in m"
+          required
+          min="0"
+        />
+      </div>
+    </section>
+
+    <section aria-labelledby="blen-label">
+      <h3 id="blen-label" class="upload-header">Fahrradlänge</h3>
+      <div class="form-row">
+        <label for="blen-input" class="sr-only">Fahrradlänge</label>
+        <input
+          id="blen-input"
+          pInputText
+          type="number"
+          [(ngModel)]="bikeLength"
+          name="bikeLength"
+          class="upload-input"
+          inputmode="decimal"
+          placeholder="Fahrradlänge in m"
+          min="0"
+        />
+      </div>
+    </section>
+
+    <section aria-labelledby="bh-label">
+      <h3 id="bh-label" class="upload-header">Fahrradhöhe</h3>
+      <div class="form-row">
+        <label for="bh-input" class="sr-only">Fahrradhöhe</label>
+        <input
+          id="bh-input"
+          pInputText
+          type="number"
+          [(ngModel)]="bikeHeight"
+          name="bikeHeight"
+          class="upload-input"
+          inputmode="decimal"
+          placeholder="Fahrradhöhe in m"
+          min="0"
+        />
+      </div>
+    </section>
+
+    <section aria-labelledby="notice-label">
+      <h3 id="notice-label" class="upload-header">Notiz an das Team</h3>
+      <div class="form-row">
+        <label for="bh-input" class="sr-only">Notiz an das Team</label>
+        <input
+          id="notice-input"
+          pInputText
+          type="number"
+          [(ngModel)]="notice"
+          name="notice"
+          class="upload-input"
+          inputmode="full-width-latin"
+          placeholder="Notiz"
+          min="0"
+        />
+      </div>
+    </section>
+
+    <section class="full" aria-labelledby="shot-label">
+      <h3 id="shot-label" class="upload-header">
+        Screenshot <span class="required-marker" aria-hidden="true">*</span>
+      </h3>
+      <label class="sr-only" for="upload-file">Screenshot (Pflichtfeld)</label>
+
+      <div class="form-row">
+        <p-fileupload
+          class="upload-file"
+          mode="basic"
+          name="upload"
+          chooseIcon="pi pi-upload"
+          chooseLabel="Bild wählen"
+          accept="image/*"
+          [auto]="true"
+          [maxFileSize]="1000000"
+          (onSelect)="onFileSelect($event)"
+          (onUpload)="onServerUpload($event)"
+          (onClear)="removeImage()"
+          [attr.aria-label]="'Screenshot hochladen'"
+          required
+          [(ngModel)]="upload"
+          name="height"
+          #uploadCtrl="ngModel"
+        ></p-fileupload>
+      </div>
+      <div *ngIf="uploadedImageUrl" class="upload-preview">
+        <img [src]="uploadedImageUrl" alt="Bildvorschau" />
+
+        <div class="file-meta">
+          <div class="file-name" [title]="uploadedFileName">
+            {{ uploadedFileName }}
+          </div>
+
+          <div class="file-size">{{ formatBytes(uploadedFileSize) }}</div>
+
+          <button
+            type="button"
+            class="upload-btn cancel"
+            (click)="removeImage()"
+          >
+            Bild entfernen
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions full">
+      <button type="button" class="upload-btn cancel" (click)="cancel()">
+        Abbrechen
+      </button>
+      <button type="submit" class="upload-btn save" [disabled]="f.invalid">
+        Speichern
       </button>
     </div>
-  </section>
-  <section
-    class="md:col-12"
-    style="margin-top: 4px"
-    aria-labelledby="date-label"
-  >
-    <h3 id="date-label" class="upload-header">Datum</h3>
-    <div class="md:col-6 col-12">
-      <label for="date-input" class="sr-only">Datum wählen</label>
-      <p-datePicker
-        class="upload-date"
-        [(ngModel)]="date"
-        name="date"
-        dateFormat="dd.mm.yy"
-        appendTo="self"
-        panelStyleClass="upload-datepicker"
-        [showIcon]="true"
-        inputId="date-input"
-      ></p-datePicker>
-    </div>
-  </section>
-
-  <section class="md:col-12" aria-labelledby="len-label">
-    <h3 id="len-label" class="upload-header">Streckenlänge</h3>
-    <div class="md:col-6 col-12">
-      <label for="len-input" class="sr-only">Streckenlänge</label>
-      <input
-        id="len-input"
-        pInputText
-        type="number"
-        [(ngModel)]="length"
-        name="length"
-        class="upload-input"
-        inputmode="decimal"
-        aria-describedby="len-hint"
-        placeholder="Strecke in km"
-      />
-    </div>
-  </section>
-
-  <section class="md:col-12" aria-labelledby="height-label">
-    <h3 id="height-label" class="upload-header">Höhe</h3>
-    <div class="md:col-6 col-12">
-      <label for="height-input" class="sr-only">Höhe</label>
-      <input
-        id="height-input"
-        pInputText
-        type="number"
-        [(ngModel)]="height"
-        name="height"
-        class="upload-input"
-        inputmode="decimal"
-        aria-describedby="height-hint"
-        placeholder="Höhe in m"
-      />
-    </div>
-  </section>
-
-  <section class="md:col-12" aria-labelledby="blen-label">
-    <h3 id="blen-label" class="upload-header">Fahrradlänge</h3>
-    <div class="md:col-6 col-12">
-      <label for="blen-input" class="sr-only">Fahrradlänge</label>
-      <input
-        id="blen-input"
-        pInputText
-        type="number"
-        [(ngModel)]="bikeLength"
-        name="bikeLength"
-        class="upload-input"
-        inputmode="decimal"
-        placeholder="Fahrradlänge in m"
-      />
-    </div>
-  </section>
-
-  <section class="md:col-12" aria-labelledby="bh-label">
-    <h3 id="bh-label" class="upload-header">Fahrradhöhe</h3>
-    <div class="md:col-6 col-12">
-      <label for="bh-input" class="sr-only">Fahrradhöhe</label>
-      <input
-        id="bh-input"
-        pInputText
-        type="number"
-        [(ngModel)]="bikeHeight"
-        name="bikeHeight"
-        class="upload-input"
-        inputmode="decimal"
-        placeholder="Fahrradhöhe in m"
-      />
-    </div>
-  </section>
-
-  <section class="md:col-12" aria-labelledby="shot-label">
-    <h3 id="shot-label" class="upload-header">Screenshot</h3>
-    <div class="md:col-6 col-12">
-      <p-fileupload
-        class="upload-file"
-        mode="basic"
-        name="upload"
-        chooseIcon="pi pi-upload"
-        chooseLabel="Bild wählen"
-        accept="image/*"
-        [auto]="true"
-        maxFileSize="1000000"
-        (onUpload)="addImage($event)"
-        [attr.aria-label]="'Screenshot hochladen'"
-      ></p-fileupload>
-    </div>
-  </section>
-
-  <div class="col-6">
-    <button type="button" class="upload-btn cancel" (click)="cancel()">
-      Abbrechen
-    </button>
-  </div>
-  <div class="col-6">
-    <button type="button" class="upload-btn save" (click)="sendForm()">
-      Speichern
-    </button>
   </div>
 </form>

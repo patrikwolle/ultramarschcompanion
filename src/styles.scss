@@ -62,7 +62,6 @@ body {
   }
 
   .upload-date .p-inputtext {
-    width: 100%;
     border: 1px solid $border;
     border-radius: 8px;
     font-size: 0.95rem;
@@ -73,6 +72,10 @@ body {
     border-color: $primary;
   }
 
+  .p-datepicker-dropdown {
+    background: $primary;
+    color: $text;
+  }
   .upload-date .p-button {
     background: $primary;
     border: none;

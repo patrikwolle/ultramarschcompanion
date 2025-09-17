@@ -16,9 +16,14 @@ export class UploadDialogComponent {
   height: string = "";
   bikeLength: string = "";
   bikeHeight: string = "";
+  upload: string = "";
+  notice: string = "";
   image: any;
   userToken: string = "";
   tokenLocked = false;
+  uploadedImageUrl: string | null = null;
+  uploadedFileName: string | null = null;
+  uploadedFileSize: number = 0;
 
   constructor(
     private ref: DynamicDialogRef,
@@ -57,10 +62,56 @@ export class UploadDialogComponent {
   unlockToken(): void {
     this.tokenLocked = false;
   }
-  addImage(event: any) {
-    console.log(event);
-    this.image = event.files[0];
-    console.log(this.image);
+
+  onFileSelect(event: any) {
+    const file: File | undefined = event?.files?.[0];
+    if (!file) return;
+
+    if (this.uploadedImageUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(this.uploadedImageUrl);
+    }
+
+    this.uploadedImageUrl = URL.createObjectURL(file);
+    this.uploadedFileName = file.name;
+    this.uploadedFileSize = file.size;
+  }
+
+  onServerUpload(event: any) {
+    const body = event?.originalEvent?.body;
+    const urlFromServer: string | undefined = body?.url;
+    const fileNameFromServer: string | undefined = body?.fileName;
+    const fileSizeFromServer: number | undefined = body?.size;
+
+    if (urlFromServer) {
+      if (this.uploadedImageUrl?.startsWith("blob:")) {
+        URL.revokeObjectURL(this.uploadedImageUrl);
+      }
+      this.uploadedImageUrl = urlFromServer;
+    }
+    if (fileNameFromServer) this.uploadedFileName = fileNameFromServer;
+    if (typeof fileSizeFromServer === "number")
+      this.uploadedFileSize = fileSizeFromServer;
+  }
+
+  removeImage() {
+    if (this.uploadedImageUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(this.uploadedImageUrl);
+    }
+    this.uploadedImageUrl = null;
+    this.uploadedFileName = null;
+    this.uploadedFileSize = 0;
+  }
+
+  formatBytes(bytes?: number | null): string {
+    const b = typeof bytes === "number" ? bytes : 0;
+    if (b === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(b) / Math.log(k));
+    const val = b / Math.pow(k, i);
+    return `${val.toLocaleString("de-DE", { maximumFractionDigits: 1 })} ${
+      sizes[i]
+    }`;
   }
 
   sendForm() {

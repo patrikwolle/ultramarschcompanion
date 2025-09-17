@@ -4,7 +4,7 @@
   display: grid;
   gap: 12px;
   background: $white;
-  border-radius: 1rem;
+  border-radius: 12px;
   padding: 0.5rem 16px;
   position: relative;
   box-shadow: 4px 4px 4px $shadow;
@@ -25,7 +25,7 @@
   transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
 
   &[aria-disabled="true"] {
-    opacity: 0.5;
+    opacity: 0;
     cursor: default;
     pointer-events: none;
   }
@@ -37,17 +37,20 @@
   gap: 0;
   align-items: center;
 }
+
 .person-card__avatar {
   width: 56px;
   height: 56px;
   background: transparent;
   clip-path: inset(0 4px 0 4px round 50%);
 }
+
 .person-card__meta {
   display: grid;
   gap: 8px;
   min-width: 0;
 }
+
 .person-card__name {
   font-weight: 600;
   line-height: 1.2;

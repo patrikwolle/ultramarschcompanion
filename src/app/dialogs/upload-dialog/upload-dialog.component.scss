@@ -1,27 +1,30 @@
 @use "./../../../colors.scss" as *;
 
-form {
+.upload-form {
   margin-left: 12px;
 }
 
-.token-row {
-  margin: 12px;
+.form-grid {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px;
   align-items: center;
-  margin-bottom: 12px;
 }
 
 .token-area {
-  width: 100%;
+  padding-right: 8px;
   border-bottom: 2px solid $border;
-}
-
-@media (max-width: 420) {
-  .token-row {
-    grid-template-columns: 1fr;
-  }
+  padding-bottom: 16px;
 }
 
 .upload-btn.token-toggle {
@@ -29,7 +32,6 @@ form {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 100%;
   border: none;
   border-radius: 8px;
   font-size: 0.95rem;
@@ -66,7 +68,7 @@ form {
   font-weight: 600;
   color: $text;
   padding-bottom: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 4px;
   margin-top: 1px;
 }
 
@@ -83,9 +85,10 @@ form {
 }
 
 .upload-input {
-  width: 100%;
   border: 1px solid $border;
+  border-radius: 8px;
   font-size: 0.95rem;
+  padding: 8px 10px;
 
   &:focus {
     outline: 2px solid $primary !important;
@@ -94,6 +97,7 @@ form {
 }
 
 .upload-btn {
+  -webkit-tap-highlight-color: transparent;
   width: 100%;
   border: none;
   border-radius: 8px;
@@ -118,4 +122,113 @@ form {
   &:hover {
     opacity: 0.9;
   }
+}
+
+.upload-preview {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid $border;
+  }
+
+  .upload-btn.cancel {
+    align-self: flex-start;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  @media (max-width: 420px) {
+    flex-direction: column;
+    justify-content: stretch;
+  }
+}
+
+.required-marker {
+  color: $primary;
+  margin-left: 4px;
+  font-weight: 700;
+}
+
+.field-error {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: $danger;
+}
+.upload-preview {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+
+  img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid $border;
+  }
+
+  .file-meta {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+
+    .file-name {
+      font-weight: 600;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-size {
+      font-size: 0.85rem;
+      color: $accent;
+    }
+
+    .upload-btn.cancel {
+      width: fit-content;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+@media (max-width: 375px) {
+  .upload-preview {
+    grid-template-columns: 1fr;
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 220px;
+      object-fit: contain;
+    }
+  }
+}
+
+.invalid,
+.upload-input.invalid,
+.upload-date .p-inputtext.invalid {
+  border-color: $danger !important;
+  outline-color: $danger !important;
+}
+
+.upload-btn.save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
