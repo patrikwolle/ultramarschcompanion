@@ -193,7 +193,7 @@
           chooseLabel="Bild wählen"
           accept="image/*"
           [auto]="true"
-          [maxFileSize]="1000000"
+          [maxFileSize]="1000000000"
           (onSelect)="onFileSelect($event)"
           (onUpload)="onServerUpload($event)"
           (onClear)="removeImage()"
