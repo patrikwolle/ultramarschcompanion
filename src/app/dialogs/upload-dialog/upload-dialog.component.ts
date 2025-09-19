@@ -18,7 +18,7 @@ export class UploadDialogComponent {
   bikeHeight: string = "";
   upload: string = "";
   notice: string = "";
-  image: any;
+  imageFile: File | null = null;
   userToken: string = "";
   tokenLocked = false;
   uploadedImageUrl: string | null = null;
@@ -67,10 +67,11 @@ export class UploadDialogComponent {
     const file: File | undefined = event?.files?.[0];
     if (!file) return;
 
-    if (this.uploadedImageUrl?.startsWith("blob:")) {
+    if (this.uploadedImageUrl?.startsWith('blob:')) {
       URL.revokeObjectURL(this.uploadedImageUrl);
     }
 
+    this.imageFile = file;
     this.uploadedImageUrl = URL.createObjectURL(file);
     this.uploadedFileName = file.name;
     this.uploadedFileSize = file.size;
@@ -121,13 +122,31 @@ export class UploadDialogComponent {
     formData.append("height", this.height);
     formData.append("bikeLength", this.bikeLength);
     formData.append("bikeHeight", this.bikeHeight);
-    formData.append("image", this.image);
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-    this.um.postData(formData).subscribe((data) => {
-      console.log(data);
-      this.ref.close();
+
+    if (this.imageFile) {
+      formData.append('image', this.imageFile, this.imageFile.name); // <-- Binary
+    } else {
+      console.warn('Kein Bild gewählt.');
+      return;
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
+
+
+    }
+
+
+    this.um.postData(formData).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.ref.close();
+      },
+      error: (err) => {
+        this.ref.close();
+      },
+      complete: () => {
+        this.ref.close();
+      },
     });
   }
 

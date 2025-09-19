@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import {Participant} from '../interfaces/participant';
-import {ProcessedMessages} from '../interfaces/processed-messages';
+import {
+  ExtractedMessages,
+  ProcessedMessage,
+  ToBeProofedMessage
+} from '../interfaces/processed-messages';
 
 @Injectable({
   providedIn: 'root'
@@ -174,61 +178,112 @@ export class DomParserService {
     return participants;
   }
 
-  extractProcessedMessages(response: string): ProcessedMessages[] {
+  /** kleine Helpers */
+  extractNumber(regex: RegExp, text: string): number {
+    const m = text.match(regex);
+    if (!m) return 0;
+    // Komma/ Punkt-Varianten abfangen
+    const norm = m[1].replace(/\./g, "").replace(",", ".");
+    const val = parseFloat(norm);
+    return Number.isFinite(val) ? val : 0;
+  }
+  extractString(regex: RegExp, text: string): string {
+    const m = text.match(regex);
+    return m ? m[1].trim() : "";
+  }
 
-    console.log(response)
+  getSectionBodyByHeading(doc: Document, headingText: string): HTMLTableSectionElement | null {
+    // findet das THEAD mit der Überschrift und nimmt das direkt folgende TBODY
+    const theads = Array.from(doc.querySelectorAll<HTMLTableSectionElement>("table.table thead"));
+    const thead = theads.find(th => th.textContent?.includes(headingText)) || null;
+    if (!thead) return null;
+    const body = thead.nextElementSibling;
+    return body && body.tagName === "TBODY" ? (body as HTMLTableSectionElement) : null;
+  }
 
+  parseRowCommon(row: HTMLTableRowElement) {
+    const imgUrl = (row.querySelector("img") as HTMLImageElement | null)?.src || "";
+    const tds = row.querySelectorAll<HTMLTableCellElement>("td");
+    const infoText = (tds[1]?.textContent || "").trim();             // enthält Länge/Höhe/Datum
+    const noteSpan = tds[2]?.querySelector("span");
+    const noteCount = noteSpan ? parseInt(noteSpan.textContent?.trim() || "0", 10) : 0;
+
+    const date = this.extractString(/Datum:\s*([\d]{4}-[\d]{2}-[\d]{2})/i, infoText);
+    const length = this.extractNumber(/Länge:\s*([\d.,]+)/i, infoText);
+    const height = this.extractNumber(/Höhe:\s*([\d.,]+)/i, infoText);
+    const bikeLength = this.extractNumber(/Länge\s*Bike:\s*([\d.,]+)/i, infoText);
+    const bikeHeight = this.extractNumber(/Höhe\s*Bike:\s*([\d.,]+)/i, infoText);
+    const status = this.extractString(/Status:\s*([^\n\r<]+)/i, infoText) || undefined;
+
+    return { imgUrl, infoText, noteCount, date, length, height, bikeLength, bikeHeight, status, tds };
+  }
+
+  /** Hauptfunktion: parst beide Abschnitte */
+  extractAllMessages(response: string): ExtractedMessages {
     const parser = new DOMParser();
     const doc = parser.parseFromString(response, "text/html");
 
-// 2. Tabelle im neuen DOM suchen
-    const tableElement = doc.querySelector("table.table") as HTMLElement;
-    console.log(tableElement)
-    const processedMessages: ProcessedMessages[] = [];
+    const processedMessages: ProcessedMessage[] = [];
+    const toBeProofed: ToBeProofedMessage[] = [];
 
-    let inProcessedSection = false;
-    const rows = Array.from(tableElement.querySelectorAll("tbody tr"));
-    console.log(rows)
-
-    for (const row of rows) {
-      // Prüfen, ob die Überschrift „haben wir verarbeitet“ direkt VOR diesem <tr> steht
-      const prev = row.previousElementSibling;
-
-      // Jetzt sind wir in der verarbeiteten Sektion, also Inhalte auslesen
-      const imgElem = row.querySelector("img") as HTMLImageElement | null;
-      const columns = row.querySelectorAll("td");
-      if (columns.length < 3) continue; // Sicherheit: mindestens 3 Spalten erwarten
-
-      const infoHtml = columns[1].innerHTML;
-      const noteSpan = columns[2].querySelector("span");
-      const noteCount = noteSpan
-        ? parseInt(noteSpan.textContent?.trim() || "0", 10)
-        : 0;
-
-      // Per Regex ID, Datum, Maße aus dem innerHTML extrahieren
-      const idMatch = infoHtml.match(/ID:\s*(\d+)/);
-      const dateMatch = infoHtml.match(/Datum:\s*([\d\-]+)/);
-      const lengthMatch = infoHtml.match(/Länge:\s*([\d.]+)/);
-      const heightMatch = infoHtml.match(/Höhe:\s*([\d.]+)/);
-      const bikeLengthMatch = infoHtml.match(/Länge Bike:\s*([\d.]+)/);
-      const bikeHeightMatch = infoHtml.match(/Höhe Bike:\s*([\d.]+)/);
-
-
-      if (idMatch && dateMatch) {
+    // --- Abschnitt A: "Diese Meldungen haben wir verarbeitet"
+    const processedBody = this.getSectionBodyByHeading(doc, "Diese Meldungen haben wir verarbeitet");
+    if (processedBody) {
+      const rows = Array.from(processedBody.querySelectorAll<HTMLTableRowElement>("tr"));
+      for (const row of rows) {
+        const { imgUrl, infoText, noteCount, date, length, height, bikeLength, bikeHeight } = this.parseRowCommon(row);
+        // ID steht hier explizit im Text
+        const idStr = this.extractString(/ID:\s*(\d+)/i, infoText);
+        if (!idStr || !date) continue;
         processedMessages.push({
-          id: parseInt(idMatch[1], 10),
-          date: dateMatch[1],
-          length: lengthMatch ? parseFloat(lengthMatch[1]) : 0,
-          height: heightMatch ? parseFloat(heightMatch[1]) : 0,
-          bikeLength: bikeLengthMatch ? parseFloat(bikeLengthMatch[1]) : 0,
-          bikeHeight: bikeHeightMatch ? parseFloat(bikeHeightMatch[1]) : 0,
-          imageUrl: imgElem?.src || "",
-          noteCount: noteCount,
+          id: parseInt(idStr, 10),
+          date,
+          length,
+          height,
+          bikeLength,
+          bikeHeight,
+          imageUrl: imgUrl,
+          noteCount,
         });
       }
     }
 
-    return processedMessages;
+    // --- Abschnitt B: "Diese Meldungen prüfen wir gerade"
+    const proofBody = this.getSectionBodyByHeading(doc, "Diese Meldungen prüfen wir gerade");
+    if (proofBody) {
+      const rows = Array.from(proofBody.querySelectorAll<HTMLTableRowElement>("tr"));
+      for (const row of rows) {
+        const {
+          imgUrl, noteCount, date, length, height, bikeLength, bikeHeight, status, tds,
+        } = this.parseRowCommon(row);
+
+        // ID ist hier NICHT im Infotext – wir holen sie aus data-meldung-id (Icon)
+        let idStr =
+          (tds[2]?.querySelector<HTMLElement>(".myNotiz")?.getAttribute("data-meldung-id")) ||
+          // Fallback: id aus dem Lösch-Link /meldung/delete/?...&id=205123
+          this.extractString(/id=(\d+)/i, (tds[3]?.querySelector("a") as HTMLAnchorElement | null)?.href || "");
+
+        if (!idStr) continue;
+        toBeProofed.push({
+          id: parseInt(idStr, 10),
+          date,
+          length,
+          height,
+          bikeLength,
+          bikeHeight,
+          imageUrl: imgUrl,
+          noteCount,
+          status,
+        });
+      }
+    }
+
+    return { processedMessages, toBeProofed };
+  }
+
+  /** Optional: Beibehaltung deiner bisherigen Signatur */
+  extractProcessedMessages(response: string): ExtractedMessages {
+    return this.extractAllMessages(response);
   }
 
 
