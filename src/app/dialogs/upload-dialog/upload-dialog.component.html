@@ -113,6 +113,7 @@
         <input
           id="height-input"
           pInputText
+          [(ngModel)]="height"
           type="number"
           name="height"
           class="upload-input"
@@ -198,7 +199,6 @@
           (onUpload)="onServerUpload($event)"
           (onClear)="removeImage()"
           [attr.aria-label]="'Screenshot hochladen'"
-          required
           [(ngModel)]="upload"
           name="height"
           #uploadCtrl="ngModel"

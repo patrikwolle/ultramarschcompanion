@@ -3,12 +3,12 @@ import { MenuItem, MenuItemCommandEvent } from "primeng/api";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
 import { UploadDialogComponent } from "../../dialogs/upload-dialog/upload-dialog.component";
 import { AllParticipant, Participant } from "../../interfaces/participant";
-import { ProcessedMessages } from "../../interfaces/processed-messages";
 import { DbService } from "../../services/db.service";
 import { DomParserService } from "../../services/dom-parser.service";
 import { LocalStorageService } from "../../services/local-storage.service";
 import { UmServiceService } from "../../services/um-service.service";
 import { UtilsService } from "../../services/utils.service";
+import {ExtractedMessages, ProcessedMessage} from '../../interfaces/processed-messages';
 
 type SortKey = "name" | "progress" | "done";
 type SelfMode = "pin" | "include";
@@ -39,7 +39,7 @@ export class MainComponent implements OnInit {
   friendId = "";
   friends: Participant[] = [];
 
-  history: ProcessedMessages[] = [];
+  history: ExtractedMessages | undefined = undefined;
   showHistory = false;
 
   ref: DynamicDialogRef | undefined;
@@ -76,6 +76,7 @@ export class MainComponent implements OnInit {
     if (this.token) {
       this.umService.getProcessedMessages(this.token).subscribe((res) => {
         this.history = this.dP.extractProcessedMessages(res);
+        console.log(this.history);
       });
     }
 
@@ -358,6 +359,13 @@ export class MainComponent implements OnInit {
         "640px": "92vw",
       },
       styleClass: "upload-dialog",
+    });
+    this.ref.onClose.subscribe((result) => {
+      console.log(result);
+      this.umService.getProcessedMessages(this.token).subscribe((res) => {
+        this.history = this.dP.extractProcessedMessages(res);
+        console.log(this.history);
+      })
     });
   }
 }

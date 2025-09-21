@@ -29,10 +29,12 @@ export class UmServiceService {
   }
 
   getProcessedMessages(token: string) {
-    return this.http.get(`https://ultramarsch-connector-production.up.railway.app/melden/?token=${token}`,{ responseType: 'text'})
+    return this.http.get(`https://ultramarsch-connector-production.up.railway.app/melden/?token=${token}`,{withCredentials: true, responseType: 'text'});
   }
 
+
+
   postData(formData: FormData) {
-    return this.http.post('https://ultramarsch-connector-production.up.railway.app/melden/save', formData, { responseType: 'text', withCredentials: true })
+    return this.http.post('https://ultramarsch-connector-production.up.railway.app/melden/save', formData, {withCredentials: true, responseType: 'text'});
   }
 }
