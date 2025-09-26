@@ -80,25 +80,27 @@
           </div>
         </div>
 
-        <div class="status">
-          <span
-            class="badge"
-            [class.ok]="f.confirmed"
-            [class.pending]="!f.confirmed"
-          >
-            {{ f.confirmed ? "Bestätigt" : "Ausstehend" }}
-          </span>
-        </div>
+        <div class="side">
+          <div class="status">
+            <span
+              class="badge"
+              [class.ok]="f.confirmed"
+              [class.pending]="!f.confirmed"
+            >
+              {{ f.confirmed ? "Bestätigt" : "Ausstehend" }}
+            </span>
+          </div>
 
-        <div class="actions">
-          <button
-            *ngIf="!f.confirmed"
-            type="button"
-            class="btn danger"
-            (click)="onDelete(f)"
-          >
-            Löschen
-          </button>
+          <div class="actions">
+            <button
+              *ngIf="!f.confirmed"
+              type="button"
+              class="btn danger"
+              (click)="onDelete(f)"
+            >
+              Löschen
+            </button>
+          </div>
         </div>
       </article>
     </div>

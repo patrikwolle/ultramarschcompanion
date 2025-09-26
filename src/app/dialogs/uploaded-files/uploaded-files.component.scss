@@ -84,14 +84,14 @@
 
 .item {
   display: grid;
-  grid-template-columns: 1fr 10px 70px;
-  gap: 12px;
+  grid-template-columns: 1fr 70px;
   align-items: center;
-  padding: 8px 12px 8px 20px;
+  padding: 8px 8px 8px 20px;
   border: 1px solid $border;
   border-radius: 12px;
   background: $background;
-  align-items: start;
+  gap: 12px;
+  align-items: stretch;
 }
 
 .meta .name {
@@ -158,10 +158,18 @@
     font-size: 0.85rem;
   }
 }
-.status {
-  justify-self: center;
+
+.side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-height: 100%;
 }
 
+.status {
+  align-self: flex-end;
+}
 .status .badge {
   display: inline-flex;
   align-items: center;
