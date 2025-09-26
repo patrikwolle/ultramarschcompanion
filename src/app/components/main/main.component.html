@@ -97,11 +97,11 @@
   </div>
 </div>
 
-<button
-  type="button"
-  class="fab"
-  aria-label="Aktivität hinzufügen"
-  (click)="openUploadDialog()"
->
-  <i class="pi pi-plus"></i>
-</button>
+<p-speeddial
+  [model]="fabItems"
+  direction="up"
+  showIcon="pi pi-plus"
+  hideIcon="pi pi-times"
+  aria-label="Options"
+  class="fab-wrap"
+/>

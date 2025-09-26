@@ -224,6 +224,9 @@
         </div>
       </div>
     </section>
+    <p class="upload-success" *ngIf="uploadSuccess">
+      Datei wurde erfolgreich hochgeladen.
+    </p>
 
     <div class="actions full">
       <button type="button" class="upload-btn cancel" (click)="cancel()">

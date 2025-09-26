@@ -1,0 +1,110 @@
+<section class="uploads">
+  <section class="token-area" aria-labelledby="token-label">
+    <h3 id="token-label" class="upload-header">
+      Token<span class="required-marker" aria-hidden="true">*</span>
+    </h3>
+    <div class="form-row">
+      <label class="sr-only" for="token-input">Token</label>
+      <input
+        id="token-input"
+        pInputText
+        class="upload-input"
+        [value]="userToken"
+        (input)="onTokenInput($event)"
+        [disabled]="tokenLocked"
+        placeholder="Token"
+        autocomplete="off"
+        inputmode="text"
+        required
+      />
+      <button
+        type="button"
+        class="upload-btn token-toggle"
+        [class.is-edit]="tokenLocked"
+        [class.is-save]="!tokenLocked"
+        (click)="toggleToken()"
+        [attr.aria-pressed]="!tokenLocked"
+        [attr.aria-label]="tokenLocked ? 'Token bearbeiten' : 'Token speichern'"
+      >
+        <i class="pi" [ngClass]="tokenLocked ? 'pi-pencil' : 'pi-save'"></i>
+        <span class="sr-only">{{
+          tokenLocked ? "Bearbeiten" : "Speichern"
+        }}</span>
+      </button>
+    </div>
+  </section>
+
+  <ng-container *ngIf="files$ | async as files; else empty">
+    <div class="list" role="list">
+      <article *ngFor="let f of files" class="item">
+        <div class="meta">
+          <div class="name" [title]="f.name">
+            {{ f.name }}
+          </div>
+          <div class="sub stats">
+            <div class="stat">
+              <mat-icon aria-hidden="true">date_range</mat-icon>
+              <span class="label mono">{{ f.date | date : "dd.MM.yyyy" }}</span>
+            </div>
+
+            <div class="stat">
+              <mat-icon aria-hidden="true">
+                {{ f.length !== 0 ? "directions_walk" : "directions_bike" }}
+              </mat-icon>
+              <span class="label nowrap">
+                <ng-container *ngIf="f.length !== 0"
+                  >{{ f.length }}&nbsp;km</ng-container
+                >
+                <ng-container *ngIf="f.bikeLength !== 0"
+                  >{{ f.bikeLength }}&nbsp;km</ng-container
+                >
+              </span>
+            </div>
+
+            <div class="stat">
+              <mat-icon aria-hidden="true">terrain</mat-icon>
+              <span class="label nowrap">
+                <ng-container *ngIf="f.height !== 0"
+                  >{{ f.height }}&nbsp;m</ng-container
+                >
+                <ng-container *ngIf="f.bikeHeight !== 0"
+                  >{{ f.bikeHeight }}&nbsp;m</ng-container
+                >
+              </span>
+            </div>
+
+            <div class="stat">
+              <mat-icon aria-hidden="true">note</mat-icon>
+              <span class="label nowrap">{{ f.noteCount }}&nbsp;Notizen</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status">
+          <span
+            class="badge"
+            [class.ok]="f.confirmed"
+            [class.pending]="!f.confirmed"
+          >
+            {{ f.confirmed ? "Bestätigt" : "Ausstehend" }}
+          </span>
+        </div>
+
+        <div class="actions">
+          <button
+            *ngIf="!f.confirmed"
+            type="button"
+            class="btn danger"
+            (click)="onDelete(f)"
+          >
+            Löschen
+          </button>
+        </div>
+      </article>
+    </div>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="empty">Noch keine Dateien vorhanden.</div>
+  </ng-template>
+</section>

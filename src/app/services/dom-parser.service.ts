@@ -1,17 +1,12 @@
-import { Injectable } from '@angular/core';
-import {Participant} from '../interfaces/participant';
-import {
-  ExtractedMessages,
-  ProcessedMessage,
-  ToBeProofedMessage
-} from '../interfaces/processed-messages';
+import { Injectable } from "@angular/core";
+import { Participant } from "../interfaces/participant";
+import { BaseMessage } from "../interfaces/processed-messages";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class DomParserService {
-
-  constructor() { }
+  constructor() {}
 
   convertRadHtmlToObject(html: any): any {
     const match = html.match(/\({'result'\s*:\s*'(.*)'}\)/s);
@@ -30,7 +25,9 @@ export class DomParserService {
       return match ? parseFloat(match[1].replace(",", ".")) : undefined;
     };
 
-    const parseDurchschnitt = (input: string | undefined): number | undefined => {
+    const parseDurchschnitt = (
+      input: string | undefined
+    ): number | undefined => {
       if (!input) return undefined;
       const match = input.match(/([\d.,]+)/);
       return match ? parseFloat(match[1].replace(",", ".")) : undefined;
@@ -62,23 +59,30 @@ export class DomParserService {
       const rad = getVal("Bereits zurückgelegte Distanz per Rad");
       const jahr = getVal("Bereits zurückgelegte seit Jahresbeginn");
 
-      const tagesdurchschnitt = getTagesDurchschnitt("Tagesdurchschnitt zu Fuß");
-      const tagesdurchschnittRad = getTagesDurchschnitt("Tagesdurchschnitt per Rad");
+      const tagesdurchschnitt = getTagesDurchschnitt(
+        "Tagesdurchschnitt zu Fuß"
+      );
+      const tagesdurchschnittRad = getTagesDurchschnitt(
+        "Tagesdurchschnitt per Rad"
+      );
 
       let letzteMeldung: Participant["letzteMeldung"] = undefined;
-      const meldungMatch = rowText.match(/letzte Meldung vom\s+(\d{2}\.\d{2}\.\d{4}):?\s*([\d.,]+)?\s*Kilometer/i);
+      const meldungMatch = rowText.match(
+        /letzte Meldung vom\s+(\d{2}\.\d{2}\.\d{4}):?\s*([\d.,]+)?\s*Kilometer/i
+      );
       if (meldungMatch) {
         const distanz = parseFloat((meldungMatch[2] || "0").replace(",", "."));
         letzteMeldung = {
           datum: meldungMatch[1],
-          distanz: distanz
+          distanz: distanz,
         };
       }
 
       const imgEl = row.querySelector("img");
       const image = imgEl?.getAttribute("src") ?? "";
 
-      const bereitsZurueckgelegt = fuss !== undefined && rad !== undefined ? fuss + rad : fuss ?? rad;
+      const bereitsZurueckgelegt =
+        fuss !== undefined && rad !== undefined ? fuss + rad : fuss ?? rad;
 
       participants.push({
         name,
@@ -88,7 +92,7 @@ export class DomParserService {
         jahr,
         tagesdurchschnitt: tagesdurchschnitt ?? undefined,
         tagesdurchschnittRad: tagesdurchschnittRad ?? undefined,
-        letzteMeldung
+        letzteMeldung,
       });
     }
     console.log(participants);
@@ -112,7 +116,9 @@ export class DomParserService {
       return match ? parseFloat(match[1].replace(",", ".")) : undefined;
     };
 
-    const parseDurchschnitt = (input: string | undefined): number | undefined => {
+    const parseDurchschnitt = (
+      input: string | undefined
+    ): number | undefined => {
       if (!input) return undefined;
       const match = input.match(/([\d.,]+)/);
       return match ? parseFloat(match[1].replace(",", ".")) : undefined;
@@ -145,15 +151,19 @@ export class DomParserService {
       const jahr = getVal("Bereits zurückgelegte seit Jahresbeginn");
 
       const tagesdurchschnitt = getTagesDurchschnitt("Tagesdurchschnitt");
-      const tagesdurchschnittRad = getTagesDurchschnitt("Tagesdurchschnitt per Rad");
+      const tagesdurchschnittRad = getTagesDurchschnitt(
+        "Tagesdurchschnitt per Rad"
+      );
 
       let letzteMeldung: Participant["letzteMeldung"] = undefined;
-      const meldungMatch = rowText.match(/letzte Meldung vom\s+(\d{2}\.\d{2}\.\d{4}):?\s*([\d.,]+)?\s*Kilometer/i);
+      const meldungMatch = rowText.match(
+        /letzte Meldung vom\s+(\d{2}\.\d{2}\.\d{4}):?\s*([\d.,]+)?\s*Kilometer/i
+      );
       if (meldungMatch) {
         const distanz = parseFloat((meldungMatch[2] || "0").replace(",", "."));
         letzteMeldung = {
           datum: meldungMatch[1],
-          distanz: distanz
+          distanz: distanz,
         };
       }
 
@@ -161,7 +171,8 @@ export class DomParserService {
       const imgEl = row.querySelector("img");
       const image = imgEl?.getAttribute("src") ?? "";
 
-      const bereitsZurueckgelegt = fuss !== undefined && rad !== undefined ? fuss + rad : fuss ?? rad;
+      const bereitsZurueckgelegt =
+        fuss !== undefined && rad !== undefined ? fuss + rad : fuss ?? rad;
 
       participants.push({
         name,
@@ -171,7 +182,7 @@ export class DomParserService {
         jahr,
         tagesdurchschnitt: tagesdurchschnitt ?? undefined,
         tagesdurchschnittRad: tagesdurchschnittRad ?? undefined,
-        letzteMeldung
+        letzteMeldung,
       });
     }
     console.log(participants);
@@ -182,9 +193,19 @@ export class DomParserService {
   extractNumber(regex: RegExp, text: string): number {
     const m = text.match(regex);
     if (!m) return 0;
-    // Komma/ Punkt-Varianten abfangen
-    const norm = m[1].replace(/\./g, "").replace(",", ".");
-    const val = parseFloat(norm);
+
+    let num = m[1].trim();
+
+    if (num.includes(",") && num.includes(".")) {
+      // z.B. "5.218,42" → Tausenderpunkt entfernen, Komma -> Dezimalpunkt
+      num = num.replace(/\./g, "").replace(",", ".");
+    } else if (num.includes(",")) {
+      // z.B. "5,18" → deutsches Dezimal
+      num = num.replace(",", ".");
+    }
+    // wenn nur "." enthalten ist: englische Schreibweise, nichts tun
+
+    const val = parseFloat(num);
     return Number.isFinite(val) ? val : 0;
   }
   extractString(regex: RegExp, text: string): string {
@@ -192,99 +213,157 @@ export class DomParserService {
     return m ? m[1].trim() : "";
   }
 
-  getSectionBodyByHeading(doc: Document, headingText: string): HTMLTableSectionElement | null {
+  getSectionBodyByHeading(
+    doc: Document,
+    headingText: string
+  ): HTMLTableSectionElement | null {
     // findet das THEAD mit der Überschrift und nimmt das direkt folgende TBODY
-    const theads = Array.from(doc.querySelectorAll<HTMLTableSectionElement>("table.table thead"));
-    const thead = theads.find(th => th.textContent?.includes(headingText)) || null;
+    const theads = Array.from(
+      doc.querySelectorAll<HTMLTableSectionElement>("table.table thead")
+    );
+    const thead =
+      theads.find((th) => th.textContent?.includes(headingText)) || null;
     if (!thead) return null;
     const body = thead.nextElementSibling;
-    return body && body.tagName === "TBODY" ? (body as HTMLTableSectionElement) : null;
+    return body && body.tagName === "TBODY"
+      ? (body as HTMLTableSectionElement)
+      : null;
   }
 
   parseRowCommon(row: HTMLTableRowElement) {
-    const imgUrl = (row.querySelector("img") as HTMLImageElement | null)?.src || "";
+    const imgUrl =
+      (row.querySelector("img") as HTMLImageElement | null)?.src || "";
     const tds = row.querySelectorAll<HTMLTableCellElement>("td");
-    const infoText = (tds[1]?.textContent || "").trim();             // enthält Länge/Höhe/Datum
+    const infoText = (tds[1]?.textContent || "").trim(); // enthält Länge/Höhe/Datum
     const noteSpan = tds[2]?.querySelector("span");
-    const noteCount = noteSpan ? parseInt(noteSpan.textContent?.trim() || "0", 10) : 0;
+    const noteCount = noteSpan
+      ? parseInt(noteSpan.textContent?.trim() || "0", 10)
+      : 0;
 
-    const date = this.extractString(/Datum:\s*([\d]{4}-[\d]{2}-[\d]{2})/i, infoText);
+    const date = this.extractString(
+      /Datum:\s*([\d]{4}-[\d]{2}-[\d]{2})/i,
+      infoText
+    );
     const length = this.extractNumber(/Länge:\s*([\d.,]+)/i, infoText);
     const height = this.extractNumber(/Höhe:\s*([\d.,]+)/i, infoText);
-    const bikeLength = this.extractNumber(/Länge\s*Bike:\s*([\d.,]+)/i, infoText);
-    const bikeHeight = this.extractNumber(/Höhe\s*Bike:\s*([\d.,]+)/i, infoText);
-    const status = this.extractString(/Status:\s*([^\n\r<]+)/i, infoText) || undefined;
+    const bikeLength = this.extractNumber(
+      /Länge\s*Bike:\s*([\d.,]+)/i,
+      infoText
+    );
+    const bikeHeight = this.extractNumber(
+      /Höhe\s*Bike:\s*([\d.,]+)/i,
+      infoText
+    );
+    const status =
+      this.extractString(/Status:\s*([^\n\r<]+)/i, infoText) || undefined;
 
-    return { imgUrl, infoText, noteCount, date, length, height, bikeLength, bikeHeight, status, tds };
+    return {
+      imgUrl,
+      infoText,
+      noteCount,
+      date,
+      length,
+      height,
+      bikeLength,
+      bikeHeight,
+      status,
+      tds,
+    };
   }
 
-  /** Hauptfunktion: parst beide Abschnitte */
-  extractAllMessages(response: string): ExtractedMessages {
+  getProcessedIdsFromDom(doc: Document = document) {
+    const processed = new Set<string>();
+    const unprocessed = new Set<string>();
+
+    console.log("=== DEBUG: getProcessedIdsFromDom ===");
+
+    const selector =
+      "#meldungen_table thead.thead-light + tbody tr td:nth-child(2)";
+    console.log("Verwende Selector:", selector);
+
+    const rows = doc.querySelectorAll(selector);
+    console.log("Gefundene Zellen:", rows.length);
+
+    rows.forEach((cell, idx) => {
+      const text = cell.textContent ?? "";
+      console.log("Raw idx:", idx);
+      console.log(`--- Zelle ${idx} ---`);
+      console.log("Raw textContent:", text);
+
+      const match = text.match(/ID:\s*(\d+)/i);
+      if (match) {
+        console.log("✅ ID gefunden:", match[1]);
+        processed.add(match[1]);
+      } else {
+        console.warn("⚠️ Keine ID gefunden in dieser Zelle!");
+        unprocessed.add("Status: wird geprüft");
+      }
+    });
+
+    console.log("=== IDs insgesamt ===", Array.from(processed));
+    return { processed, unprocessed };
+  }
+
+  extractAllMessages(response: string): BaseMessage[] {
     const parser = new DOMParser();
     const doc = parser.parseFromString(response, "text/html");
+    const processedIds = this.getProcessedIdsFromDom(doc).processed;
+    const unprocessedIds = this.getProcessedIdsFromDom(doc).unprocessed;
+    console.log("unprocessedIds:", unprocessedIds);
 
-    const processedMessages: ProcessedMessage[] = [];
-    const toBeProofed: ToBeProofedMessage[] = [];
+    const allIds = new Set<string>([
+      ...Array.from(processedIds),
+      ...Array.from(unprocessedIds),
+    ]);
+    console.log("allIds:", allIds);
 
-    // --- Abschnitt A: "Diese Meldungen haben wir verarbeitet"
-    const processedBody = this.getSectionBodyByHeading(doc, "Diese Meldungen haben wir verarbeitet");
-    if (processedBody) {
-      const rows = Array.from(processedBody.querySelectorAll<HTMLTableRowElement>("tr"));
+    const messages: BaseMessage[] = [];
+
+    const body =
+      this.getSectionBodyByHeading(
+        doc,
+        "Diese Meldungen haben wir verarbeitet"
+      ) ||
+      this.getSectionBodyByHeading(doc, "Diese Meldungen prüfen wir gerade");
+
+    console.log("Gefundener TBODY:", body);
+    if (body) {
+      const rows = Array.from(doc.querySelectorAll<HTMLTableRowElement>("tr"));
+
+      console.log("Gefundene Rows:", rows.length);
       for (const row of rows) {
-        const { imgUrl, infoText, noteCount, date, length, height, bikeLength, bikeHeight } = this.parseRowCommon(row);
-        // ID steht hier explizit im Text
-        const idStr = this.extractString(/ID:\s*(\d+)/i, infoText);
-        if (!idStr || !date) continue;
-        processedMessages.push({
-          id: parseInt(idStr, 10),
-          date,
-          length,
-          height,
-          bikeLength,
-          bikeHeight,
-          imageUrl: imgUrl,
-          noteCount,
-        });
-      }
-    }
-
-    // --- Abschnitt B: "Diese Meldungen prüfen wir gerade"
-    const proofBody = this.getSectionBodyByHeading(doc, "Diese Meldungen prüfen wir gerade");
-    if (proofBody) {
-      const rows = Array.from(proofBody.querySelectorAll<HTMLTableRowElement>("tr"));
-      for (const row of rows) {
+        console.log(row.innerText);
         const {
-          imgUrl, noteCount, date, length, height, bikeLength, bikeHeight, status, tds,
-        } = this.parseRowCommon(row);
-
-        // ID ist hier NICHT im Infotext – wir holen sie aus data-meldung-id (Icon)
-        let idStr =
-          (tds[2]?.querySelector<HTMLElement>(".myNotiz")?.getAttribute("data-meldung-id")) ||
-          // Fallback: id aus dem Lösch-Link /meldung/delete/?...&id=205123
-          this.extractString(/id=(\d+)/i, (tds[3]?.querySelector("a") as HTMLAnchorElement | null)?.href || "");
-
-        if (!idStr) continue;
-        toBeProofed.push({
-          id: parseInt(idStr, 10),
+          imgUrl,
+          infoText,
+          noteCount,
           date,
           length,
           height,
           bikeLength,
           bikeHeight,
-          imageUrl: imgUrl,
-          noteCount,
-          status,
-        });
+        } = this.parseRowCommon(row);
+        const idStr = this.extractString(/ID:\s*(\d+)/i, infoText);
+        if (length !== 0 || bikeLength !== 0) {
+          messages.push({
+            id: idStr || "Status: wird geprüft",
+            date,
+            length,
+            height,
+            bikeLength,
+            bikeHeight,
+            imageUrl: imgUrl,
+            confirmed: allIds.has(idStr),
+            noteCount,
+          });
+        }
       }
     }
 
-    return { processedMessages, toBeProofed };
+    return messages;
   }
 
-  /** Optional: Beibehaltung deiner bisherigen Signatur */
-  extractProcessedMessages(response: string): ExtractedMessages {
+  extractMessages(response: string): BaseMessage[] {
     return this.extractAllMessages(response);
   }
-
-
-  }
+}

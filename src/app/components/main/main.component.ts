@@ -2,13 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { MenuItem, MenuItemCommandEvent } from "primeng/api";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
 import { UploadDialogComponent } from "../../dialogs/upload-dialog/upload-dialog.component";
+import { UploadedFilesComponent } from "../../dialogs/uploaded-files/uploaded-files.component";
 import { AllParticipant, Participant } from "../../interfaces/participant";
+import { BaseMessage } from "../../interfaces/processed-messages";
 import { DbService } from "../../services/db.service";
 import { DomParserService } from "../../services/dom-parser.service";
 import { LocalStorageService } from "../../services/local-storage.service";
 import { UmServiceService } from "../../services/um-service.service";
 import { UtilsService } from "../../services/utils.service";
-import {ExtractedMessages, ProcessedMessage} from '../../interfaces/processed-messages';
 
 type SortKey = "name" | "progress" | "done";
 type SelfMode = "pin" | "include";
@@ -18,6 +19,7 @@ type SelfMode = "pin" | "include";
   standalone: false,
   templateUrl: "./main.component.html",
   styleUrls: ["./main.component.scss"],
+
   providers: [DialogService],
 })
 export class MainComponent implements OnInit {
@@ -39,7 +41,7 @@ export class MainComponent implements OnInit {
   friendId = "";
   friends: Participant[] = [];
 
-  history: ExtractedMessages | undefined = undefined;
+  history: BaseMessage[] | undefined = undefined;
   showHistory = false;
 
   ref: DynamicDialogRef | undefined;
@@ -68,6 +70,19 @@ export class MainComponent implements OnInit {
     protected utils: UtilsService
   ) {}
 
+  fabItems = [
+    {
+      label: "Upload",
+      icon: "pi pi-upload",
+      command: () => this.openUploadDialog(),
+    },
+    {
+      label: "Übersicht",
+      icon: "pi pi-list",
+      command: () => this.openUploadedFilesDialog(),
+    },
+  ];
+
   ngOnInit(): void {
     this.getData();
     this.pinnedFriendId = this.lS.getPinnedFriend();
@@ -75,7 +90,7 @@ export class MainComponent implements OnInit {
     this.token = this.lS.getToken();
     if (this.token) {
       this.umService.getProcessedMessages(this.token).subscribe((res) => {
-        this.history = this.dP.extractProcessedMessages(res);
+        this.history = this.dP.extractMessages(res);
         console.log(this.history);
       });
     }
@@ -363,9 +378,33 @@ export class MainComponent implements OnInit {
     this.ref.onClose.subscribe((result) => {
       console.log(result);
       this.umService.getProcessedMessages(this.token).subscribe((res) => {
-        this.history = this.dP.extractProcessedMessages(res);
+        this.history = this.dP.extractMessages(res);
         console.log(this.history);
-      })
+      });
+    });
+  }
+
+  openUploadedFilesDialog() {
+    this.umService.getProcessedMessages(this.token).subscribe((res) => {
+      const extractedData = this.dP.extractMessages(res);
+      const processedFiles = extractedData;
+      console.log("Processed files array:", processedFiles);
+
+      this.ref = this.dialogService.open(UploadedFilesComponent, {
+        header: "Hochgeladene Strecken",
+        width: "520px",
+        modal: true,
+        dismissableMask: true,
+        closable: true,
+        contentStyle: { overflow: "auto" },
+        breakpoints: {
+          "960px": "520px",
+          "640px": "92vw",
+        },
+        data: {
+          files: processedFiles,
+        },
+      });
     });
   }
 }

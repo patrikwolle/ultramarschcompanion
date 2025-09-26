@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { NgModule, isDevMode } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 
@@ -24,16 +25,25 @@ import { InputText } from "primeng/inputtext";
 import { Menubar } from "primeng/menubar";
 import { ProgressBarModule } from "primeng/progressbar";
 import { SelectButtonModule } from "primeng/selectbutton";
+import { SpeedDial, SpeedDialModule } from "primeng/speeddial";
 import { FriendComponent } from "./components/friend/friend.component";
 import { MainComponent } from "./components/main/main.component";
 import { UploadDialogComponent } from "./dialogs/upload-dialog/upload-dialog.component";
+import { UploadedFilesComponent } from "./dialogs/uploaded-files/uploaded-files.component";
 
 @NgModule({
-  declarations: [MainComponent, AppComponent, UploadDialogComponent],
+  declarations: [
+    MainComponent,
+    AppComponent,
+    UploadDialogComponent,
+    UploadedFilesComponent,
+  ],
   imports: [
+    CommonModule,
     FriendComponent,
     CardModule,
     BrowserModule,
+    SpeedDialModule,
     AppRoutingModule,
     HttpClientModule,
     HttpClientJsonpModule,
@@ -45,8 +55,6 @@ import { UploadDialogComponent } from "./dialogs/upload-dialog/upload-dialog.com
     SelectButtonModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: !isDevMode(),
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
       registrationStrategy: "registerWhenStable:30000",
     }),
     ProgressBarModule,
@@ -57,6 +65,7 @@ import { UploadDialogComponent } from "./dialogs/upload-dialog/upload-dialog.com
     DatePicker,
     FileUpload,
     MatIconModule,
+    SpeedDial,
   ],
   providers: [
     provideAnimationsAsync(),

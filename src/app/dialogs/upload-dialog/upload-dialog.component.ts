@@ -24,6 +24,7 @@ export class UploadDialogComponent {
   uploadedImageUrl: string | null = null;
   uploadedFileName: string | null = null;
   uploadedFileSize: number = 0;
+  uploadSuccess = false;
 
   constructor(
     private ref: DynamicDialogRef,
@@ -47,14 +48,7 @@ export class UploadDialogComponent {
       return;
     }
     if (this.userToken.trim().length > 0) {
-      this.ls.addToken?.(this.userToken);
-      this.tokenLocked = true;
-    }
-  }
-
-  saveSettings(): void {
-    if (this.userToken.trim().length > 0) {
-      this.ls.addToken?.(this.userToken);
+      this.ls.addToken(this.userToken);
       this.tokenLocked = true;
     }
   }
@@ -64,15 +58,20 @@ export class UploadDialogComponent {
   }
 
   onFileSelect(event: any) {
+    this.uploadSuccess = false;
     const file: File | undefined = event?.files?.[0];
     if (!file) return;
 
-    if (this.uploadedImageUrl?.startsWith('blob:')) {
+    if (this.uploadedImageUrl?.startsWith("blob:")) {
       URL.revokeObjectURL(this.uploadedImageUrl);
     }
 
     this.imageFile = file;
-    this.uploadedImageUrl = URL.createObjectURL(file);
+
+    const prodBase =
+      "https://ultramarsch-connector-production.up.railway.app/images/";
+    this.uploadedImageUrl = `${prodBase}${file.name}`;
+
     this.uploadedFileName = file.name;
     this.uploadedFileSize = file.size;
   }
@@ -92,6 +91,8 @@ export class UploadDialogComponent {
     if (fileNameFromServer) this.uploadedFileName = fileNameFromServer;
     if (typeof fileSizeFromServer === "number")
       this.uploadedFileSize = fileSizeFromServer;
+    this.uploadSuccess = true;
+    setTimeout(() => (this.uploadSuccess = false), 4000);
   }
 
   removeImage() {
@@ -124,17 +125,11 @@ export class UploadDialogComponent {
     formData.append("bikeHeight", this.bikeHeight);
 
     if (this.imageFile) {
-      formData.append('image', this.imageFile, this.imageFile.name); // <-- Binary
+      formData.append("image", this.imageFile, this.imageFile.name);
     } else {
-      console.warn('Kein Bild gewählt.');
+      console.warn("Kein Bild gewählt.");
       return;
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      });
-
-
     }
-
 
     this.um.postData(formData).subscribe({
       next: (res) => {

@@ -194,32 +194,39 @@
 .remove-btn {
   z-index: 3;
 }
-.fab {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 56px;
-  height: 56px;
-  border: 0;
-  border-radius: 999px;
-  box-shadow: 0 10px 24px $shadow;
-  background: $primary;
-  color: $text;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-  z-index: 1000;
+
+.fab-wrap {
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 24px !important;
+  z-index: 4000 !important;
 }
-.fab:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+
+::ng-deep .p-button-icon-only.p-button-rounded {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  border: 0 !important;
+  background: $primary !important;
+  color: $text !important;
+  box-shadow: 0 10px 24px $shadow !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease !important;
 }
-.fab:active {
-  transform: translateY(0);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+
+.fab-btn .p-button-icon,
+.fab-wrap .p-speeddial-button .p-button-icon {
+  font-size: 24px !important;
+  line-height: 1 !important;
 }
-.fab .pi {
-  font-size: 20px;
-  line-height: 1;
+
+::ng-deep .p-button-icon-only.p-button-rounded:not(:disabled):hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22) !important;
+}
+::ng-deep .p-button-icon-only.p-button-rounded:not(:disabled):active {
+  transform: translateY(0) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18) !important;
 }
