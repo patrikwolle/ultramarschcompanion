@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1759013107008,
+  "timestamp": 1759013365769,
   "index": "/ultramarschcompanion/index.html",
   "assetGroups": [
     {
@@ -15,7 +15,7 @@
         "/ultramarschcompanion/chunk-PS4FF755.js",
         "/ultramarschcompanion/favicon.ico",
         "/ultramarschcompanion/index.html",
-        "/ultramarschcompanion/main-E5NONEDD.js",
+        "/ultramarschcompanion/main-IAFYMJAX.js",
         "/ultramarschcompanion/manifest.webmanifest",
         "/ultramarschcompanion/polyfills-FFHMD2TL.js",
         "/ultramarschcompanion/styles-U2HKIVDK.css"
@@ -61,8 +61,8 @@
     "/ultramarschcompanion/icons/icon-512x512.png": "f1e2c7772d510871354a42dbf073ce8c59b0eae2",
     "/ultramarschcompanion/icons/icon-72x72.png": "fed143160e9eba51b0bd4d27e6971047856218dc",
     "/ultramarschcompanion/icons/icon-96x96.png": "85645b694b21b2f7ab78b7f59016c3b13d1c49c5",
-    "/ultramarschcompanion/index.html": "89587ca559d39c50f100c6d94cc6f0c1d7c9e883",
-    "/ultramarschcompanion/main-E5NONEDD.js": "40a85043162e9055271c4433e67bfef658d2542d",
+    "/ultramarschcompanion/index.html": "3793dd4323c5e54fa721335309a013a623cd914a",
+    "/ultramarschcompanion/main-IAFYMJAX.js": "2270dea9bf579d821e7c183f255592ff26b7a78f",
     "/ultramarschcompanion/manifest.webmanifest": "0a139564a81af1c55e3da7ae405b828aee1fb7dd",
     "/ultramarschcompanion/media/primeicons-4GST5W3O.woff2": "837c1279b6af9d297f34fdb43e6fcc9206a79f32",
     "/ultramarschcompanion/media/primeicons-DHQU4SEP.svg": "a07ae39027c1a780b42fd82fad7575c2924d9d28",
