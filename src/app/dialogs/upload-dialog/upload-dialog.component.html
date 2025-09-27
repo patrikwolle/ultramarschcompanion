@@ -13,11 +13,12 @@
           [(ngModel)]="userToken"
           name="userToken"
           [disabled]="tokenLocked"
-          placeholder="Token"
+          [type]="tokenLocked ? 'password' : 'text'"
           autocomplete="off"
           inputmode="text"
           required
         />
+
         <button
           type="button"
           class="upload-btn token-toggle"
@@ -41,24 +42,34 @@
       <h3 id="date-label" class="upload-header">
         Datum <span class="required-marker" aria-hidden="true">*</span>
       </h3>
-      <div class="form-row">
-        <label class="sr-only" for="date-input"
-          >Datum wählen (Pflichtfeld)</label
-        >
-        <p-datePicker
+      <div class="date-row">
+        <p-datepicker
+          #dp
           class="upload-date"
           [(ngModel)]="date"
           name="date"
-          #dateCtrl="ngModel"
           required
           dateFormat="dd.mm.yy"
-          panelStyleClass="upload-datepicker"
-          [showIcon]="true"
-          inputId="date-input"
-          [ngClass]="{
-            invalid: dateCtrl.invalid && (dateCtrl.touched || f.submitted)
-          }"
-        ></p-datePicker>
+          [showIcon]="false"
+          inputId="datePicker"
+          [showIcon]="false"
+          [showOnFocus]="false"
+          #dateCtrl="ngModel"
+        ></p-datepicker>
+
+        <button
+          type="button"
+          class="upload-btn"
+          aria-label="Kalender öffnen"
+          (mousedown)="$event.preventDefault()"
+          (touchstart)="$event.preventDefault()"
+          (pointerdown)="$event.preventDefault()"
+          (touchend)="toggleCalendar($event)"
+          (click)="toggleCalendar($event)"
+        >
+          <i class="pi pi-calendar"></i>
+          <span class="sr-only">Kalender öffnen</span>
+        </button>
       </div>
       <p
         class="field-error"
@@ -67,13 +78,28 @@
         Bitte ein Datum wählen.
       </p>
     </section>
+    <section aria-labelledby="mode-label">
+      <h3 id="mode-label" class="upload-header">Strecke bewältigt:</h3>
+      <p-selectButton
+        [options]="modes"
+        [(ngModel)]="mode"
+        name="mode"
+        [allowEmpty]="false"
+        optionLabel="label"
+        optionValue="value"
+        class="mode-toggle"
+      >
+      </p-selectButton>
+    </section>
     <section aria-labelledby="len-label">
       <h3 id="len-label" class="upload-header">
-        Streckenlänge <span class="required-marker" aria-hidden="true">*</span>
+        {{ mode === "feet" ? "Streckenlänge zu Fuß" : "Streckenlänge per Rad" }}
+        <span class="required-marker" aria-hidden="true">*</span>
       </h3>
-      <div class="form-row">
+
+      <div class="form-row" *ngIf="mode === 'feet'">
         <label for="len-input" class="sr-only"
-          >Streckenlänge (Pflichtfeld)</label
+          >Streckenlänge zu Fuß (in km)</label
         >
         <input
           id="len-input"
@@ -84,80 +110,128 @@
           #lengthCtrl="ngModel"
           class="upload-input"
           inputmode="decimal"
-          placeholder="Strecke in km"
           required
           min="0"
           [ngClass]="{
             invalid: lengthCtrl.invalid && (lengthCtrl.touched || f.submitted)
           }"
         />
+        <p
+          class="field-error"
+          *ngIf="lengthCtrl.errors?.['required'] && (lengthCtrl.touched || f.submitted)"
+        >
+          Bitte die Streckenlänge angeben.
+        </p>
+        <p
+          class="field-error"
+          *ngIf="lengthCtrl.errors?.['min'] && (lengthCtrl.touched || f.submitted)"
+        >
+          Der Wert muss ≥ 0 sein.
+        </p>
       </div>
-      <p
-        class="field-error"
-        *ngIf="lengthCtrl.errors?.['required'] && (lengthCtrl.touched || f.submitted)"
-      >
-        Bitte die Streckenlänge angeben.
-      </p>
-      <p
-        class="field-error"
-        *ngIf="lengthCtrl.errors?.['min'] && (lengthCtrl.touched || f.submitted)"
-      >
-        Der Wert muss ≥ 0 sein.
-      </p>
-    </section>
 
-    <section aria-labelledby="height-label">
-      <h3 id="height-label" class="upload-header">Höhe</h3>
-      <div class="form-row">
-        <label for="height-input" class="sr-only">Höhe</label>
-        <input
-          id="height-input"
-          pInputText
-          [(ngModel)]="height"
-          type="number"
-          name="height"
-          class="upload-input"
-          inputmode="decimal"
-          placeholder="Höhe in m"
-          required
-          min="0"
-        />
-      </div>
-    </section>
-
-    <section aria-labelledby="blen-label">
-      <h3 id="blen-label" class="upload-header">Fahrradlänge</h3>
-      <div class="form-row">
-        <label for="blen-input" class="sr-only">Fahrradlänge</label>
+      <div class="form-row" *ngIf="mode === 'bike'">
+        <label for="blen-input" class="sr-only"
+          >Streckenlänge per Rad (in km)</label
+        >
         <input
           id="blen-input"
           pInputText
           type="number"
           [(ngModel)]="bikeLength"
           name="bikeLength"
+          #bikeLenCtrl="ngModel"
           class="upload-input"
           inputmode="decimal"
-          placeholder="Fahrradlänge in m"
+          required
           min="0"
+          [ngClass]="{
+            invalid: bikeLenCtrl.invalid && (bikeLenCtrl.touched || f.submitted)
+          }"
         />
+        <p
+          class="field-error"
+          *ngIf="bikeLenCtrl.errors?.['required'] && (bikeLenCtrl.touched || f.submitted)"
+        >
+          Bitte die Streckenlänge angeben.
+        </p>
+        <p
+          class="field-error"
+          *ngIf="bikeLenCtrl.errors?.['min'] && (bikeLenCtrl.touched || f.submitted)"
+        >
+          Der Wert muss ≥ 0 sein.
+        </p>
       </div>
     </section>
 
-    <section aria-labelledby="bh-label">
-      <h3 id="bh-label" class="upload-header">Fahrradhöhe</h3>
-      <div class="form-row">
-        <label for="bh-input" class="sr-only">Fahrradhöhe</label>
+    <section aria-labelledby="len-label">
+      <h3 id="len-label" class="upload-header">
+        {{ mode === "feet" ? "Höhenmeter zu Fuß" : "Höhenmeter per Rad" }}
+        <span class="required-marker" aria-hidden="true">*</span>
+      </h3>
+
+      <div class="form-row" *ngIf="mode === 'feet'">
+        <label for="len-input" class="sr-only">Höhenmeter zu Fuß (in m)</label>
         <input
-          id="bh-input"
+          id="len-input"
+          pInputText
+          type="number"
+          [(ngModel)]="height"
+          name="height"
+          #heightCtrl="ngModel"
+          class="upload-input"
+          inputmode="decimal"
+          required
+          min="0"
+          [ngClass]="{
+            invalid: heightCtrl.invalid && (heightCtrl.touched || f.submitted)
+          }"
+        />
+        <p
+          class="field-error"
+          *ngIf="heightCtrl.errors?.['required'] && (heightCtrl.touched || f.submitted)"
+        >
+          Bitte die Höhenmeter angeben.
+        </p>
+        <p
+          class="field-error"
+          *ngIf="heightCtrl.errors?.['min'] && (heightCtrl.touched || f.submitted)"
+        >
+          Der Wert muss ≥ 0 sein.
+        </p>
+      </div>
+
+      <div class="form-row" *ngIf="mode === 'bike'">
+        <label for="blen-input" class="sr-only"
+          >Höhenmeter per Rad (in m)</label
+        >
+        <input
+          id="blen-input"
           pInputText
           type="number"
           [(ngModel)]="bikeHeight"
           name="bikeHeight"
+          #bikeHCtrl="ngModel"
           class="upload-input"
           inputmode="decimal"
-          placeholder="Fahrradhöhe in m"
+          required
           min="0"
+          [ngClass]="{
+            invalid: bikeHCtrl.invalid && (bikeHCtrl.touched || f.submitted)
+          }"
         />
+        <p
+          class="field-error"
+          *ngIf="bikeHCtrl.errors?.['required'] && (bikeHCtrl.touched || f.submitted)"
+        >
+          Bitte die Höhenmeter angeben.
+        </p>
+        <p
+          class="field-error"
+          *ngIf="bikeHCtrl.errors?.['min'] && (bikeHCtrl.touched || f.submitted)"
+        >
+          Der Wert muss ≥ 0 sein.
+        </p>
       </div>
     </section>
 
@@ -168,12 +242,11 @@
         <input
           id="notice-input"
           pInputText
-          type="number"
+          type="text"
           [(ngModel)]="notice"
           name="notice"
           class="upload-input"
           inputmode="full-width-latin"
-          placeholder="Notiz"
           min="0"
         />
       </div>

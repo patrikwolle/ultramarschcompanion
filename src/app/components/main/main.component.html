@@ -6,15 +6,19 @@
         aria-label="Freund hinzufügen"
         (submit)="addFriend(friendBox.value); friendBox.value = ''"
       >
-        <input
-          #friendBox
-          class="add__input"
-          type="text"
-          placeholder="Vorname N."
-          autocomplete="off"
-          aria-label="Freund"
-          (keydown.enter)="addFriend(friendBox.value); friendBox.value = ''"
-        />
+        <p-floatlabel variant="on">
+          <input
+            #friendBox
+            class="add__input"
+            type="text"
+            pInputText
+            autocomplete="off"
+            aria-label="Freund"
+            (keydown.enter)="addFriend(friendBox.value); friendBox.value = ''"
+            fluid
+          />
+          <label for="on_label">Vorname N.</label>
+        </p-floatlabel>
         <button class="add__btn" type="submit">Hinzufügen</button>
 
         <nav class="toolbar" aria-label="Sortierung" role="navigation">
@@ -95,6 +99,7 @@
       </ng-template>
     </section>
   </div>
+  <div class="spacer"></div>
 </div>
 
 <p-speeddial
@@ -102,6 +107,5 @@
   direction="up"
   showIcon="pi pi-plus"
   hideIcon="pi pi-times"
-  aria-label="Options"
   class="fab-wrap"
 />

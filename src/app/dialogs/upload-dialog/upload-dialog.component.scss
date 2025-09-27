@@ -62,6 +62,18 @@
     cursor: not-allowed;
   }
 }
+:host ::ng-deep .p-togglebutton.p-togglebutton-checked::before {
+  background: $primary;
+}
+
+:host ::ng-deep .p-selectbutton p-togglebutton:last-child .p-togglebutton,
+:host ::ng-deep .p-selectbutton p-togglebutton:first-child .p-togglebutton {
+  background: $background;
+}
+
+:host ::ng-deep .p-selectbutton .p-togglebutton {
+  border-width: 0px;
+}
 
 .upload-header {
   font-size: 0.85rem;
@@ -91,7 +103,7 @@
   padding: 8px 10px;
 
   &:focus {
-    outline: 2px solid $primary !important;
+    outline: 2px solid $text !important;
     border-color: $primary;
   }
 }
@@ -228,14 +240,79 @@
   }
 }
 
-.invalid,
-.upload-input.invalid,
-.upload-date .p-inputtext.invalid {
-  border-color: $danger !important;
-  outline-color: $danger !important;
-}
-
 .upload-btn.save:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+:host ::ng-deep .p-button-icon-only.p-button-rounded {
+  background: $background;
+  border: 2px solid $primary;
+  color: $text;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  transition: filter 0.15s ease;
+  margin-bottom: 12px;
+
+  &:hover {
+    background: $primary;
+    border: 2px solid $primary;
+    color: $text;
+  }
+}
+
+:host ::ng-deep .p-inputtext {
+  border: 1px solid $border;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  padding: 8px 10px;
+
+  &:enabled:focus {
+    outline: 1px solid $primary;
+    border-color: $primary;
+  }
+}
+
+:host ::ng-deep .p-selectbutton .p-togglebutton:focus-visible {
+  outline: 2px solid $text !important;
+}
+
+:host ::ng-deep .p-datepicker-dropdown:focus-visible {
+  outline: 2px solid $text !important;
+}
+
+:host ::ng-deep .p-datepicker-day-selected,
+:host ::ng-deep .p-datepicker-today > .p-datepicker-day-selected,
+:host ::ng-deep .p-datepicker-month-selected,
+:host ::ng-deep .p-datepicker-year-selected {
+  background-color: $primary;
+}
+
+:host ::ng-deep .p-datepicker-select-month,
+:host ::ng-deep .p-datepicker-select-year {
+  padding-bottom: 16px;
+  font-size: 0.95rem;
+}
+:host ::ng-deep .upload-file .p-button {
+  background: $background;
+  border: 2px solid $primary;
+  color: $text;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  transition: filter 0.15s ease;
+  margin-bottom: 12px;
+}
+:host ::ng-deep .upload-file .p-button:hover {
+  background: $primary;
+  border: 2px solid $primary;
+  color: $text;
+}
+
+.date-row {
+  display: grid;
+  grid-template-columns: 200px 50px;
+  gap: 8px;
+  align-items: center;
 }

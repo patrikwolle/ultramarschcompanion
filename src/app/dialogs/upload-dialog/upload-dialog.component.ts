@@ -1,5 +1,5 @@
 import { formatDate } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { DynamicDialogRef } from "primeng/dynamicdialog";
 import { LocalStorageService } from "../../services/local-storage.service"; // ← Pfad ggf. anpassen
 import { UmServiceService } from "../../services/um-service.service";
@@ -55,6 +55,51 @@ export class UploadDialogComponent {
 
   unlockToken(): void {
     this.tokenLocked = false;
+  }
+  isTouchUI = window.matchMedia?.("(pointer: coarse)")?.matches ?? false;
+
+  mode: "feet" | "bike" = "feet";
+
+  modes = [
+    { label: "Zu Fuß", value: "feet" },
+    { label: "Per Rad", value: "bike" },
+  ];
+
+  onModeChange() {
+    if (this.mode === "feet") {
+      this.bikeLength = null as any;
+      this.bikeHeight = null as any;
+    } else {
+      this.length = null as any;
+      this.height = null as any;
+    }
+  }
+
+  @ViewChild("dp") dp!: any;
+
+  toggleCalendar(ev: Event) {
+    ev.stopPropagation();
+    const cmp = this.dp as any;
+    const input = document.getElementById(
+      "datePicker"
+    ) as HTMLInputElement | null;
+
+    if (cmp.overlayVisible) {
+      if (typeof cmp.hideOverlay === "function") {
+        cmp.hideOverlay();
+      } else if (typeof cmp.toggle === "function") {
+        cmp.toggle();
+      }
+    } else {
+      if (typeof cmp.showOverlay === "function") {
+        cmp.showOverlay();
+      } else if (typeof cmp.toggle === "function") {
+        cmp.toggle();
+      } else if (typeof cmp.onInputFocus === "function") {
+        cmp.onInputFocus();
+      }
+      setTimeout(() => input?.blur(), 0);
+    }
   }
 
   onFileSelect(event: any) {

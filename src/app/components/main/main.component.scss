@@ -22,6 +22,20 @@
   grid-area: input;
 }
 
+.p-inputtext {
+  &:enabled:focus {
+    border-color: $primary;
+    color: $text;
+  }
+}
+
+.p-floatlabel:has(input:focus) label,
+.p-floatlabel:has(input:-webkit-autofill) label,
+.p-floatlabel:has(textarea:focus) label,
+.p-floatlabel:has(.p-inputwrapper-focus) label {
+  color: $text !important;
+}
+
 .add__btn {
   background: $primary;
   border: none;
@@ -126,6 +140,7 @@
 
 .btn {
   background: $white;
+  color: $text;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
@@ -139,6 +154,7 @@
 }
 
 .pin-btn {
+  color: $text;
   background: transparent;
   border: none;
   border-radius: 999px;
@@ -152,10 +168,18 @@
   top: -8px;
   transition: transform 0.15s ease, opacity 0.15s ease, background 0.2s ease;
   z-index: 3;
+
+  &:hover {
+    background: $accent !important;
+  }
 }
 
 .pin-btn.is-active {
   color: $primary;
+
+  &:hover {
+    background: $muted !important;
+  }
 }
 
 .pi-star,
@@ -199,10 +223,10 @@
   position: fixed !important;
   right: 24px !important;
   bottom: 24px !important;
-  z-index: 4000 !important;
+  z-index: 100 !important;
 }
 
-::ng-deep .p-button-icon-only.p-button-rounded {
+:host ::ng-deep .p-button-icon-only.p-button-rounded {
   width: 64px !important;
   height: 64px !important;
   border-radius: 50% !important;
@@ -222,11 +246,15 @@
   line-height: 1 !important;
 }
 
-::ng-deep .p-button-icon-only.p-button-rounded:not(:disabled):hover {
+:host ::ng-deep .p-button-icon-only.p-button-rounded:not(:disabled):hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22) !important;
 }
-::ng-deep .p-button-icon-only.p-button-rounded:not(:disabled):active {
+:host ::ng-deep .p-button-icon-only.p-button-rounded:not(:disabled):active {
   transform: translateY(0) !important;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18) !important;
+}
+
+.spacer {
+  height: 100px;
 }
