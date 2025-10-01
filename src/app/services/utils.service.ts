@@ -30,29 +30,29 @@ export class UtilsService {
   getRemainingDays(d: Date) {
     switch (d.getMonth()) {
       case 0:
-        return this.getDaysInMonth(d.getFullYear(), 0) + this.getDaysInMonth(d.getFullYear(), 1) + this.getDaysInMonth(d.getFullYear(), 2)- d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 1) + this.getDaysInMonth(d.getFullYear(), 2) + this.getDaysInMonth(d.getFullYear(), 3)- d.getDate()+1;
       case 1:
-        return this.getDaysInMonth(d.getFullYear(), 1) + this.getDaysInMonth(d.getFullYear(), 2) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 2) + this.getDaysInMonth(d.getFullYear(), 3) - d.getDate()+1;
       case 2:
-        return this.getDaysInMonth(d.getFullYear(), 2) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 3) - d.getDate()+1;
       case 3:
-        return this.getDaysInMonth(d.getFullYear(), 3) + this.getDaysInMonth(d.getFullYear(), 4) + this.getDaysInMonth(d.getFullYear(), 5)- d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 4) + this.getDaysInMonth(d.getFullYear(), 5) + this.getDaysInMonth(d.getFullYear(), 6)- d.getDate()+1;
       case 4:
-        return this.getDaysInMonth(d.getFullYear(), 4) + this.getDaysInMonth(d.getFullYear(), 5) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 5) + this.getDaysInMonth(d.getFullYear(), 6) - d.getDate()+1;
       case 5:
-        return this.getDaysInMonth(d.getFullYear(), 5) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 6) - d.getDate()+1;
       case 6:
-        return this.getDaysInMonth(d.getFullYear(), 6) + this.getDaysInMonth(d.getFullYear(), 7) + this.getDaysInMonth(d.getFullYear(), 8)- d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 7) + this.getDaysInMonth(d.getFullYear(), 8) + this.getDaysInMonth(d.getFullYear(), 9)- d.getDate()+1;
       case 7:
-        return this.getDaysInMonth(d.getFullYear(), 7) + this.getDaysInMonth(d.getFullYear(), 8) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 8) + this.getDaysInMonth(d.getFullYear(), 9) - d.getDate()+1;
       case 8:
-        return this.getDaysInMonth(d.getFullYear(), 8) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 9) - d.getDate()+1;
       case 9:
-        return this.getDaysInMonth(d.getFullYear(), 9) + this.getDaysInMonth(d.getFullYear(), 10) + this.getDaysInMonth(d.getFullYear(), 11)- d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 10) + this.getDaysInMonth(d.getFullYear(), 11) + this.getDaysInMonth(d.getFullYear(), 12)- d.getDate()+1;
       case 10:
-        return this.getDaysInMonth(d.getFullYear(), 10) + this.getDaysInMonth(d.getFullYear(), 11) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 11) + this.getDaysInMonth(d.getFullYear(), 12) - d.getDate()+1;
       case 11:
-        return this.getDaysInMonth(d.getFullYear(), 11) - d.getDate();
+        return this.getDaysInMonth(d.getFullYear(), 12) - d.getDate()+1;
       default:
         return 0;
     }
