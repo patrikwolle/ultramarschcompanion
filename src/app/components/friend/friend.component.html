@@ -17,7 +17,13 @@
 
     <div class="person-card__meta">
       <div class="person-card__row">
+        <mat-icon *ngIf="friend?.type === 'hike'" class="grid__icon" aria-hidden="true">directions_walk</mat-icon>
+        <mat-icon *ngIf="friend?.type === 'hikeRun'" class="grid__icon" aria-hidden="true">directions_run</mat-icon>
+        <mat-icon *ngIf="friend?.type === 'hikeRunBike'" class="grid__icon" aria-hidden="true">directions_bike</mat-icon>
         <h3 class="person-card__name">{{ displayName }}</h3>
+        <mat-icon *ngIf="friend?.loading" class="grid__icon" aria-hidden="true">cached</mat-icon>
+
+
       </div>
 
       <div

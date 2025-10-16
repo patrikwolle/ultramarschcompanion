@@ -1,4 +1,6 @@
 export interface Participant {
+  type?: string;
+  loading?: boolean
   name: string | undefined;
   image: string | undefined;
   gemeldet: number | undefined; // z. B. "1000 Kilometer"
@@ -8,6 +10,7 @@ export interface Participant {
   tagesdurchschnittRad: number | undefined;
   letzteMeldung: { datum: string; distanz: number } | undefined; // z. B. ["letzte Meldung vom...", "Datum", "Kilometer"]
 }
+
 
 export interface AllParticipant {
   hike: Participant[];

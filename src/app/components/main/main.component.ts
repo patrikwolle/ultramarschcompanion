@@ -3,7 +3,7 @@ import { MenuItem, MenuItemCommandEvent } from "primeng/api";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
 import { UploadDialogComponent } from "../../dialogs/upload-dialog/upload-dialog.component";
 import { UploadedFilesComponent } from "../../dialogs/uploaded-files/uploaded-files.component";
-import { AllParticipant, Participant } from "../../interfaces/participant";
+import {AllParticipant, Participant} from "../../interfaces/participant";
 import { BaseMessage } from "../../interfaces/processed-messages";
 import { DbService } from "../../services/db.service";
 import { DomParserService } from "../../services/dom-parser.service";
@@ -49,7 +49,10 @@ export class MainComponent implements OnInit {
 
   quartale = [{ name: "q1", start: new Date(20) }];
 
-  allUsers: AllParticipant = { hike: [], hikeRun: [], hikeRunBike: [] };
+  allUsers: AllParticipant = {
+    hike: [],
+    hikeRun: [],
+    hikeRunBike: []}
   progress = 0;
 
   groupOptions: Array<{ name: string; value: number }> = [
@@ -85,13 +88,28 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
+
+    const sk = localStorage.getItem('sortKey');
+    this.asc = localStorage.getItem('asc') === 'true';
+    if(sk !== null) {
+      switch (sk) {
+        case 'name':
+          this.sortKey = 'name'
+          break;
+        case 'done':
+          this.sortKey = 'done'
+          break;
+        case 'progress':
+          this.sortKey = 'progress'
+          break
+      }
+    }
     this.pinnedFriendId = this.lS.getPinnedFriend();
 
     this.token = this.lS.getToken();
     if (this.token) {
       this.umService.getProcessedMessages(this.token).subscribe((res) => {
         this.history = this.dP.extractMessages(res);
-        console.log(this.history);
       });
     }
 
@@ -116,6 +134,7 @@ export class MainComponent implements OnInit {
       },
     ];
 
+
     this.database.getParticipantsHike().then((participants) => {
       this.allUsers.hike = participants;
       this.database.getParticipantsHikeRun().then((participants2) => {
@@ -125,6 +144,7 @@ export class MainComponent implements OnInit {
           if (this.selectUserId)
             this.selectedUser = this.findUser(this.selectUserId);
           this.isLoadingAll = false;
+          this.beginLoading()
           this.lS.getFriends().forEach((friendId) => this.addFriend(friendId));
         });
       });
@@ -147,6 +167,17 @@ export class MainComponent implements OnInit {
   private kmGoal(r?: Participant): number {
     const v = Number(r?.gemeldet ?? 0);
     return Number.isFinite(v) && v > 0 ? v : 0;
+  }
+
+  private beginLoading() {
+    this.allUsers.hike.forEach((h) => h.loading = true);
+    this.allUsers.hikeRun.forEach((h) => h.loading = true);
+    this.allUsers.hikeRunBike.forEach((h) => h.loading = true);
+    console.log('beginLoading')
+    console.log(this.allUsers)
+    this.lS
+      .getFriends()
+      .forEach((friendId) => this.updateFriend(friendId));
   }
 
   private pctOf(r?: Participant): number {
@@ -202,6 +233,8 @@ export class MainComponent implements OnInit {
   }
 
   setSortKey(key: SortKey): void {
+    localStorage.setItem('sortKey', key)
+    localStorage.setItem('asc', String(this.asc))
     if (this.sortKey === key) {
       this.asc = !this.asc;
     } else {
@@ -337,16 +370,21 @@ export class MainComponent implements OnInit {
   }
 
   getData(): void {
+    console.log('beg')
+    this.beginLoading()
     this.umService.getQuartalDataHike().subscribe((response) => {
       this.allUsers.hike = this.dP.convertHtmlToObject(response);
+      this.allUsers.hike.forEach((h) => {h.loading = false;h.type='hike'});
       this.umService.getQuartalDataHikeRun().subscribe((response1) => {
         this.allUsers.hikeRun = this.dP.convertHtmlToObject(response1);
+        this.allUsers.hikeRun.forEach((h) => {h.loading = false;h.type='hikeRun'});
         this.database.addParticipantHike(this.allUsers.hike).then(() => {});
         this.database
           .addParticipantHikeRun(this.allUsers.hikeRun)
           .then(() => {});
         this.umService.getQuartalDataHikeRunBike().subscribe((response2) => {
           this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response2);
+          this.allUsers.hikeRunBike.forEach((h) => {h.loading = false;h.type='hikeRunBike'});
           this.database
             .addParticipantHikeRunBike(this.allUsers.hikeRunBike)
             .then(() => {

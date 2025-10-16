@@ -6,6 +6,7 @@ import {
   UploadedFile,
   UploadedFilesService,
 } from "../../services/uploaded-files.service";
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: "app-uploaded-files",
@@ -24,7 +25,8 @@ export class UploadedFilesComponent implements OnInit, OnDestroy {
   constructor(
     private files: UploadedFilesService,
     private ls: LocalStorageService,
-    public config: DynamicDialogConfig
+    public config: DynamicDialogConfig,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +109,9 @@ export class UploadedFilesComponent implements OnInit, OnDestroy {
       URL.revokeObjectURL(file.url);
     }
     this.files.remove(file.id);
+    this.http.post(`https://list.ultramarsch.de/meldung/delete/?token=${this.userToken}&id=${file.id}`, {}).subscribe((res) => {
+      console.log(res)
+    })
   }
 
   formatBytes(bytes?: number | null): string {

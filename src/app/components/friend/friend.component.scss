@@ -124,6 +124,13 @@
   min-width: 0;
 }
 
+.person-card__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
 .grid__row--inline {
   display: flex;
   align-items: center;

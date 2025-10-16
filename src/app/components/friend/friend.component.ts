@@ -22,6 +22,7 @@ import { UtilsService } from "../../services/utils.service";
 export class FriendComponent implements OnChanges {
   @Input() friend?: Participant;
   @Input() pinned = false;
+  @Input() loading = false;
 
   displayName = "";
   avatarUrl = "";
@@ -109,8 +110,8 @@ export class FriendComponent implements OnChanges {
 
   private computeDailyAvgClass(meanToGoKm: number, percent: number): string {
     if (percent >= 100) return "is-blue";
-    if (meanToGoKm <= 2) return "is-green";
-    if (meanToGoKm <= 5) return "is-amber";
+    if (this.dailyMeanKm - meanToGoKm >= 2) return "is-green";
+    if (this.dailyMeanKm - meanToGoKm >= 0) return "is-amber";
     return "is-rose";
   }
 }
