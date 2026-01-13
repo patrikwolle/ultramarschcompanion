@@ -88,6 +88,7 @@
         optionLabel="label"
         optionValue="value"
         class="mode-toggle"
+        (onChange)="onModeChange()"
       >
       </p-selectButton>
     </section>
@@ -262,7 +263,6 @@
         <p-fileupload
           class="upload-file"
           mode="basic"
-          name="upload"
           chooseIcon="pi pi-upload"
           chooseLabel="Bild wählen"
           accept="image/*"
@@ -272,9 +272,6 @@
           (onUpload)="onServerUpload($event)"
           (onClear)="removeImage()"
           [attr.aria-label]="'Screenshot hochladen'"
-          [(ngModel)]="upload"
-          name="height"
-          #uploadCtrl="ngModel"
         ></p-fileupload>
       </div>
       <div *ngIf="uploadedImageUrl" class="upload-preview">
@@ -302,10 +299,10 @@
     </p>
 
     <div class="actions full">
-      <button type="button" class="upload-btn cancel" (click)="cancel()">
+      <button type="button" class="upload-btn cancel" (click)="cancel()" [disabled]="isSubmitting">
         Abbrechen
       </button>
-      <button type="submit" class="upload-btn save" [disabled]="f.invalid">
+      <button type="submit" class="upload-btn save" [disabled]="f.invalid || isSubmitting">
         Speichern
       </button>
     </div>

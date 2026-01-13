@@ -1,6 +1,8 @@
-import { Component, OnInit } from "@angular/core";
-import { MenuItem, MenuItemCommandEvent } from "primeng/api";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { MenuItem } from "primeng/api";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { UploadDialogComponent } from "../../dialogs/upload-dialog/upload-dialog.component";
 import { UploadedFilesComponent } from "../../dialogs/uploaded-files/uploaded-files.component";
 import {AllParticipant, Participant} from "../../interfaces/participant";
@@ -22,7 +24,7 @@ type SelfMode = "pin" | "include";
 
   providers: [DialogService],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   pinnedFriendId: string | null = null;
   addError = "";
 
@@ -30,6 +32,8 @@ export class MainComponent implements OnInit {
   isLoadingAll = true;
   activeTab: string = "progress";
   sheetOpen = false;
+
+  private destroy$ = new Subject<void>();
 
   sortKey: SortKey = "name";
   asc = true;
@@ -87,8 +91,6 @@ export class MainComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.getData();
-
     const sk = localStorage.getItem('sortKey');
     this.asc = localStorage.getItem('asc') === 'true';
     if(sk !== null) {
@@ -108,9 +110,11 @@ export class MainComponent implements OnInit {
 
     this.token = this.lS.getToken();
     if (this.token) {
-      this.umService.getProcessedMessages(this.token).subscribe((res) => {
-        this.history = this.dP.extractMessages(res);
-      });
+      this.umService.getProcessedMessages(this.token)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          this.history = this.dP.extractMessages(res);
+        });
     }
 
     const storedCat = this.lS.getCategory();
@@ -121,20 +125,6 @@ export class MainComponent implements OnInit {
 
     this.selectUserId = this.lS.getUser() ?? undefined;
 
-    this.menuItems = [
-      {
-        label: "Upload",
-        command: (_event: MenuItemCommandEvent) =>
-          this.dialogService.open(UploadDialogComponent, {
-            header: "Upload",
-            width: "50vw",
-            modal: true,
-            breakpoints: { "960px": "75vw", "640px": "100vw" },
-          }),
-      },
-    ];
-
-
     this.database.getParticipantsHike().then((participants) => {
       this.allUsers.hike = participants;
       this.database.getParticipantsHikeRun().then((participants2) => {
@@ -144,8 +134,8 @@ export class MainComponent implements OnInit {
           if (this.selectUserId)
             this.selectedUser = this.findUser(this.selectUserId);
           this.isLoadingAll = false;
-          this.beginLoading()
           this.lS.getFriends().forEach((friendId) => this.addFriend(friendId));
+          this.getData();
         });
       });
     });
@@ -173,8 +163,6 @@ export class MainComponent implements OnInit {
     this.allUsers.hike.forEach((h) => h.loading = true);
     this.allUsers.hikeRun.forEach((h) => h.loading = true);
     this.allUsers.hikeRunBike.forEach((h) => h.loading = true);
-    console.log('beginLoading')
-    console.log(this.allUsers)
     this.lS
       .getFriends()
       .forEach((friendId) => this.updateFriend(friendId));
@@ -370,36 +358,44 @@ export class MainComponent implements OnInit {
   }
 
   getData(): void {
-    console.log('beg')
-    this.beginLoading()
-    this.umService.getQuartalDataHike().subscribe((response) => {
-      this.allUsers.hike = this.dP.convertHtmlToObject(response);
-      this.allUsers.hike.forEach((h) => {h.loading = false;h.type='hike'});
-      this.umService.getQuartalDataHikeRun().subscribe((response1) => {
-        this.allUsers.hikeRun = this.dP.convertHtmlToObject(response1);
-        this.allUsers.hikeRun.forEach((h) => {h.loading = false;h.type='hikeRun'});
-        this.database.addParticipantHike(this.allUsers.hike).then(() => {});
-        this.database
-          .addParticipantHikeRun(this.allUsers.hikeRun)
-          .then(() => {});
-        this.umService.getQuartalDataHikeRunBike().subscribe((response2) => {
-          this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response2);
-          this.allUsers.hikeRunBike.forEach((h) => {h.loading = false;h.type='hikeRunBike'});
-          this.database
-            .addParticipantHikeRunBike(this.allUsers.hikeRunBike)
-            .then(() => {
-              this.lS
-                .getFriends()
-                .forEach((friendId) => this.updateFriend(friendId));
-            });
-        });
+    this.beginLoading();
+    this.umService.getQuartalDataHike()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.allUsers.hike = this.dP.convertHtmlToObject(response);
+        this.allUsers.hike.forEach((h) => {h.loading = false;h.type='hike'});
+        this.umService.getQuartalDataHikeRun()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response1) => {
+            this.allUsers.hikeRun = this.dP.convertHtmlToObject(response1);
+            this.allUsers.hikeRun.forEach((h) => {h.loading = false;h.type='hikeRun'});
+            this.database.addParticipantHike(this.allUsers.hike).then(() => {});
+            this.database
+              .addParticipantHikeRun(this.allUsers.hikeRun)
+              .then(() => {});
+            this.umService.getQuartalDataHikeRunBike()
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((response2) => {
+                this.allUsers.hikeRunBike = this.dP.convertRadHtmlToObject(response2);
+                this.allUsers.hikeRunBike.forEach((h) => {h.loading = false;h.type='hikeRunBike'});
+                this.database
+                  .addParticipantHikeRunBike(this.allUsers.hikeRunBike)
+                  .then(() => {
+                    this.lS
+                      .getFriends()
+                      .forEach((friendId) => this.updateFriend(friendId));
+                  });
+              });
+          });
       });
-    });
   }
 
   trackByName = (_: number, p: Participant) => p.name!;
 
   openUploadDialog() {
+    if (this.ref) {
+      this.ref.close();
+    }
     this.ref = this.dialogService.open(UploadDialogComponent, {
       header: "Aktivität hinzufügen",
       width: "520px",
@@ -413,36 +409,48 @@ export class MainComponent implements OnInit {
       },
       styleClass: "upload-dialog",
     });
-    this.ref.onClose.subscribe((result) => {
-      console.log(result);
-      this.umService.getProcessedMessages(this.token).subscribe((res) => {
-        this.history = this.dP.extractMessages(res);
-        console.log(this.history);
+    this.ref.onClose
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.token) {
+          this.umService.getProcessedMessages(this.token)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((res) => {
+              this.history = this.dP.extractMessages(res);
+            });
+        }
       });
-    });
   }
 
   openUploadedFilesDialog() {
-    this.umService.getProcessedMessages(this.token).subscribe((res) => {
-      const extractedData = this.dP.extractMessages(res);
-      const processedFiles = extractedData;
-      console.log("Processed files array:", processedFiles);
+    this.umService.getProcessedMessages(this.token)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        const processedFiles = this.dP.extractMessages(res);
 
-      this.ref = this.dialogService.open(UploadedFilesComponent, {
-        header: "Hochgeladene Strecken",
-        width: "520px",
-        modal: true,
-        dismissableMask: true,
-        closable: true,
-        contentStyle: { overflow: "auto" },
-        breakpoints: {
-          "960px": "520px",
-          "640px": "92vw",
-        },
-        data: {
-          files: processedFiles,
-        },
+        this.ref = this.dialogService.open(UploadedFilesComponent, {
+          header: "Hochgeladene Strecken",
+          width: "520px",
+          modal: true,
+          dismissableMask: true,
+          closable: true,
+          contentStyle: { overflow: "auto" },
+          breakpoints: {
+            "960px": "520px",
+            "640px": "92vw",
+          },
+          data: {
+            files: processedFiles,
+          },
+        });
       });
-    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 }

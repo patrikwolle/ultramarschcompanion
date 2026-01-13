@@ -25,6 +25,7 @@ export class UploadDialogComponent {
   uploadedFileName: string | null = null;
   uploadedFileSize: number = 0;
   uploadSuccess = false;
+  isSubmitting = false;
 
   constructor(
     private ref: DynamicDialogRef,
@@ -162,6 +163,10 @@ export class UploadDialogComponent {
   }
 
   sendForm() {
+    if (this.isSubmitting) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append("date", formatDate(this.date, "yyyy-MM-dd", "en-US"));
     formData.append("length", this.length);
@@ -176,15 +181,17 @@ export class UploadDialogComponent {
       return;
     }
 
+    this.isSubmitting = true;
+
     this.um.postData(formData).subscribe({
       next: (res) => {
         console.log(res);
+        this.isSubmitting = false;
         this.ref.close();
       },
       error: (err) => {
-        this.ref.close();
-      },
-      complete: () => {
+        console.error(err);
+        this.isSubmitting = false;
         this.ref.close();
       },
     });
