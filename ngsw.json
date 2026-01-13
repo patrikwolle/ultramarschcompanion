@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1768334670629,
+  "timestamp": 1768336799655,
   "index": "/ultramarschcompanion/index.html",
   "assetGroups": [
     {
@@ -11,11 +11,11 @@
         "ignoreVary": true
       },
       "urls": [
-        "/ultramarschcompanion/chunk-B5XJMKBK.js",
-        "/ultramarschcompanion/chunk-PS4FF755.js",
+        "/ultramarschcompanion/chunk-FX7NDTAT.js",
+        "/ultramarschcompanion/chunk-GQOAFIT7.js",
         "/ultramarschcompanion/favicon.ico",
         "/ultramarschcompanion/index.html",
-        "/ultramarschcompanion/main-HCBNBDDL.js",
+        "/ultramarschcompanion/main-FHW3JMU6.js",
         "/ultramarschcompanion/manifest.webmanifest",
         "/ultramarschcompanion/polyfills-FFHMD2TL.js",
         "/ultramarschcompanion/styles-U2HKIVDK.css"
@@ -30,6 +30,9 @@
         "ignoreVary": true
       },
       "urls": [
+        "/ultramarschcompanion/THE_WORLD_2026_Q1.avif",
+        "/ultramarschcompanion/THE_WORLD_2026_Q1.png",
+        "/ultramarschcompanion/cheating-on-samsung-health-step-challenge-v0-9la4cv8icd0d1.jpg",
         "/ultramarschcompanion/icons/icon-128x128.png",
         "/ultramarschcompanion/icons/icon-144x144.png",
         "/ultramarschcompanion/icons/icon-152x152.png",
@@ -49,8 +52,11 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/ultramarschcompanion/chunk-B5XJMKBK.js": "0d2cc74096d32c0b1f753efccdc235fb85c24f30",
-    "/ultramarschcompanion/chunk-PS4FF755.js": "12b989bd2804b1d8116f2fc48da0c76b1c448f41",
+    "/ultramarschcompanion/THE_WORLD_2026_Q1.avif": "e72c1207f71af572431d2ca05428d5dddb24f71b",
+    "/ultramarschcompanion/THE_WORLD_2026_Q1.png": "bba313c2ba803fd9f548173659b957e26805c9b8",
+    "/ultramarschcompanion/cheating-on-samsung-health-step-challenge-v0-9la4cv8icd0d1.jpg": "6b9a75417a1dc346fb6988efab70e352c223048d",
+    "/ultramarschcompanion/chunk-FX7NDTAT.js": "659082ef987041bd2be7579539b36d6f1122d7af",
+    "/ultramarschcompanion/chunk-GQOAFIT7.js": "7852ce3fa0de20cd8ca051cee9d7c019900c51fc",
     "/ultramarschcompanion/favicon.ico": "e6e1859c8dd7045468fa671ec46ca2b1a7b22846",
     "/ultramarschcompanion/icons/icon-128x128.png": "715bf0cb399a53a88b912b40fe3a7021ce79ea91",
     "/ultramarschcompanion/icons/icon-144x144.png": "20b40618935bb7b776a2e27585eb9308ca1dde2d",
@@ -61,8 +67,8 @@
     "/ultramarschcompanion/icons/icon-512x512.png": "f1e2c7772d510871354a42dbf073ce8c59b0eae2",
     "/ultramarschcompanion/icons/icon-72x72.png": "fed143160e9eba51b0bd4d27e6971047856218dc",
     "/ultramarschcompanion/icons/icon-96x96.png": "85645b694b21b2f7ab78b7f59016c3b13d1c49c5",
-    "/ultramarschcompanion/index.html": "009b557a74714c6105f94a8c75896b9a02581b2e",
-    "/ultramarschcompanion/main-HCBNBDDL.js": "0a29bfcc970d366fce129f78b03115573c02b1be",
+    "/ultramarschcompanion/index.html": "00c7235688d0d37e7179d0cb4ed15a82ffaa04f7",
+    "/ultramarschcompanion/main-FHW3JMU6.js": "3e53bb600e9a8a8ade2c3bf717a4995bfdb289e3",
     "/ultramarschcompanion/manifest.webmanifest": "0a139564a81af1c55e3da7ae405b828aee1fb7dd",
     "/ultramarschcompanion/media/primeicons-4GST5W3O.woff2": "837c1279b6af9d297f34fdb43e6fcc9206a79f32",
     "/ultramarschcompanion/media/primeicons-DHQU4SEP.svg": "a07ae39027c1a780b42fd82fad7575c2924d9d28",
