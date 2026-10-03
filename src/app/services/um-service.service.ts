@@ -11,7 +11,8 @@ export class UmServiceService {
   ) { }
 
   getQuartalDataHike() {
-    return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=616,617,618,619', { responseType: 'text' });
+    return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=628,6129,630,631', { responseType: 'text' });
+    //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=616,617,618,619', { responseType: 'text' });
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=603,604,605,606', { responseType: 'text' });
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=591,592,593,594', { responseType: 'text' });
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=381,382,383,384', { responseType: 'text' });
@@ -21,7 +22,8 @@ export class UmServiceService {
   }
 
   getQuartalDataHikeRun() {
-    return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=620,621,622,623', { responseType: 'text' });
+    return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=632,633,634,635', { responseType: 'text' });
+    //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=620,621,622,623', { responseType: 'text' });
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=607,608,609,610', { responseType: 'text' });
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=595,596,597,598', { responseType: 'text' });
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=385,386,387,388', { responseType: 'text' });
@@ -31,7 +33,8 @@ export class UmServiceService {
   }
 
   getQuartalDataHikeRunBike() {
-    return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=624,625,626,627&bike=1', { responseType: 'text'});
+    return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=636,637,638,639&bike=1', { responseType: 'text'});
+    //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=624,625,626,627&bike=1', { responseType: 'text'});
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=611,612,613,614&bike=1', { responseType: 'text'});
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=599,600,601,602&bike=1', { responseType: 'text'});
     //return this.http.get('https://ultramarsch-connector-production.up.railway.app/ultramarsch/?event=389,390,391,392&bike=1', { responseType: 'text'});
