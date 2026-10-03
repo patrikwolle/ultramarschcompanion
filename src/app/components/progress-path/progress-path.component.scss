@@ -1,0 +1,103 @@
+@use "./../../../colors.scss" as *;
+
+.progress-path {
+  display: grid;
+  gap: 12px;
+  background: $white;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 4px 4px 4px $shadow;
+}
+
+.progress-path__scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 300 / 420;
+  max-height: 60vh;
+  border-radius: 10px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  // background-image wird jetzt per [style.background-image] im
+  // Template gesetzt, da relative url() im SCSS vom Bundler falsch
+  // aufgelöst wird und ein absoluter Pfad den base-href ignoriert.
+}
+
+.progress-path__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.trail {
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+.checkpoint circle {
+  fill: $white;
+  stroke: $accent;
+  stroke-width: 2.5;
+}
+
+.checkpoint text {
+  font-size: 11px;
+  font-weight: 700;
+  fill: $text;
+}
+
+.marker__ring {
+  fill: $primary;
+  stroke: $white;
+  stroke-width: 2.5;
+}
+
+.marker__initial {
+  font-size: 13px;
+  font-weight: 700;
+  fill: $text;
+}
+
+.progress-path__legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+}
+
+.legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $primary;
+  flex: 0 0 auto;
+}
+
+.legend__name {
+  flex: 1;
+  min-width: 0;
+}
+
+.legend__pct {
+  font-weight: 700;
+}
+
+.progress-path__empty {
+  color: $danger;
+  text-align: center;
+  padding: 16px;
+}

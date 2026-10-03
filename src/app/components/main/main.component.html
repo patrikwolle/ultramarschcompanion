@@ -55,7 +55,30 @@
       </form>
     </section>
 
-    <section role="region" aria-label="Freundesliste">
+    <nav class="view-tabs" role="tablist" aria-label="Ansicht wählen">
+      <button
+        type="button"
+        role="tab"
+        class="view-tabs__btn"
+        [class.is-active]="activeTab === 'list'"
+        [attr.aria-selected]="activeTab === 'list'"
+        (click)="setTab('list')"
+      >
+        Liste
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="view-tabs__btn"
+        [class.is-active]="activeTab === 'map'"
+        [attr.aria-selected]="activeTab === 'map'"
+        (click)="setTab('map')"
+      >
+        Strecke
+      </button>
+    </nav>
+
+    <section role="region" aria-label="Freundesliste" [hidden]="activeTab !== 'list'">
       <ul
         class="friends__list"
         *ngIf="renderFriends?.length; else emptyState"
@@ -97,6 +120,10 @@
           Noch keine Einträge. Füge oben jemanden hinzu.
         </div>
       </ng-template>
+    </section>
+
+    <section role="region" aria-label="Streckenansicht" [hidden]="activeTab !== 'map'">
+      <um-progress-path [friends]="renderFriends"></um-progress-path>
     </section>
   </div>
   <div class="spacer"></div>

@@ -1,0 +1,57 @@
+<div #host class="progress-path" role="img" aria-label="Fortschritt auf der Strecke">
+  <div #scene class="progress-path__scene">
+    <svg class="progress-path__svg" viewBox="0 0 300 420" preserveAspectRatio="xMidYMid slice">
+      <!-- Strecke -->
+      <path
+        #trail
+        class="trail"
+        d="M 40 380
+           L 40 260
+           L 260 260
+           L 260 140
+           L 40 140
+           L 40 40"
+        fill="none"
+      ></path>
+
+      <g *ngFor="let cp of checkpoints" class="checkpoint">
+        <circle [attr.cx]="cp.x" [attr.cy]="cp.y" r="13"></circle>
+        <text [attr.x]="cp.x" [attr.y]="cp.y + 4" text-anchor="middle">
+          {{ cp.percent }}%
+        </text>
+      </g>
+
+      <g
+        *ngFor="let m of markers; trackBy: trackByName"
+        class="marker"
+        [attr.transform]="'translate(' + m.x + ',' + m.y + ')'"
+      >
+        <circle r="15" class="marker__ring"></circle>
+        <image
+          *ngIf="m.friend.image"
+          [attr.href]="m.friend.image"
+          x="-13"
+          y="-13"
+          width="26"
+          height="26"
+          style="clip-path: circle(13px at 13px 13px);"
+        ></image>
+        <text *ngIf="!m.friend.image" y="5" text-anchor="middle" class="marker__initial">
+          {{ (m.friend.name || '?').charAt(0) }}
+        </text>
+      </g>
+    </svg>
+  </div>
+
+  <ul class="progress-path__legend" *ngIf="markers.length">
+    <li *ngFor="let m of markers; trackBy: trackByName">
+      <span class="legend__dot"></span>
+      <span class="legend__name">{{ m.friend.name }}</span>
+      <span class="legend__pct">{{ m.percent | number:'1.1-1' }}%</span>
+    </li>
+  </ul>
+
+  <div class="progress-path__empty" *ngIf="!markers.length">
+    Noch keine Einträge für die Streckenansicht.
+  </div>
+</div>

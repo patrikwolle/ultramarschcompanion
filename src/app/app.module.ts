@@ -30,6 +30,7 @@ import { FriendComponent } from "./components/friend/friend.component";
 import { MainComponent } from "./components/main/main.component";
 import { UploadDialogComponent } from "./dialogs/upload-dialog/upload-dialog.component";
 import { UploadedFilesComponent } from "./dialogs/uploaded-files/uploaded-files.component";
+import { ProgressPathComponent } from "./components/progress-path/progress-path.component";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { UploadedFilesComponent } from "./dialogs/uploaded-files/uploaded-files.
   imports: [
     CommonModule,
     FriendComponent,
+    ProgressPathComponent,
     CardModule,
     BrowserModule,
     SpeedDialModule,

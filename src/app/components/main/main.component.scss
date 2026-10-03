@@ -258,3 +258,26 @@
 .spacer {
   height: 100px;
 }
+
+.view-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.view-tabs__btn {
+  flex: 1;
+  background: $white;
+  color: $text;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px $shadow;
+}
+
+.view-tabs__btn.is-active {
+  background: $primary;
+}

@@ -15,6 +15,7 @@ import { UtilsService } from "../../services/utils.service";
 
 type SortKey = "name" | "progress" | "done";
 type SelfMode = "pin" | "include";
+type ViewTab = "list" | "map";
 
 @Component({
   selector: "um-main",
@@ -30,7 +31,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   isLoading = true;
   isLoadingAll = true;
-  activeTab: string = "progress";
+  activeTab: ViewTab = "list";
   sheetOpen = false;
 
   private destroy$ = new Subject<void>();
@@ -233,6 +234,10 @@ export class MainComponent implements OnInit, OnDestroy {
 
   toggleAsc(): void {
     this.asc = !this.asc;
+  }
+
+  setTab(tab: ViewTab): void {
+    this.activeTab = tab;
   }
 
   distinctByName(arr: Participant[]): Participant[] {
